@@ -150,6 +150,10 @@ function Contact() {
                     </div>
                 </div>
             </div>
+
+            <div className="contact-map">
+                <img src="/src/assets/map.png" alt="Map" />
+            </div>
         </div>
     );
 }
