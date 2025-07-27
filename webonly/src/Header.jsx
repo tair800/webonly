@@ -48,7 +48,7 @@ function Header() {
                 </div>
                 <ul className="navbar-links">
                     <li><Link to="/" className={location.pathname === "/" ? "active" : ""}>Əsas Səhifə</Link></li>
-                    <li><Link to="/about-us" className={location.pathname === "/about-us" ? "active" : ""}>Haqqımızda</Link></li>
+                    <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""}>Haqqımızda</Link></li>
                     <li><a href="#">Məhsullar</a></li>
                     <li><a href="#">Xidmətlər</a></li>
                     <li><a href="#">Avadanlıqlar</a></li>

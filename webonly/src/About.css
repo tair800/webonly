@@ -1,0 +1,55 @@
+.about-container {
+  min-height: 100vh;
+  padding: 120px 2rem 2rem 2rem;
+  background: #111214;
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.about-logo {
+  width: 35%;
+  height: auto;
+}
+
+.about-logo img {
+  width: 100%;
+  height: auto;
+}
+
+.about-text {
+  color: #17DBFC;
+  font-size: 43px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.about-text p {
+  margin: 0;
+}
+
+.about-rainbow {
+  margin-top: -19%;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.about-rainbow img {
+  width: 100%;
+  height: auto;
+}
