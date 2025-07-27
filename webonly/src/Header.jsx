@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logoIcon from './assets/logo-icon.png';
 import logoText from './assets/logo-text.png';
 import globeImg from './assets/globe.png';
 import dropdownIcon from './assets/dropdown-icon.png';
+import './Header.css';
 
-function Navbar() {
+function Header() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const langRef = useRef(null);
+    const location = useLocation();
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -45,13 +47,13 @@ function Navbar() {
                     />
                 </div>
                 <ul className="navbar-links">
-                    <li><a href="#">Əsas Səhifə</a></li>
-                    <li><Link to="/about-us" className="active">Haqqımızda</Link></li>
+                    <li><Link to="/" className={location.pathname === "/" ? "active" : ""}>Əsas Səhifə</Link></li>
+                    <li><Link to="/about-us" className={location.pathname === "/about-us" ? "active" : ""}>Haqqımızda</Link></li>
                     <li><a href="#">Məhsullar</a></li>
                     <li><a href="#">Xidmətlər</a></li>
                     <li><a href="#">Avadanlıqlar</a></li>
                     <li><a href="#">Bloq</a></li>
-                    <li><a href="#">Əlaqə</a></li>
+                    <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Əlaqə</Link></li>
                 </ul>
                 <div
                     className="navbar-lang"
@@ -86,4 +88,4 @@ function Navbar() {
     );
 }
 
-export default Navbar; 
+export default Header; 

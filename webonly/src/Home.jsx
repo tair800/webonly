@@ -9,6 +9,7 @@ import slider6 from './assets/slider6.png';
 import prevIcon from './assets/prev.png';
 import nextIcon from './assets/next.png';
 import logoIcon from './assets/logo-icon.png';
+import logoText from './assets/logo-text.png';
 
 const slides = [
     { id: 1, img: slider1, name: 'slider1' },
@@ -20,27 +21,31 @@ const slides = [
 ];
 
 function CircularProgress({ currentIndex, totalSlides }) {
-    const radius = 160; // Circle radius (increased from 120)
-    const centerX = 200; // Center X coordinate (increased from 150)
-    const centerY = 200; // Center Y coordinate (increased from 150)
+    const radius = 128; // Circle radius (reduced from 160)
+    const centerX = 160; // Center X coordinate (reduced from 200)
+    const centerY = 160; // Center Y coordinate (reduced from 200)
 
     // Calculate rotation angle to keep active slider at top
     const rotationAngle = -(currentIndex * 360 / totalSlides);
 
     return (
         <div className="circular-progress">
+            {/* Logo text - positioned behind the circle with transparency */}
+            <div className="circle-logo-text">
+                <img src={logoText} alt="Logo Text" className="logo-text-background" />
+            </div>
             {/* Logo icon - positioned outside the rotating SVG so it doesn't rotate */}
             <div className="circle-logo">
                 <img src={logoIcon} alt="Logo" className="circle-logo-icon" />
             </div>
 
             <svg
-                width="400"
-                height="400"
-                viewBox="0 0 400 400"
+                width="320"
+                height="320"
+                viewBox="0 0 320 320"
                 style={{
                     transform: `rotate(${rotationAngle}deg)`,
-                    transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+                    transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
             >
                 {/* Gradient definition for border */}
@@ -65,7 +70,7 @@ function CircularProgress({ currentIndex, totalSlides }) {
                 {/* Slider names positioned around the circle */}
                 {slides.map((slide, index) => {
                     const angle = (index * 360 / totalSlides - 90) * (Math.PI / 180); // Start from top
-                    const textRadius = radius + 45; // Text positioned outside the circle (increased from 35)
+                    const textRadius = radius + 20; // Text positioned closer to circle
                     const x = centerX + textRadius * Math.cos(angle);
                     const y = centerY + textRadius * Math.sin(angle);
                     const isActive = index === currentIndex;
@@ -79,8 +84,10 @@ function CircularProgress({ currentIndex, totalSlides }) {
                             textAnchor="middle"
                             dominantBaseline="middle"
                             style={{
-                                transform: `rotate(${angle * 180 / Math.PI + 90}deg)`,
-                                transformOrigin: `${x}px ${y}px`
+                                fontSize: 18,
+                                transform: `rotate(${angle * 180 / Math.PI + 90}deg) scale(${isActive ? 1.35 : 1})`,
+                                transformOrigin: `${x}px ${y}px`,
+                                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                             }}
                         >
                             {slide.name}

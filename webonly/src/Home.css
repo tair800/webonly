@@ -143,12 +143,12 @@
 /* Circular Progress Indicator */
 .circular-progress {
     position: absolute;
-    bottom: -20px;
+    top: 82%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     width: 400px;
-    height: 400px;
+    height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -159,7 +159,7 @@
 
 .circle-logo {
     position: absolute;
-    top: 22%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 15;
@@ -169,10 +169,33 @@
 }
 
 .circle-logo-icon {
-    width: 180px;
-    height: 148px;
+    width: 350px;
+    height: 248px;
     object-fit: contain;
-    filter: brightness(1.1);
+    filter: brightness(1.1) brightness(0) invert(1);
+    clip-path: inset(0 0 38% 0);
+    /* Crop bottom 25% to hide "technology" text */
+}
+
+.circle-logo-text {
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-text-background {
+    width: 600px;
+    height: auto;
+    object-fit: contain;
+    opacity: 0.05;
+    filter: brightness(0) invert(1);
+    image-rendering: auto;
+    transform: scale(1);
 }
 
 .circular-progress svg {
@@ -181,7 +204,7 @@
     outline: none;
     overflow: visible;
     width: 400px;
-    height: 400px;
+    height: 320px;
 }
 
 .progress-circle {
@@ -193,9 +216,10 @@
     font-size: 18px;
     font-weight: 500;
     fill: #ffffff;
-    transition: all 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), fill 0.3s;
     cursor: pointer;
     user-select: none;
+    will-change: transform;
 }
 
 .slider-name:hover {
@@ -207,7 +231,13 @@
 .slider-name.active {
     fill: #17DBFC;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 22px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider-name.active:hover {
+    font-size: 24px;
+    transition: font-size 0.2s;
 }
 
 /* Navigation Buttons */
@@ -339,5 +369,66 @@
     .slider-name:hover,
     .slider-name.active {
         font-size: 11px;
+    }
+}
+
+/* Responsive Design for Circle and Logo */
+@media (max-width: 900px) {
+    .circular-progress {
+        width: 280px;
+        height: 220px;
+        top: 80%;
+    }
+
+    .circle-logo {
+        top: 18%;
+    }
+
+    .circle-logo-icon {
+        width: 180px;
+        height: 120px;
+    }
+
+    .circle-logo-text {
+        top: 8%;
+    }
+
+    .logo-text-background {
+        width: 300px;
+        opacity: 0.08;
+    }
+
+    .slider-name {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 600px) {
+    .circular-progress {
+        width: 180px;
+        height: 120px;
+        top: 75%;
+    }
+
+    .circle-logo {
+        top: 10%;
+    }
+
+    .circle-logo-icon {
+        width: 100px;
+        height: 60px;
+    }
+
+    .circle-logo-text {
+        top: 4%;
+    }
+
+    .logo-text-background {
+        width: 120px;
+        opacity: 0.12;
+    }
+
+    .slider-name {
+        font-size: 9px;
     }
 }

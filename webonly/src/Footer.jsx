@@ -2,6 +2,7 @@ import React from 'react';
 import logoIcon from './assets/logo-icon.png';
 import logoText from './assets/logo-text.png';
 import footerLogo from './assets/footer-logo.png';
+import nextIcon from './assets/next.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube, faFacebookF, faXTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { faLocationDot, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
@@ -11,19 +12,19 @@ function Footer() {
     return (
         <footer className="footer">
             <div className="footer-content">
-                {/* Left column */}
+                {/* Left Section - Company Information and Newsletter */}
                 <div className="footer-col footer-col-left">
                     <div className="footer-logo-row">
                         <img src={logoIcon} alt="Logo Icon" className="footer-logo-icon" />
                         <img src={logoText} alt="Logo Text" className="footer-logo-text" />
                     </div>
                     <p className="footer-desc">
-                        Şirkəti yeni standartlarla proqram təminatı satışı və servisi həyata keçirən proqramlaşdırma şirkətidir.
+                        Şirkət yeni standartlarla proqram təminatı satışı və servisi həyata keçirən proqramlaşdırma şirkətidir.
                     </p>
                     <form className="footer-email-form">
                         <input type="email" placeholder="Email daxil edin" className="footer-email-input" />
                         <button type="submit" className="footer-email-btn">
-                            <span className="footer-email-btn-arrow">&raquo;</span>
+                            <img src={nextIcon} alt="Next" className="footer-email-btn-arrow" />
                         </button>
                     </form>
                     <div className="footer-socials">
@@ -33,8 +34,14 @@ function Footer() {
                         <a href="#" aria-label="Instagram"><FontAwesomeIcon icon={faInstagram} /></a>
                         <a href="#" aria-label="LinkedIn"><FontAwesomeIcon icon={faLinkedinIn} /></a>
                     </div>
+                    <hr className="footer-divider" />
+                    <div className="footer-meta-row">
+                        <div className="footer-madeby">Veb-sayt Webonly tərəfindən hazırlanıb.</div>
+                        <div className="footer-copyright">Copywrite @2025. Bütün hüquqlar qorunur.</div>
+                    </div>
                 </div>
-                {/* Center column */}
+
+                {/* Middle Section - Products */}
                 <div className="footer-col footer-col-center">
                     <h3 className="footer-title">Məhsullar</h3>
                     <ul className="footer-links">
@@ -49,7 +56,8 @@ function Footer() {
                         <li>İstehsal idarəetmə modulu</li>
                     </ul>
                 </div>
-                {/* Right column */}
+
+                {/* Right Section - Contact */}
                 <div className="footer-col footer-col-right">
                     <h3 className="footer-title">Əlaqə</h3>
                     <ul className="footer-contact">
@@ -60,13 +68,6 @@ function Footer() {
                 </div>
                 {/* Decorative image */}
                 <img src={footerLogo} alt="Footer Decorative" className="footer-bg-img" />
-            </div>
-            <div className="footer-bottom">
-                <hr className="footer-divider" />
-                <div className="footer-bottom-row">
-                    <span className="footer-madeby">Veb-sayt Webonly tərəfindən hazırlanıb.</span>
-                    <span className="footer-copyright">Copywrite @2025. Bütün hüquqlar qorunur.</span>
-                </div>
             </div>
         </footer>
     );
