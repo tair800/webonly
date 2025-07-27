@@ -54,15 +54,123 @@
   height: auto;
 }
 
-.contact-form-section {
+.contact-main-section {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: flex-start;
   padding: 40px 2rem;
-  margin-top: 450px;
+  margin-top: 530px;
+  gap: 13%;
+}
+
+.contact-left-section {
+  flex: 0 0 auto;
+  max-width: 500px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.contact-content {
+  max-width: 500px;
+}
+
+.contact-heading {
+  margin-bottom: 40px;
+}
+
+.heading-line-1 {
+  font-size: 48px;
+  font-weight: 700;
+  background:
+    linear-gradient(263.82deg, #4EDEFF -9.75%, #467EFE 58.82%, #17DBFC 132.96%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.heading-line-2 {
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  margin: 0;
+  line-height: 1.2;
+
+
+}
+
+.contact-description {
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 24px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+.contact-description p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #9BA1B6;
+  margin: 0;
+  color: rgba(255, 255, 255, 1);
+}
+
+.contact-location {
+  margin-bottom: 30px;
+
+}
+
+.contact-location span {
+  font-size: 20px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.contact-icon {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.contact-icon img {
+  width: 18px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.contact-item span {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.contact-right-section {
+  flex: 0 0 auto;
+  height: 400px;
+  display: flex;
+  align-items: center;
 }
 
 .contact-form-container {
-  width: 350px;
+  width: 400px;
   background: rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(40px);
   border-radius: 20px;
@@ -143,7 +251,7 @@
   color: #ffffff;
   border: none;
   padding: 12px 25px;
-  border-radius: 10px;
+  border-radius: 35px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
