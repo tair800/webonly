@@ -1,25 +1,92 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './About.css';
 
-export default function About() {
+function About() {
+    const [teamMembers] = useState([
+        {
+            id: 1,
+            name: "Name Surname",
+            position: "Baş proqram tərtibatçısı",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 67",
+            email: "developer@company.com",
+            linkedin: "linkedin.com/in/developer"
+        },
+        {
+            id: 2,
+            name: "Name Surname",
+            position: "Layihə koordinatoru",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 68",
+            email: "coordinator@company.com",
+            linkedin: "linkedin.com/in/coordinator"
+        },
+        {
+            id: 3,
+            name: "Name Surname",
+            position: "Baş proqramçı",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 69",
+            email: "programmer@company.com",
+            linkedin: "linkedin.com/in/programmer"
+        },
+        {
+            id: 4,
+            name: "Name Surname",
+            position: "IT mütəxəssisi",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 70",
+            email: "specialist@company.com",
+            linkedin: "linkedin.com/in/specialist"
+        },
+        {
+            id: 5,
+            name: "Name Surname",
+            position: "Layihələr üzrə şöbə rəhbəri",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 71",
+            email: "manager@company.com",
+            linkedin: "linkedin.com/in/manager"
+        },
+        {
+            id: 6,
+            name: "Name Surname",
+            position: "Layihə meneceri",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 72",
+            email: "project-manager@company.com",
+            linkedin: "linkedin.com/in/project-manager"
+        },
+        {
+            id: 7,
+            name: "Name Surname",
+            position: "SQL Server üzrə proqramçı",
+            image: "/src/assets/employee.png",
+            phone: "+994 50 123 45 73",
+            email: "sql-developer@company.com",
+            linkedin: "linkedin.com/in/sql-developer"
+        }
+
+    ]);
+
     return (
         <div className="about-container">
-            <div className="about-center">
-                <div className="about-logo-top">
-                    <img src="/src/assets/logo-white.png" alt="Logo" />
-                </div>
-                <div className="about-text">
-                    <p>Haqqımızda</p>
-                </div>
-                <div className="about-rainbow">
-                    <img src="/src/assets/rainbow.png" alt="Rainbow" />
-                </div>
+            <div className="about-logo-top">
+                <img src="/src/assets/logo-white.png" alt="Logo" />
             </div>
+            <div className="about-text">
+                <p>Haqqımızda</p>
+            </div>
+            <div className="about-rainbow">
+                <img src="/src/assets/rainbow.png" alt="Rainbow" />
+            </div>
+
             <div className="about-logo">
                 <img src="/src/assets/logo-only.png" alt="Logo" />
                 <p className="about-logo-text">Texnologiya ilə Gələcəyə Doğru</p>
                 <p className="about-logo-description">10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.</p>
             </div>
+
             <div className="about-team-header">
                 <div className="about-team-title">Kollektiv</div>
                 <div className="about-team-nav">
@@ -29,6 +96,7 @@ export default function About() {
                     <div className="about-team-bar"></div>
                 </div>
             </div>
+
             <div className="about-description-section">
                 <img src="/src/assets/director.png" alt="Director" className="about-director-img" />
                 <div className="about-name">Name Surname</div>
@@ -40,6 +108,49 @@ export default function About() {
                     <img src="/src/assets/comma.png" alt="Comma" className="about-comma" />
                 </div>
             </div>
+
+            <div className="about-team-cards">
+                {teamMembers.map((member) => (
+                    <div key={member.id} className="team-card">
+                        <div className="card-image">
+                            <img src={member.image} alt={member.name} />
+                        </div>
+                        <div className="card-content">
+                            <div className="card-name">{member.name}</div>
+                            <div className="card-position">{member.position}</div>
+                            <div className="card-contacts">
+                                <a href={`tel:${member.phone}`}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" fill="rgba(0, 123, 255, 1)" />
+                                    </svg>
+                                </a>
+                                <a href={`mailto:${member.email}`}>
+                                    <img src="/src/assets/mail-icon.png" alt="Email" />
+                                </a>
+                                <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" fill="rgba(0, 123, 255, 1)" />
+                                        <rect x="2" y="9" width="4" height="12" fill="rgba(0, 123, 255, 1)" />
+                                        <circle cx="4" cy="4" r="2" fill="rgba(0, 123, 255, 1)" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="about-team-header">
+                <div className="about-team-title">Referance</div>
+                <div className="about-team-nav">
+                    <div className="about-team-nav-dot about-team-nav-dot-faded"></div>
+                    <div className="about-team-nav-dot about-team-nav-dot-gradient"></div>
+                    <div className="about-team-divider"></div>
+                    <div className="about-team-bar"></div>
+                </div>
+            </div>
         </div>
     );
-} 
+}
+
+export default About; 

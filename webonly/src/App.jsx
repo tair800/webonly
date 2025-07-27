@@ -5,7 +5,6 @@ import Footer from './Footer';
 import About from './About';
 import Home from './Home';
 import Contact from './Contact';
-import AboutUsHeaderPage from './AboutUsHeaderPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/aboutusheader" element={<AboutUsHeaderPage />} />
           </Routes>
         </div>
         <Footer />

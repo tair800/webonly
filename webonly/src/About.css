@@ -266,8 +266,8 @@
   margin: 0 0 1rem 0;
   position: absolute;
   z-index: 2;
-  top: 8rem;
-  left: 32rem;
+  top: 7.8rem;
+  left: 32.6rem;
 }
 
 .about-position {
@@ -277,8 +277,8 @@
   margin: 0;
   position: absolute;
   z-index: 2;
-  top: 62%;
-  left: 36rem;
+  top: 61%;
+  left: 36.5rem;
   color: #ffffff;
   width: 100px;
   transform: translateX(-50%);
@@ -294,4 +294,136 @@
   filter: brightness(0) invert(1);
   transform: rotate(180deg);
   opacity: 0.5;
+}
+
+/* Loading State */
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #ffffff;
+  font-size: 18px;
+  padding: 2rem;
+}
+
+/* Team Cards Section */
+.about-team-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  width: 100%;
+  margin: 4rem 0 2rem 0;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  justify-content: center;
+  padding-bottom:100px;
+}
+
+.team-card {
+  flex: 0 0 calc(25% - 1.5rem);
+  background: transparent;
+  border-radius: 90px 90px 0 0;
+  border: 1px solid #17DBFC;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 280px;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(23, 219, 252, 0.2);
+}
+
+.card-image {
+  position: relative;
+  height: 280px;
+  background: linear-gradient(0deg, rgba(217, 217, 217, 0.5), rgba(217, 217, 217, 0.5)),
+    linear-gradient(180deg, rgba(70, 126, 254, 0.1) 27.88%, rgba(23, 219, 252, 0.1) 61.54%, rgba(255, 255, 255, 0.1) 100%);
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  margin-top: 50px;
+}
+
+.card-content {
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 1px solid #17DBFC;
+}
+
+.card-name {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.card-position {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.card-contacts {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  align-items: center;
+}
+
+.card-contacts svg,
+.card-contacts img {
+  width: 20px;
+  height: 17px;
+  transition: opacity 0.3s ease;
+}
+
+.card-contacts svg:hover,
+.card-contacts img:hover {
+  opacity: 0.8;
+}
+
+/* Responsive Design for Team Cards */
+@media (max-width: 1200px) {
+  .about-team-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .about-team-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-team-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card-image {
+    height: 180px;
+  }
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-name {
+    font-size: 16px;
+  }
+
+  .card-position {
+    font-size: 13px;
+  }
 }
