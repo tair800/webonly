@@ -17,7 +17,7 @@
     z-index: 1;
     gap: 10rem;
     width: 100%;
-    padding: 0 2rem;
+    padding: 0 2rem 0 6rem;
 }
 
 .footer-col {
@@ -57,7 +57,7 @@
 }
 
 .footer-desc {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: #e0e0e0;
     margin-bottom: 1.5rem;
     line-height: 1.5;
@@ -77,7 +77,7 @@
     background: transparent;
     border: none;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     flex: 1;
     outline: none;
     padding: 0.8rem 0;
@@ -113,7 +113,7 @@
     align-items: center;
     gap: 1.2rem;
     margin-top: 1.2rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
 .footer-socials a {
@@ -126,7 +126,7 @@
 }
 
 .footer-title {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 1.2rem;
 }
@@ -136,7 +136,7 @@
     padding: 0;
     margin: 0;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .footer-links li {
@@ -148,7 +148,7 @@
     padding: 0;
     margin: 0;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .footer-contact li {
@@ -160,12 +160,12 @@
 
 .footer-contact-icon {
     color: #19e6ff;
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 .footer-bg-img {
     position: absolute;
-    right: 0;
+    right: 80px;
     bottom: 0;
     width: 520px;
     max-width: 60vw;
@@ -190,7 +190,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #b0b0b0;
     max-width: 1400px;
     margin: 0 auto;
@@ -198,11 +198,11 @@
 }
 
 .footer-madeby {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 .footer-copyright {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 .footer-meta-row {
@@ -215,7 +215,7 @@
 
 .footer-madeby,
 .footer-copyright {
-    font-size: 8px;
+    font-size: 6px;
     color: #b0b0b0;
     white-space: nowrap;
 }
@@ -236,6 +236,7 @@
     .footer-bg-img {
         width: 220px;
         max-width: 90vw;
+        right: 40px;
     }
 
     .footer-bottom-row {
@@ -266,15 +267,16 @@
     .footer-bg-img {
         width: 120px;
         max-width: 100vw;
+        right: 20px;
     }
 
     .footer-title {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
 
     .footer-links,
     .footer-contact {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     .footer-email-form {
@@ -300,7 +302,7 @@
 
     .footer-madeby,
     .footer-copyright {
-        font-size: 7px;
+        font-size: 5px;
         white-space: normal;
     }
 }
@@ -311,11 +313,16 @@
     }
 
     .footer-title {
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 
     .footer-links,
     .footer-contact {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
+    }
+
+    .footer-bg-img {
+        width: 80px;
+        right: 10px;
     }
 }

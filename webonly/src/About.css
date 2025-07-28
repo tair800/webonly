@@ -24,7 +24,10 @@
 .about-logo-top {
   width: 35%;
   height: auto;
-
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .about-logo-top img {
@@ -315,7 +318,7 @@
   padding: 0 2rem;
   box-sizing: border-box;
   justify-content: center;
-  padding-bottom:100px;
+  padding-bottom: 100px;
 }
 
 .team-card {
@@ -340,6 +343,17 @@
   background: linear-gradient(0deg, rgba(217, 217, 217, 0.5), rgba(217, 217, 217, 0.5)),
     linear-gradient(180deg, rgba(70, 126, 254, 0.1) 27.88%, rgba(23, 219, 252, 0.1) 61.54%, rgba(255, 255, 255, 0.1) 100%);
   overflow: hidden;
+  transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-image::after {
+  content: none;
+}
+
+.team-card:hover .card-image {
+  background: rgba(217, 217, 217, 0.8);
+  transform: scale(1.04);
+  z-index: 1;
 }
 
 .card-image img {
@@ -425,5 +439,136 @@
 
   .card-position {
     font-size: 13px;
+  }
+}
+
+/* Logo Carousel Styles */
+.logo-carousel-container {
+  width: 100%;
+  overflow: hidden;
+  margin: 40px 0;
+  padding: 20px 0;
+}
+
+.logo-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.logo-carousel-track {
+  display: flex;
+  animation: scroll var(--animation-duration, 60s) linear infinite;
+  width: var(--carousel-width, calc(200px * 46));
+  transform: translateX(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Hide scrollbar */
+.logo-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.logo-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.logo-item {
+  flex-shrink: 0;
+  width: 200px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+  padding: 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.logo-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.logo-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  /* Make logos white */
+  transition: filter 0.3s ease;
+}
+
+.logo-item:hover img {
+  filter: brightness(1) invert(0);
+  /* Show original colors on hover */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-200px * var(--logo-count, 23)));
+    /* Move by exactly one set of logos */
+  }
+}
+
+/* Pause animation on hover */
+.logo-carousel-container:hover .logo-carousel-track {
+  animation-play-state: paused;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo-item {
+    width: 150px;
+    height: 60px;
+    margin: 0 15px;
+  }
+
+  .logo-carousel-track {
+    width: calc(150px * var(--logo-count, 23) * 2);
+    animation-duration: calc(var(--animation-duration, 60s) * 0.83);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(calc(-150px * var(--logo-count, 23)));
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-item {
+    width: 120px;
+    height: 50px;
+    margin: 0 10px;
+  }
+
+  .logo-carousel-track {
+    width: calc(120px * var(--logo-count, 23) * 2);
+    animation-duration: calc(var(--animation-duration, 60s) * 0.67);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(calc(-120px * var(--logo-count, 23)));
+    }
   }
 }
