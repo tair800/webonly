@@ -4,6 +4,7 @@ import logoIcon from './assets/logo-icon.png';
 import logoText from './assets/logo-text.png';
 import globeImg from './assets/globe.png';
 import dropdownIcon from './assets/dropdown-icon.png';
+import logoWhite from './assets/logo-white.png';
 import './Header.css';
 
 function Header() {
@@ -32,18 +33,10 @@ function Header() {
             <div className="navbar-container">
                 <div className="navbar-logo-frame">
                     <img
-                        src={logoIcon}
-                        alt="Logo Icon"
-                        className="logo-icon"
-                        width="92"
-                        height="75"
-                    />
-                    <img
-                        src={logoText}
-                        alt="Logo Text"
-                        className="logo-text"
-                        width="144"
-                        height="27"
+                        src={logoWhite}
+                        alt="Logo White"
+                        className="logo-white"
+                        style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }}
                     />
                 </div>
                 <ul className="navbar-links">

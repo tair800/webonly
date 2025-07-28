@@ -1,6 +1,5 @@
 import React from 'react';
-import logoIcon from './assets/logo-icon.png';
-import logoText from './assets/logo-text.png';
+import logoWhite from './assets/logo-white.png';
 import footerLogo from './assets/footer-logo.png';
 import nextIcon from './assets/next.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,8 +14,7 @@ function Footer() {
                 {/* Left Section - Company Information and Newsletter */}
                 <div className="footer-col footer-col-left">
                     <div className="footer-logo-row">
-                        <img src={logoIcon} alt="Logo Icon" className="footer-logo-icon" />
-                        <img src={logoText} alt="Logo Text" className="footer-logo-text" />
+                        <img src={logoWhite} alt="Logo White" className="footer-logo-white" />
                     </div>
                     <p className="footer-desc">
                         Şirkət yeni standartlarla proqram təminatı satışı və servisi həyata keçirən proqramlaşdırma şirkətidir.
