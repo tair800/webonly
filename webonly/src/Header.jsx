@@ -42,9 +42,9 @@ function Header() {
                 <ul className="navbar-links">
                     <li><Link to="/" className={location.pathname === "/" ? "active" : ""}>Əsas Səhifə</Link></li>
                     <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""}>Haqqımızda</Link></li>
-                    <li><a href="#">Məhsullar</a></li>
+                    <li><Link to="/products" className={location.pathname === "/products" ? "active" : ""}>Məhsullar</Link></li>
                     <li><a href="#">Xidmətlər</a></li>
-                    <li><a href="#">Avadanlıqlar</a></li>
+                    <li><Link to="/equipment" className={location.pathname === "/equipment" ? "active" : ""}>Avadanlıqlar</Link></li>
                     <li><a href="#">Bloq</a></li>
                     <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Əlaqə</Link></li>
                 </ul>
