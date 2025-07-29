@@ -46,7 +46,7 @@
     margin-top: -19%;
     width: 100vw;
     position: relative;
-    left: 50%;
+    left: 52%;
     transform: translateX(-50%);
 }
 
@@ -348,8 +348,8 @@
 
 .equipment-title-left {
     position: absolute;
-    left: -180px;
-    top: 0;
+    left: -111px;
+    top: 4px;
     width: 160px;
     text-align: left;
     font-size: 30px;
@@ -361,7 +361,15 @@
     line-height: 0.8;
     padding-top: 0;
     margin-top: 0;
+}
 
+.equipment-product-id {
+    font-family: Sansation;
+    font-size: 36px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 21px;
+    line-height: 1;
 }
 
 /* Your styles will go here */
