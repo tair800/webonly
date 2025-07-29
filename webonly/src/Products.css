@@ -268,4 +268,52 @@
     }
 }
 
+@media (max-width: 900px) {
+    .products-grid {
+        gap: 2rem;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0 1rem;
+        justify-content: center;
+    }
+
+    .product-card {
+        padding: 3rem 1.5rem;
+        max-width: 90vw;
+    }
+
+    .product-icon {
+        width: 70px !important;
+        height: 70px !important;
+    }
+
+    .product-name {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .products-grid {
+        gap: 3rem;
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 0 1rem;
+        justify-content: center;
+    }
+
+    .product-card {
+        padding: 4rem 2rem;
+        max-width: 300px;
+    }
+
+    .product-icon {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .product-name {
+        font-size: 1.5rem;
+    }
+}
+
 /* Your styles will go here */

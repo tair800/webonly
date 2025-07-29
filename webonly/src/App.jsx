@@ -36,7 +36,7 @@ function App() {
             <Route path="/factory" element={<Factory />} />
             <Route path="/credit" element={<Credit />} />
           </Routes>
-        </div>
+      </div>
         <Footer />
       </div>
     </Router>
