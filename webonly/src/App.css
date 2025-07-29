@@ -14,7 +14,7 @@ body,
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+
   opacity: 0.18;
   pointer-events: none;
   backdrop-filter: blur(285.8px);
