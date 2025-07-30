@@ -241,7 +241,7 @@
 }
 
 /* Navigation Buttons */
-.nav-btn {
+.slider-nav-btn {
     position: absolute;
     bottom: 25px;
     width: 60px;
@@ -255,7 +255,7 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 10;
+    z-index: 20;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -263,40 +263,53 @@
     -ms-user-select: none;
     user-select: none;
     box-shadow: 0 4px 15px rgba(70, 126, 254, 0.3);
+    aspect-ratio: 1;
+    min-width: 60px;
+    min-height: 60px;
+    max-width: 60px;
+    max-height: 60px;
+    overflow: hidden;
+    top: auto;
+    left: auto;
+    right: auto;
 }
 
-.nav-btn:hover:not(:disabled) {
+.slider-nav-btn:hover:not(:disabled) {
     transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(70, 126, 254, 0.4);
 }
 
-.nav-btn:focus {
+.slider-nav-btn:focus {
     outline: none;
     border: none;
     box-shadow: none;
 }
 
-.nav-btn:active:not(:disabled) {
+.slider-nav-btn:active:not(:disabled) {
     outline: none;
     border: none;
     transform: scale(0.95);
 }
 
-.nav-btn:disabled {
+.slider-nav-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: scale(0.95);
 }
 
-.prev-btn {
+.slider-prev-btn {
     left: 50px;
+    top: auto;
+    right: auto;
 }
 
-.next-btn {
+.slider-next-btn {
     right: 50px;
+    top: auto;
+    left: auto;
 }
 
-.nav-icon {
+.slider-nav-icon {
     width: 24px;
     height: 24px;
     object-fit: contain;
@@ -304,7 +317,7 @@
     transition: transform 0.3s ease;
 }
 
-.nav-btn:hover:not(:disabled) .nav-icon {
+.slider-nav-btn:hover:not(:disabled) .slider-nav-icon {
     transform: scale(1.1);
 }
 
@@ -329,21 +342,25 @@
         width: 220px;
     }
 
-    .nav-btn {
+    .slider-nav-btn {
         width: 50px;
         height: 50px;
         bottom: 5%;
+        min-width: 50px;
+        min-height: 50px;
+        max-width: 50px;
+        max-height: 50px;
     }
 
-    .prev-btn {
+    .slider-prev-btn {
         left: 20px;
     }
 
-    .next-btn {
+    .slider-next-btn {
         right: 20px;
     }
 
-    .nav-icon {
+    .slider-nav-icon {
         width: 20px;
         height: 20px;
     }

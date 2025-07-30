@@ -10,15 +10,7 @@ import prevIcon from './assets/prev.png';
 import nextIcon from './assets/next.png';
 import logoIcon from './assets/logo-icon.png';
 import logoText from './assets/logo-text.png';
-
-const slides = [
-    { id: 1, img: slider1, name: 'slider1' },
-    { id: 2, img: slider2, name: 'slider2' },
-    { id: 3, img: slider3, name: 'slider3' },
-    { id: 4, img: slider4, name: 'slider4' },
-    { id: 5, img: slider5, name: 'slider5' },
-    { id: 6, img: slider6, name: 'slider6' }
-];
+import { slides } from './data/sliderData';
 
 function CircularProgress({ currentIndex, totalSlides }) {
     const radius = 128; // Circle radius (reduced from 160)
@@ -161,12 +153,12 @@ export default function Home() {
                     })}
                 </div>
 
-                <button className="nav-btn prev-btn" onClick={prevSlide} disabled={isTransitioning}>
-                    <img src={prevIcon} alt="Previous" className="nav-icon" />
+                <button className="slider-nav-btn slider-prev-btn" onClick={prevSlide} disabled={isTransitioning}>
+                    <img src={prevIcon} alt="Previous" className="slider-nav-icon" />
                 </button>
 
-                <button className="nav-btn next-btn" onClick={nextSlide} disabled={isTransitioning}>
-                    <img src={nextIcon} alt="Next" className="nav-icon" />
+                <button className="slider-nav-btn slider-next-btn" onClick={nextSlide} disabled={isTransitioning}>
+                    <img src={nextIcon} alt="Next" className="slider-nav-icon" />
                 </button>
 
                 <CircularProgress currentIndex={currentIndex} totalSlides={slides.length} />

@@ -1,235 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { teamMembers } from './data/teamData';
+import { logos } from './data/logoData';
 import './About.css';
 
 function About() {
-    const [teamMembers] = useState([
-        {
-            id: 1,
-            name: "Name Surname",
-            position: "Baş proqram tərtibatçısı",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 67",
-            email: "developer@company.com",
-            linkedin: "linkedin.com/in/developer"
-        },
-        {
-            id: 2,
-            name: "Name Surname",
-            position: "Layihə koordinatoru",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 68",
-            email: "coordinator@company.com",
-            linkedin: "linkedin.com/in/coordinator"
-        },
-        {
-            id: 3,
-            name: "Name Surname",
-            position: "Baş proqramçı",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 69",
-            email: "programmer@company.com",
-            linkedin: "linkedin.com/in/programmer"
-        },
-        {
-            id: 4,
-            name: "Name Surname",
-            position: "IT mütəxəssisi",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 70",
-            email: "specialist@company.com",
-            linkedin: "linkedin.com/in/specialist"
-        },
-        {
-            id: 5,
-            name: "Name Surname",
-            position: "Layihələr üzrə şöbə rəhbəri",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 71",
-            email: "manager@company.com",
-            linkedin: "linkedin.com/in/manager"
-        },
-        {
-            id: 6,
-            name: "Name Surname",
-            position: "Layihə meneceri",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 72",
-            email: "project-manager@company.com",
-            linkedin: "linkedin.com/in/project-manager"
-        },
-        {
-            id: 7,
-            name: "Name Surname",
-            position: "SQL Server üzrə proqramçı",
-            image: "/src/assets/employee.png",
-            phone: "+994 50 123 45 73",
-            email: "sql-developer@company.com",
-            linkedin: "linkedin.com/in/sql-developer"
-        }
-
-    ]);
-
-    const [logos] = useState([
-        {
-            id: 1,
-            name: "Logo 1",
-            image: "/src/assets/logo1.png",
-            alt: "Company Logo 1"
-        },
-        {
-            id: 2,
-            name: "Logo 2",
-            image: "/src/assets/logo2.png",
-            alt: "Company Logo 2"
-        },
-        {
-            id: 3,
-            name: "Logo 3",
-            image: "/src/assets/logo3.png",
-            alt: "Company Logo 3"
-        },
-        {
-            id: 4,
-            name: "Logo 4",
-            image: "/src/assets/logo4.png",
-            alt: "Company Logo 4"
-        },
-        {
-            id: 5,
-            name: "Logo 5",
-            image: "/src/assets/logo5.png",
-            alt: "Company Logo 5"
-        },
-        {
-            id: 6,
-            name: "Logo 6",
-            image: "/src/assets/logo6.png",
-            alt: "Company Logo 6"
-        },
-        {
-            id: 7,
-            name: "Logo 7",
-            image: "/src/assets/logo7.png",
-            alt: "Company Logo 7"
-        },
-        {
-            id: 8,
-            name: "Logo 8",
-            image: "/src/assets/logo8.png",
-            alt: "Company Logo 8"
-        },
-        {
-            id: 9,
-            name: "Logo 9",
-            image: "/src/assets/logo9.png",
-            alt: "Company Logo 9"
-        },
-        {
-            id: 10,
-            name: "Logo 10",
-            image: "/src/assets/logo10.png",
-            alt: "Company Logo 10"
-        },
-        {
-            id: 11,
-            name: "Logo 11",
-            image: "/src/assets/logo11.png",
-            alt: "Company Logo 11"
-        },
-        {
-            id: 12,
-            name: "Logo 12",
-            image: "/src/assets/logo12.png",
-            alt: "Company Logo 12"
-        },
-        {
-            id: 13,
-            name: "Logo 13",
-            image: "/src/assets/logo13.png",
-            alt: "Company Logo 13"
-        },
-        {
-            id: 14,
-            name: "Logo 14",
-            image: "/src/assets/logo14.png",
-            alt: "Company Logo 14"
-        },
-        {
-            id: 15,
-            name: "Logo 15",
-            image: "/src/assets/logo15.png",
-            alt: "Company Logo 15"
-        },
-        {
-            id: 16,
-            name: "Logo 16",
-            image: "/src/assets/logo16.png",
-            alt: "Company Logo 16"
-        },
-        {
-            id: 17,
-            name: "Logo 17",
-            image: "/src/assets/logo17.png",
-            alt: "Company Logo 17"
-        },
-        {
-            id: 18,
-            name: "Logo 18",
-            image: "/src/assets/logo18.png",
-            alt: "Company Logo 18"
-        },
-        {
-            id: 19,
-            name: "Logo 19",
-            image: "/src/assets/logo19.png",
-            alt: "Company Logo 19"
-        },
-        {
-            id: 20,
-            name: "Logo 20",
-            image: "/src/assets/logo20.png",
-            alt: "Company Logo 20"
-        },
-        {
-            id: 21,
-            name: "Logo 21",
-            image: "/src/assets/logo21.png",
-            alt: "Company Logo 21"
-        },
-        {
-            id: 22,
-            name: "Logo 22",
-            image: "/src/assets/logo22.png",
-            alt: "Company Logo 22"
-        },
-        {
-            id: 23,
-            name: "Logo 23",
-            image: "/src/assets/logo23.png",
-            alt: "Company Logo 23"
-        },
-        {
-            id: 24,
-            name: "Logo 24",
-            image: "/src/assets/logo24.png",
-            alt: "Company Logo 24"
-        },
-        {
-            id: 25,
-            name: "Logo 25",
-            image: "/src/assets/logo25.png",
-            alt: "Company Logo 25"
-        }
-    ]);
+    const [teamMembersState] = useState(teamMembers);
+    const [logosState] = useState(logos);
 
     // Update CSS custom properties for dynamic animation
     useEffect(() => {
-        const logoCount = logos.length;
+        const logoCount = logosState.length;
         const root = document.documentElement;
         root.style.setProperty('--logo-count', logoCount);
         root.style.setProperty('--carousel-width', `calc(200px * ${logoCount * 2})`);
         root.style.setProperty('--animation-duration', `${Math.max(30, logoCount * 2)}s`);
-    }, [logos]);
+    }, [logosState]);
 
 
 
@@ -274,7 +59,7 @@ function About() {
             </div>
 
             <div className="about-team-cards">
-                {teamMembers.map((member) => (
+                {teamMembersState.map((member) => (
                     <div key={member.id} className="team-card">
                         <div className="card-image">
                             <img src={member.image} alt={member.name} />
@@ -318,13 +103,13 @@ function About() {
                 <div className="logo-carousel">
                     <div className="logo-carousel-track">
                         {/* First set of logos */}
-                        {logos.map((logo) => (
+                        {logosState.map((logo) => (
                             <div key={`first-${logo.id}`} className="logo-item">
                                 <img src={logo.image} alt={logo.alt} />
                             </div>
                         ))}
                         {/* Duplicate set for seamless infinite scroll */}
-                        {logos.map((logo) => (
+                        {logosState.map((logo) => (
                             <div key={`second-${logo.id}`} className="logo-item">
                                 <img src={logo.image} alt={logo.alt} />
                             </div>

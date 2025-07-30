@@ -1,31 +1,10 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { equipmentList } from './data/equipmentData';
 import './Equipment.css';
 
-const equipmentList = [
-    {
-        id: 1,
-        name: "PosClass TX-1500S",
-        version: "J-1900",
-        core: "İntel Core I5",
-        img: "/src/assets/equipment1.png"
-    },
-    {
-        id: 2,
-        name: "saPosClass TX-1500S",
-        version: "J-1900",
-        core: "İntel Core I5",
-        img: "/src/assets/equipment1.png"
-    },
-    {
-        id: 3,
-        name: "PosClass TX-1500S",
-        version: "J-1900",
-        core: "İntel Core I5",
-        img: "/src/assets/equipment1.png"
-    },
-];
-
 function Equipment() {
+    const navigate = useNavigate();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [slideDirection, setSlideDirection] = useState(null);
     const [isSliding, setIsSliding] = useState(false);
@@ -33,6 +12,10 @@ function Equipment() {
     const timeoutRef = useRef(null);
 
     const slideDuration = 300;
+
+    const handleMoreClick = () => {
+        navigate(`/equipment/${currentItem.id}`);
+    };
 
     const startSlide = (direction) => {
         if (isSliding) return;
@@ -95,7 +78,7 @@ function Equipment() {
                             </div>
                             <div className="equipment-product-model blue">{currentItem.version}</div>
                             <div className="equipment-product-cpu">{currentItem.core}</div>
-                            <button className="equipment-more-btn">Daha çox</button>
+                            <button className="equipment-more-btn" onClick={handleMoreClick}>Daha çox</button>
                         </div>
                     </div>
                 </div>
