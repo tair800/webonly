@@ -6,6 +6,7 @@ import About from './About';
 import Home from './Home';
 import Contact from './Contact';
 import Equipment from './Equipment';
+import EquipmentDetail from './EquipmentDetail';
 import Products from './Products';
 import Market from './Market';
 import Textile from './Textile';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/equipment" element={<Equipment />} />
+            <Route path="/equipment/:id" element={<EquipmentDetail />} />
             <Route path="/products" element={<Products />} />
             <Route path="/market" element={<Market />} />
             <Route path="/textile" element={<Textile />} />
@@ -36,7 +38,7 @@ function App() {
             <Route path="/factory" element={<Factory />} />
             <Route path="/credit" element={<Credit />} />
           </Routes>
-      </div>
+        </div>
         <Footer />
       </div>
     </Router>

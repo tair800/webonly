@@ -27,11 +27,12 @@ const equipmentList = [
 
 function Equipment() {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [slideDirection, setSlideDirection] = useState(null); // 'left' or 'right'
+    const [slideDirection, setSlideDirection] = useState(null);
     const [isSliding, setIsSliding] = useState(false);
+    const [showModal, setShowModal] = useState(false); // ← NEW STATE
     const timeoutRef = useRef(null);
 
-    const slideDuration = 300; // ms
+    const slideDuration = 300;
 
     const startSlide = (direction) => {
         if (isSliding) return;
@@ -110,6 +111,7 @@ function Equipment() {
                             src={currentItem.img}
                             alt={currentItem.name}
                             className="equipment-main-img"
+                            onClick={() => setShowModal(true)} // ← NEW HANDLER
                         />
                         <button className="equipment-nav-btn next-btn" onClick={() => startSlide('left')}>&#62;</button>
                     </div>
@@ -120,6 +122,17 @@ function Equipment() {
                     </div>
                 </div>
             </div>
+
+            {/* Modal for full-screen image */}
+            {showModal && (
+                <div className="equipment-modal" onClick={() => setShowModal(false)}>
+                    <img
+                        src={currentItem.img}
+                        alt={currentItem.name}
+                        className="equipment-modal-img"
+                    />
+                </div>
+            )}
         </div>
     );
 }

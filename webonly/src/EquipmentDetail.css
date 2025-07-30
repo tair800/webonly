@@ -1,0 +1,302 @@
+.equipment-detail-container {
+    min-height: 100vh;
+    background: #111214;
+    color: #fff;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.equipment-detail-content {
+    max-width: 1200px;
+    width: 80%;
+    background: rgba(147, 157, 184, 0.2);
+    border-radius: 20px;
+    padding: 3rem;
+    display: flex;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+    margin-top: 150px;
+}
+
+.equipment-detail-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(23, 219, 252, 0.1));
+    pointer-events: none;
+}
+
+.equipment-detail-left {
+    flex: 1;
+    z-index: 2;
+}
+
+.equipment-detail-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #007BFF 0%, #17DBFC 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: Sansation;
+    line-height: 1.2;
+    width: 55%;
+}
+
+.equipment-detail-description {
+    font-size: 23px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 1);
+    margin-bottom: 2.5rem;
+    max-width: 443px;
+    font-weight: 300;
+}
+
+.equipment-detail-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    font-size: 10px;
+}
+
+.equipment-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.feature-checkmark {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #007BFF 0%, #17DBFC 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.feature-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+}
+
+.equipment-detail-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.equipment-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.equipment-detail-image {
+    width: 100%;
+    height: auto;
+    max-width: 1000px;
+    filter: drop-shadow(0 10px 30px rgba(23, 219, 252, 0.3)) drop-shadow(0 0 50px rgba(70, 126, 254, 0.4)) drop-shadow(0 0 100px rgba(23, 219, 252, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.equipment-detail-image:hover {
+    transform: scale(1.05);
+}
+
+/* Equipment Detail Team Header Section */
+.equipment-detail-team-header {
+    position: relative;
+    width: 100%;
+    max-width: 1340px;
+    min-height: 40px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem 0 2.5rem;
+    margin: 3rem auto 2.5rem auto;
+    z-index: 10;
+    box-sizing: border-box;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.equipment-detail-team-title,
+.equipment-detail-team-nav {
+    position: relative;
+    z-index: 1;
+}
+
+.equipment-detail-team-title {
+    font-family: "MadaniArabic-Bold", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 36px;
+    line-height: 24px;
+    letter-spacing: 0px;
+    vertical-align: middle;
+    color: #ffffff;
+}
+
+.equipment-detail-team-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.equipment-detail-team-nav-dot {
+    border-radius: 40px;
+    width: 30px;
+    height: 30px;
+    border: 0px solid rgba(147, 157, 184, 0.2);
+    display: inline-block;
+    background: transparent;
+    margin: 0;
+    outline: none;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.equipment-detail-team-nav-dot-faded {
+    background: linear-gradient(0deg, rgba(23, 25, 38, 0.7), rgba(23, 25, 38, 0.7)),
+        linear-gradient(263.82deg, #171926 -9.75%, #467EFE 58.82%, #17DBFC 132.96%);
+    opacity: 1;
+}
+
+.equipment-detail-team-nav-dot-gradient {
+    background: linear-gradient(263.82deg, #171926 -9.75%, #467EFE 58.82%, #17DBFC 132.96%);
+    border: 0px solid rgba(147, 157, 184, 0.2);
+    opacity: 1;
+}
+
+.equipment-detail-team-divider {
+    width: 1px;
+    height: 15px;
+    background: rgba(147, 157, 184, 0.12);
+    margin: 0 10px;
+}
+
+.equipment-detail-team-bar {
+    width: 281px;
+    height: 30px;
+    border-radius: 9999px;
+    border: 0px solid rgba(147, 157, 184, 0.2);
+    background: linear-gradient(263.82deg, #171926 -9.75%, #467EFE 58.82%, #17DBFC 132.100%);
+    display: inline-block;
+    margin-left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1000px) {
+    .equipment-detail-content {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .equipment-detail-title {
+        font-size: 2.5rem;
+    }
+
+    .equipment-detail-description {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .equipment-detail-container {
+        padding: 1rem;
+    }
+
+    .equipment-detail-content {
+        padding: 1.5rem;
+    }
+
+    .equipment-detail-title {
+        font-size: 2rem;
+    }
+
+    .equipment-detail-description {
+        font-size: 1rem;
+    }
+
+    .feature-text {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .equipment-detail-title {
+        font-size: 1.8rem;
+    }
+
+    .equipment-detail-content {
+        padding: 1rem;
+    }
+
+    .equipment-feature-item {
+        gap: 0.8rem;
+    }
+
+    .feature-checkmark {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 900px) {
+    .equipment-detail-team-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 1rem 0 1rem;
+        min-height: 60px;
+        margin-bottom: 1.2rem;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 26px;
+        margin-bottom: 0.5rem;
+    }
+
+    .equipment-detail-team-bar {
+        width: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .equipment-detail-team-header {
+        padding: 0 0.5rem 0 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 22px;
+    }
+
+    .equipment-detail-team-bar {
+        width: 150px;
+        height: 25px;
+    }
+}
