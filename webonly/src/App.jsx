@@ -5,6 +5,7 @@ import Footer from './Footer';
 import About from './About';
 import Home from './Home';
 import Contact from './Contact';
+import Services from './Services';
 import Equipment from './Equipment';
 import EquipmentDetail from './EquipmentDetail';
 import Products from './Products';
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/equipment" element={<Equipment />} />
             <Route path="/equipment/:id" element={<EquipmentDetail />} />

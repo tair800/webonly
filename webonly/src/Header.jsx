@@ -43,7 +43,7 @@ function Header() {
                     <li><Link to="/" className={location.pathname === "/" ? "active" : ""}>Əsas Səhifə</Link></li>
                     <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""}>Haqqımızda</Link></li>
                     <li><Link to="/products" className={location.pathname === "/products" || location.pathname === "/market" ? "active" : ""}>Məhsullar</Link></li>
-                    <li><a href="#">Xidmətlər</a></li>
+                    <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""}>Xidmətlər</Link></li>
                     <li><Link to="/equipment" className={location.pathname === "/equipment" ? "active" : ""}>Avadanlıqlar</Link></li>
                     <li><a href="#">Bloq</a></li>
                     <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Əlaqə</Link></li>
