@@ -207,6 +207,95 @@
     margin-left: 0;
 }
 
+/* Equipment Specifications Section */
+.equipment-specifications-section {
+    width: 90%;
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: transparent;
+}
+
+.equipment-specifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.equipment-model {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #17DBFC;
+    font-family: Sansation;
+}
+
+
+
+.equipment-specifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.specification-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.spec-label {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    text-align: left;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.spec-line-css {
+    height: 2px;
+    flex-grow: 1;
+    background: repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.3) 0px,
+        rgba(255, 255, 255, 0.3) 8px,
+        transparent 8px,
+        transparent 16px
+    );
+    margin: 0 1rem;
+}
+
+.spec-value {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    text-align: right;
+    min-width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+
+.spec-value-top {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.spec-value-bottom {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
 /* Responsive Design */
 @media (max-width: 1000px) {
     .equipment-detail-content {
@@ -243,6 +332,36 @@
 
     .feature-text {
         font-size: 0.9rem;
+    }
+
+    .equipment-specifications-section {
+        padding: 1rem;
+    }
+
+    .equipment-model {
+        font-size: 1.5rem;
+    }
+
+
+
+    .specification-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .spec-label {
+        min-width: auto;
+        font-size: 1rem;
+    }
+
+    .spec-line {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .spec-value {
+        font-size: 1rem;
     }
 }
 

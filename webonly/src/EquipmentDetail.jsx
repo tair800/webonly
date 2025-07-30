@@ -13,6 +13,15 @@ const equipmentList = [
             "Wi-Fi Adapter Artırma İmkanı",
             "10.1\" Arxa Ekran Əlavə İmkanı"
         ],
+        specifications: {
+            model: "J-1900",
+            screenSize: "15 inch LED LCD proyeksiyalı Kapasitiv panel",
+            multiTouch: "10 barmaq",
+            processor: "Intel BayTrail J1900 2.0 GHZ",
+            memory: "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
+            storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
+            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
+        },
         img: "/src/assets/equipment1.png"
     },
     {
@@ -25,6 +34,15 @@ const equipmentList = [
             "Wi-Fi Adapter Artırma İmkanı",
             "10.1\" Arxa Ekran Əlavə İmkanı"
         ],
+        specifications: {
+            model: "J-1900",
+            screenSize: "15 inch LED LCD proyeksiyalı Kapasitiv panel",
+            multiTouch: "10 barmaq",
+            processor: "Intel BayTrail J1900 2.0 GHZ",
+            memory: "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
+            storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
+            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
+        },
         img: "/src/assets/equipment1.png"
     },
     {
@@ -37,6 +55,15 @@ const equipmentList = [
             "Wi-Fi Adapter Artırma İmkanı",
             "10.1\" Arxa Ekran Əlavə İmkanı"
         ],
+        specifications: {
+            model: "J-1900",
+            screenSize: "15 inch LED LCD proyeksiyalı Kapasitiv panel",
+            multiTouch: "10 barmaq",
+            processor: "Intel BayTrail J1900 2.0 GHZ",
+            memory: "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
+            storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
+            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
+        },
         img: "/src/assets/equipment1.png"
     }
 ];
@@ -85,7 +112,79 @@ function EquipmentDetail() {
             </div>
 
             <div className="equipment-detail-team-header">
-                <div className="equipment-detail-team-title">Əlavə Məlumat</div>
+                <div className="equipment-detail-team-title">Xüsusiyyətlər</div>
+                <div className="equipment-detail-team-nav">
+                    <div className="equipment-detail-team-nav-dot equipment-detail-team-nav-dot-faded"></div>
+                    <div className="equipment-detail-team-nav-dot equipment-detail-team-nav-dot-gradient"></div>
+                    <div className="equipment-detail-team-divider"></div>
+                    <div className="equipment-detail-team-bar"></div>
+                </div>
+            </div>
+
+            <div className="equipment-specifications-section">
+                <div className="equipment-specifications-header">
+                    <div className="equipment-model">{equipment.specifications.model}</div>
+                </div>
+
+                <div className="equipment-specifications-list">
+                    <div className="specification-item">
+                        <div className="spec-label">Ekran ölçüsü</div>
+                        <div className="spec-line-css"></div>
+                        <div className="spec-value">
+                            <div className="spec-value-top">15 inch LED LCD proyeksiyalı</div>
+                            <div className="spec-value-bottom">Kapasitiv panel</div>
+                        </div>
+                    </div>
+
+                    <div className="specification-item">
+                        <div className="spec-label">Multi-Touch Sensor Ekran</div>
+                        <div className="spec-line-css"></div>
+                        <div className="spec-value">
+                            <div className="spec-value-top">10 barmaq</div>
+                            <div className="spec-value-bottom"></div>
+                        </div>
+                    </div>
+
+                    <div className="specification-item">
+                        <div className="spec-label">Prosessor</div>
+                        <div className="spec-line-css"></div>
+                        <div className="spec-value">
+                            <div className="spec-value-top">Intel BayTrail J1900</div>
+                            <div className="spec-value-bottom">2.0 GHZ</div>
+                        </div>
+                    </div>
+
+                    <div className="specification-item">
+                        <div className="spec-label">Yaddaş RAM</div>
+                        <div className="spec-line-css"></div>
+                        <div className="spec-value">
+                            <div className="spec-value-top">4GB DDR3 SODIMM - 8GB</div>
+                            <div className="spec-value-bottom">(1333/1666 MHz)</div>
+                        </div>
+                    </div>
+
+                    <div className="specification-item">
+                        <div className="spec-label">Flash Disk</div>
+                        <div className="spec-line-css"></div>
+                        <div className="spec-value">
+                            <div className="spec-value-top">120GB SSD HDD 2.5" /MSATA</div>
+                            <div className="spec-value-bottom">240GB SSD artırma imkanı</div>
+                        </div>
+                    </div>
+
+                    <div className="specification-item">
+                        <div className="spec-label">Uyğun əməliyyat sistemi</div>
+                        <div className="spec-line-css"></div>
+                        <div className="spec-value">
+                            <div className="spec-value-top">Microsoft Windows 7, Windows 8.1</div>
+                            <div className="spec-value-bottom">Windows 10, Windows 11, Posready 7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="equipment-detail-team-header">
+                <div className="equipment-detail-team-title">Oxşar avadanlıqlar</div>
                 <div className="equipment-detail-team-nav">
                     <div className="equipment-detail-team-nav-dot equipment-detail-team-nav-dot-faded"></div>
                     <div className="equipment-detail-team-nav-dot equipment-detail-team-nav-dot-gradient"></div>
