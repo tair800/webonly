@@ -73,6 +73,12 @@
     border-radius: 15px;
     padding: 3px;
     display: block;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.card-border-wrapper:hover {
+    transform: scale(1.02);
 }
 
 .mobile-card {

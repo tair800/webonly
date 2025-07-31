@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { servicesList } from './data/servicesData.js';
 import './Services.css';
 
 function Services() {
-    const [services] = useState([
-        { id: 1, name: "Bazanın arxivlənməsi", subtitle: "Arxivləmə", icon: "/src/assets/service1.png" },
-        { id: 2, name: "Logların saxlanılması", subtitle: "Loglama", icon: "/src/assets/service2.png" },
-        { id: 3, name: "Hesabatların e-poçt göndərilməsi", subtitle: "E-poçt", icon: "/src/assets/service3.png" },
-        { id: 4, name: "Mobil hesabatlar", subtitle: "Mobil hesabatlar", icon: "/src/assets/service4.png" },
-        { id: 5, name: "Bazanın nüsxəsinin alınması", subtitle: "Nüsxələmə", icon: "/src/assets/service5.png" },
-        { id: 6, name: "Bonus modulunun tətbiqi", subtitle: "Bonus modulu", icon: "/src/assets/service6.png" },
-        { id: 7, name: "Hesabatların hazırlanması", subtitle: "Hesabatlar", icon: "/src/assets/service7.png" },
-        { id: 8, name: "Əməliyyat sisteminin yazılması", subtitle: "Əməliyyat sistemi", icon: "/src/assets/service8.png" },
-        { id: 9, name: "Sistemin audit olunması", subtitle: "Audit", icon: "/src/assets/service9.png" }
-    ]);
+    const navigate = useNavigate();
+    const services = servicesList;
 
     return (
         <div className="services-container">
@@ -30,7 +23,7 @@ function Services() {
                 {/* Services Cards Section */}
                 <div className="card-section">
                     {services.map((service) => (
-                        <div key={service.id} className="card-border-wrapper">
+                        <div key={service.id} className="card-border-wrapper" onClick={() => navigate(`/services/${service.id}`)}>
                             <div className="mobile-card">
                                 <img src={service.icon} alt={service.name} className="icon" />
                                 <div className="card-text-content">

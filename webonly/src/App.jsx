@@ -8,6 +8,7 @@ import Contact from './Contact';
 import Services from './Services';
 import Equipment from './Equipment';
 import EquipmentDetail from './EquipmentDetail';
+import ServiceDetail from './ServiceDetail';
 import Products from './Products';
 import Market from './Market';
 import Textile from './Textile';
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/:id" element={<ServiceDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/equipment" element={<Equipment />} />
             <Route path="/equipment/:id" element={<EquipmentDetail />} />
