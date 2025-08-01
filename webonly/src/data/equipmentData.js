@@ -20,7 +20,7 @@ export const equipmentList = [
             storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
             operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
         },
-        img: "/src/assets/equipment1.png"
+        img: "/assets/equipment1.png"
     },
     {
         id: 2,
@@ -43,7 +43,7 @@ export const equipmentList = [
             storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
             operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
         },
-        img: "/src/assets/equipment1.png"
+        img: "/assets/equipment1.png"
     },
     {
         id: 3,
@@ -66,6 +66,6 @@ export const equipmentList = [
             storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
             operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
         },
-        img: "/src/assets/equipment1.png"
+        img: "/assets/equipment1.png"
     }
 ]; 

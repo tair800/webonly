@@ -25,13 +25,13 @@ function Contact() {
         <div className="contact-container">
             <div className="contact-center">
                 <div className="contact-logo">
-                    <img src="/src/assets/logo-white.png" alt="Logo" />
+                    <img src="/assets/logo-white.png" alt="Logo" />
                 </div>
                 <div className="contact-text">
                     <p>Bizimlə əlaqə</p>
                 </div>
                 <div className="contact-rainbow">
-                    <img src="/src/assets/rainbow.png" alt="Rainbow" />
+                    <img src="/assets/rainbow.png" alt="Rainbow" />
                 </div>
             </div>
 
@@ -57,28 +57,28 @@ function Contact() {
                         <div className="contact-info">
                             <div className="contact-item">
                                 <div className="contact-icon">
-                                    <img src="/src/assets/phone-icon.png" alt="Phone" />
+                                    <img src="/assets/phone-icon.png" alt="Phone" />
                                 </div>
                                 <span>+994 xx xxx xx xx</span>
                             </div>
 
                             <div className="contact-item">
                                 <div className="contact-icon">
-                                    <img src="/src/assets/phone-icon.png" alt="Phone" />
+                                    <img src="/assets/phone-icon.png" alt="Phone" />
                                 </div>
                                 <span>+994 xx xxx xx xx</span>
                             </div>
 
                             <div className="contact-item">
                                 <div className="contact-icon">
-                                    <img src="/src/assets/email-icon.png" alt="Email" />
+                                    <img src="/assets/email-icon.png" alt="Email" />
                                 </div>
                                 <span>example@mail.az</span>
                             </div>
 
                             <div className="contact-item">
                                 <div className="contact-icon">
-                                    <img src="/src/assets/location-icon.png" alt="Location" />
+                                    <img src="/assets/location-icon.png" alt="Location" />
                                 </div>
                                 <span>Baku</span>
                             </div>
@@ -152,7 +152,7 @@ function Contact() {
             </div>
 
             <div className="contact-map">
-                <img src="/src/assets/map.png" alt="Map" />
+                <img src="/assets/map.png" alt="Map" />
             </div>
         </div>
     );

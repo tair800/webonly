@@ -3,7 +3,7 @@ export const teamMembers = [
         id: 1,
         name: "Name Surname",
         position: "Baş proqram tərtibatçısı",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 67",
         email: "developer@company.com",
         linkedin: "linkedin.com/in/developer"
@@ -12,7 +12,7 @@ export const teamMembers = [
         id: 2,
         name: "Name Surname",
         position: "Layihə koordinatoru",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 68",
         email: "coordinator@company.com",
         linkedin: "linkedin.com/in/coordinator"
@@ -21,7 +21,7 @@ export const teamMembers = [
         id: 3,
         name: "Name Surname",
         position: "Baş proqramçı",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 69",
         email: "programmer@company.com",
         linkedin: "linkedin.com/in/programmer"
@@ -30,7 +30,7 @@ export const teamMembers = [
         id: 4,
         name: "Name Surname",
         position: "IT mütəxəssisi",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 70",
         email: "specialist@company.com",
         linkedin: "linkedin.com/in/specialist"
@@ -39,7 +39,7 @@ export const teamMembers = [
         id: 5,
         name: "Name Surname",
         position: "Layihələr üzrə şöbə rəhbəri",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 71",
         email: "manager@company.com",
         linkedin: "linkedin.com/in/manager"
@@ -48,7 +48,7 @@ export const teamMembers = [
         id: 6,
         name: "Name Surname",
         position: "Layihə meneceri",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 72",
         email: "project-manager@company.com",
         linkedin: "linkedin.com/in/project-manager"
@@ -57,7 +57,7 @@ export const teamMembers = [
         id: 7,
         name: "Name Surname",
         position: "SQL Server üzrə proqramçı",
-        image: "/src/assets/employee.png",
+        image: "/assets/employee.png",
         phone: "+994 50 123 45 73",
         email: "sql-developer@company.com",
         linkedin: "linkedin.com/in/sql-developer"

@@ -9,20 +9,20 @@ function Products() {
     const [productsState] = useState(products);
 
     const handleProductClick = (product) => {
-        navigate(product.path);
+        navigate(`/product/${product.id}`);
     };
 
     return (
         <div className="products-container">
             <div className="products-center">
                 <div className="products-logo">
-                    <img src="/src/assets/logo-white.png" alt="Logo" />
+                    <img src="/assets/logo-white.png" alt="Logo" />
                 </div>
                 <div className="products-text">
                     <p>Məhsullar</p>
                 </div>
                 <div className="products-rainbow">
-                    <img src="/src/assets/rainbow.png" alt="Rainbow" />
+                    <img src="/assets/rainbow.png" alt="Rainbow" />
                 </div>
             </div>
 

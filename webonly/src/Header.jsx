@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logoIcon from './assets/logo-icon.png';
-import logoText from './assets/logo-text.png';
-import globeImg from './assets/globe.png';
-import dropdownIcon from './assets/dropdown-icon.png';
-import logoWhite from './assets/logo-white.png';
+import logoIcon from '/assets/logo-icon.png';
+import logoText from '/assets/logo-text.png';
+import globeImg from '/assets/globe.png';
+import dropdownIcon from '/assets/dropdown-icon.png';
+import logoWhite from '/assets/logo-white.png';
 import './Header.css';
 
 function Header() {

@@ -1,0 +1,428 @@
+.product-detail-container {
+    min-height: 100vh;
+    background: #111214;
+    color: #ffffff;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.product-detail-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Section Styles */
+.main-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.main-left {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.main-right {
+    flex: 0 0 50%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: 80vh;
+}
+
+.first-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.first-left {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    padding: 2rem;
+}
+
+.first-right {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.second-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.second-left {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 80vh;
+}
+
+.second-right {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    padding: 2rem;
+}
+
+.third-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.third-left {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    padding: 2rem;
+}
+
+.third-right {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.product-detail-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+
+
+.product-detail-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #ffffff;
+}
+
+.product-detail-line {
+    width: 60px;
+    height: 2px;
+    background: #467EFE;
+}
+
+.product-detail-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(136, 159, 184, 1);
+    margin-bottom: 3rem;
+    text-align: justify;
+    max-width: 93%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.product-detail-scroll {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.scroll-arrow {
+    width: 25px;
+    height: 25px;
+    background: linear-gradient(135deg, #467EFE 0%, #17DBFC 100%);
+    -webkit-mask: url('/assets/arrowDown.png') no-repeat center / contain;
+    mask: url('/assets/arrowDown.png') no-repeat center / contain;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+/* New Content Styles */
+.tagline-container {
+    display: inline-grid;
+    grid-template-columns: max-content;
+    grid-template-rows: max-content;
+    place-items: start;
+    position: relative;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.tagline-line {
+    grid-area: 1 / 1;
+    height: 2px;
+    margin-left: 0;
+    margin-top: 0;
+    width: 72px;
+    background: linear-gradient(90deg, #17dbfc 0%, #2fadfd 30%, #467efe 60%, #2fadfd 90%, #17dbfc 100%);
+}
+
+.page-number-01 {
+    font-family: MadaniArabic-SemiBold;
+    font-weight: bold;
+    font-size: 14rem;
+    color: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    top: -76px;
+    left: -125px;
+    z-index: 0;
+    line-height: 1;
+}
+
+.page-number-02 {
+    font-family: MadaniArabic-SemiBold;
+    font-weight: bold;
+    font-size: 14rem;
+    color: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    top: -169px;
+    left: -125px;
+    z-index: 0;
+    line-height: 1;
+}
+
+.page-number-03 {
+    font-family: MadaniArabic-SemiBold;
+    font-weight: bold;
+    font-size: 14rem;
+    color: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    top: -76px;
+    left: -125px;
+    z-index: 0;
+    line-height: 1;
+}
+
+.more-container {
+    display: inline-grid;
+    grid-template-columns: max-content;
+    grid-template-rows: max-content;
+    place-items: start;
+    position: relative;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.more-text {
+    grid-area: 1 / 1;
+    background: linear-gradient(90deg, #17dbfc 0%, #2fadfd 30%, #467efe 60%, #2fadfd 90%, #17dbfc 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    font-family: 'MadaniArabic-Regular', system-ui, -apple-system, sans-serif;
+    height: 116px;
+    line-height: 0;
+    margin-left: 0;
+    margin-top: 0;
+    font-style: normal;
+    position: relative;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    font-size: 18px;
+    text-align: left;
+    width: 501px;
+}
+
+.more-text p {
+    display: block;
+    line-height: normal;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    margin-left: 12rem;
+    margin-top: 51px;
+}
+
+.content-title {
+    font-family: 'MadaniArabic-SemiBold', 'Arial', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 50px;
+    text-align: left;
+    line-height: 1.2;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.content-title p {
+    display: block;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.content-description-01 {
+    font-family: 'MadaniArabic-Medium', 'Arial', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 1.1rem;
+    text-align: left;
+    line-height: 1.6;
+    max-width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.content-description-01 p {
+    display: block;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.content-description-02 {
+    font-family: 'MadaniArabic-Medium', 'Arial', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 16px;
+    text-align: left;
+    line-height: 1.6;
+    max-width: 81%;
+    position: relative;
+    z-index: 1;
+}
+
+.content-description-02 p {
+    display: block;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Second Section Content Styles */
+.content-heading {
+    font-family: 'MadaniArabic-SemiBold', 'Arial', sans-serif;
+    font-style: normal;
+    position: relative;
+    flex-shrink: 0;
+    color: #ffffff;
+    font-size: 50px;
+    font-weight: 600;
+    text-align: left;
+    width: 555px;
+    z-index: 1;
+}
+
+.content-heading p {
+    display: block;
+    line-height: normal;
+    margin: 0;
+}
+
+/* Third Section Content Styles */
+.main-title {
+    font-family: 'MadaniArabic-SemiBold', system-ui, -apple-system, sans-serif;
+    font-style: normal;
+    position: relative;
+    flex-shrink: 0;
+    color: #ffffff;
+    font-size: 64px;
+    text-align: left;
+    width: 598px;
+    z-index: 1;
+}
+
+.main-title p {
+    display: block;
+    line-height: normal;
+}
+
+.description-text {
+    font-family: 'MadaniArabic-Medium', system-ui, -apple-system, sans-serif;
+    line-height: 1.2;
+    font-style: normal;
+    position: relative;
+    flex-shrink: 0;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: left;
+    width: 632px;
+    z-index: 1;
+}
+
+.description-text p {
+    display: block;
+    margin-bottom: 0;
+}
+
+.description-text p:last-child {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .main-section,
+    .first-section {
+        flex-direction: column;
+        min-height: auto;
+        padding: 1rem;
+    }
+
+    .main-left,
+    .main-right,
+    .first-left,
+    .first-right {
+        flex: 1;
+        width: 100%;
+        height: auto;
+        min-height: 50vh;
+    }
+
+    .content-title {
+        font-size: 2rem;
+    }
+
+    .product-detail-title {
+        font-size: 2rem;
+    }
+
+    .content-container {
+        max-width: 100%;
+        gap: 1.5rem;
+    }
+}

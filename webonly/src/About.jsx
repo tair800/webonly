@@ -21,17 +21,17 @@ function About() {
     return (
         <div className="about-container">
             <div className="about-logo-top">
-                <img src="/src/assets/logo-white.png" alt="Logo" />
+                                    <img src="/assets/logo-white.png" alt="Logo" />
             </div>
             <div className="about-text">
                 <p>Haqqımızda</p>
             </div>
             <div className="about-rainbow">
-                <img src="/src/assets/rainbow.png" alt="Rainbow" />
+                                    <img src="/assets/rainbow.png" alt="Rainbow" />
             </div>
 
             <div className="about-logo">
-                <img src="/src/assets/logo-only.png" alt="Logo" />
+                                    <img src="/assets/logo-only.png" alt="Logo" />
                 <p className="about-logo-text">Texnologiya ilə Gələcəyə Doğru</p>
                 <p className="about-logo-description">10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.</p>
             </div>
@@ -47,14 +47,14 @@ function About() {
             </div>
 
             <div className="about-description-section">
-                <img src="/src/assets/director.png" alt="Director" className="about-director-img" />
+                                        <img src="/assets/director.png" alt="Director" className="about-director-img" />
                 <div className="about-name">Name Surname</div>
                 <div className="about-position">director</div>
                 <div>
                     <p className="about-description-text">
                         10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.
                     </p>
-                    <img src="/src/assets/comma.png" alt="Comma" className="about-comma" />
+                                            <img src="/assets/comma.png" alt="Comma" className="about-comma" />
                 </div>
             </div>
 
@@ -74,7 +74,7 @@ function About() {
                                     </svg>
                                 </a>
                                 <a href={`mailto:${member.email}`}>
-                                    <img src="/src/assets/mail-icon.png" alt="Email" />
+                                    <img src="/assets/mail-icon.png" alt="Email" />
                                 </a>
                                 <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

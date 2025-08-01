@@ -233,7 +233,7 @@
   left: 0;
   right: 10px;
   bottom: 0;
-  background: url('/src/assets/logo-only.png') no-repeat 85% center;
+  background: url('/assets/logo-only.png') no-repeat 85% center;
   background-size: 250px;
   opacity: 0.1;
   pointer-events: none;

@@ -11,13 +11,13 @@ function Services() {
         <div className="services-container">
             <div className="services-center">
                 <div className="services-logo">
-                    <img src="/src/assets/logo-white.png" alt="Logo" />
+                    <img src="/assets/logo-white.png" alt="Logo" />
                 </div>
                 <div className="services-text">
                     <p>Xidmətlər</p>
                 </div>
                 <div className="services-rainbow">
-                    <img src="/src/assets/rainbow.png" alt="Rainbow" />
+                    <img src="/assets/rainbow.png" alt="Rainbow" />
                 </div>
 
                 {/* Services Cards Section */}

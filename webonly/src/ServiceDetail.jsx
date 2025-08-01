@@ -16,7 +16,7 @@ function ServiceDetail() {
             <div className="icon-container" data-name="Icon">
                 <img
                     height="41"
-                    src={isActive ? "/src/assets/services-active.png" : "/src/assets/services-deac.png"}
+                    src={isActive ? "/assets/services-active.png" : "/assets/services-deac.png"}
                     width="41"
                     alt="Icon"
                 />
@@ -64,7 +64,7 @@ function ServiceDetail() {
             <div className="icon-container-small" data-name="Icon">
                 <img
                     height="36"
-                    src={isActive ? "/src/assets/services-active.png" : "/src/assets/services-deac.png"}
+                    src={isActive ? "/assets/services-active.png" : "/assets/services-deac.png"}
                     width="36"
                     alt="Icon"
                 />
