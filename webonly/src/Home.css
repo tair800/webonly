@@ -36,8 +36,8 @@ body {
 /* Circle Background Elements */
 .circle-background-left {
     position: absolute;
-    top: 75%;
-    left: 10%;
+    top: 80%;
+    left: 0%;
     transform: translate(-50%, -50%);
     width: 400px;
     height: 400px;
@@ -52,8 +52,8 @@ body {
 
 .circle-background-right {
     position: absolute;
-    top: 75%;
-    right: 10%;
+    top: 80%;
+    right: 0%;
     transform: translate(50%, -50%);
     width: 400px;
     height: 400px;
@@ -83,7 +83,7 @@ body {
 /* Top Ellipse */
 .top-ellipse {
     position: absolute;
-    top: -60px;
+    top: -50px;
     left: 50%;
     transform: translateX(-50%);
     width: 1920px;
@@ -143,7 +143,7 @@ body {
 /* Bottom Ellipse */
 .bottom-ellipse {
     position: absolute;
-    bottom: -60px;
+    bottom: -50px;
     left: 50%;
     transform: translateX(-50%);
     width: 1920px;
