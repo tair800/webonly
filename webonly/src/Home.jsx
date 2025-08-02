@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Home.css';
 import slider1 from '/assets/slider1.png';
 import slider2 from '/assets/slider2.png';
@@ -92,9 +92,21 @@ function CircularProgress({ currentIndex, totalSlides }) {
 }
 
 export default function Home() {
+    const scrollerRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [direction, setDirection] = useState('next');
+    const [imageWidth, setImageWidth] = useState(window.innerWidth / 3);
+
+    // Update image width on window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setImageWidth(window.innerWidth / 3);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Auto-advance slider with infinite loop
     useEffect(() => {
@@ -107,6 +119,16 @@ export default function Home() {
 
         return () => clearInterval(interval);
     }, [isTransitioning]);
+
+    // Update transform for smooth scrolling
+    useEffect(() => {
+        if (scrollerRef.current) {
+            const scrollPosition = currentIndex * imageWidth;
+            scrollerRef.current.style.transform = `translateX(-${scrollPosition}px)`;
+        }
+    }, [currentIndex, imageWidth]);
+
+
 
     const nextSlide = () => {
         if (!isTransitioning) {
@@ -135,33 +157,56 @@ export default function Home() {
     return (
         <div className="home-container">
             <div className="slider-container">
-                <div className={`slider-track ${isTransitioning ? 'transitioning' : ''} ${direction}`}>
-                    {[0, 1, 2].map((position) => {
-                        const slideIndex = (currentIndex + position) % slides.length;
-                        const isActive = position === 1;
-                        const isSide = position === 0 || position === 2;
-
-                        return (
-                            <div
-                                key={`${currentIndex}-${position}-${slideIndex}`}
-                                className={`slider-slide ${isActive ? 'active' : ''} ${isSide ? 'side' : ''} ${isTransitioning ? 'animating' : ''}`}
-                                style={{
-                                    backgroundImage: `url(${slides[slideIndex].img})`
-                                }}
-                            />
-                        );
-                    })}
+                {/* Top Ellipse */}
+                <div className="top-ellipse">
+                    <svg className="ellipse-svg" fill="none" preserveAspectRatio="none" viewBox="0 0 1920 147">
+                        <ellipse cx="960" cy="73.5" fill="#111214" rx="960" ry="73.5" />
+                    </svg>
                 </div>
 
+                {/* Image Scroller Container - Shows 3 images */}
+                <div className="image-scroller-wrapper">
+                    <div className="image-scroller-container">
+                        <div
+                            ref={scrollerRef}
+                            className="image-scroller"
+                            style={{ width: `${slides.length * imageWidth}px` }}
+                        >
+                            {/* Duplicate images for infinite loop effect */}
+                            {[...slides, ...slides, ...slides].map((slide, index) => (
+                                <div
+                                    key={`${index}-${slide.id}`}
+                                    className="image-slide"
+                                    style={{
+                                        width: `${imageWidth}px`,
+                                        backgroundImage: `url('${slide.img}')`
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Ellipse */}
+                <div className="bottom-ellipse">
+                    <svg className="ellipse-svg" fill="none" preserveAspectRatio="none" viewBox="0 0 1920 147">
+                        <ellipse cx="960" cy="73.5" fill="#111214" rx="960" ry="73.5" />
+                    </svg>
+                </div>
+
+            </div>
+
+            {/* Circular progress with buttons on sides */}
+            <div className="circular-progress-container">
                 <button className="slider-nav-btn slider-prev-btn" onClick={prevSlide} disabled={isTransitioning}>
                     <img src={prevIcon} alt="Previous" className="slider-nav-icon" />
                 </button>
 
+                <CircularProgress currentIndex={currentIndex} totalSlides={slides.length} />
+
                 <button className="slider-nav-btn slider-next-btn" onClick={nextSlide} disabled={isTransitioning}>
                     <img src={nextIcon} alt="Next" className="slider-nav-icon" />
                 </button>
-
-                <CircularProgress currentIndex={currentIndex} totalSlides={slides.length} />
             </div>
         </div>
     );

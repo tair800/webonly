@@ -12,6 +12,7 @@ import ServiceDetail from './ServiceDetail';
 import Products from './Products';
 import Factory from './Factory';
 import ProductDetail from './ProductDetail';
+import TestPage from './TestPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/factory" element={<Factory />} />
+            <Route path="/test" element={<TestPage />} />
           </Routes>
         </div>
         <Footer />
