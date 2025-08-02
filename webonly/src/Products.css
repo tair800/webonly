@@ -6,6 +6,40 @@
     padding: 2rem 0;
     position: relative;
     overflow-x: hidden;
+    overflow: visible;
+}
+
+/* Circle Background Elements */
+.products-circle-background-left-1 {
+    position: absolute;
+    top: 25%;
+    left: 5%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+    backdrop-filter: blur(285.79998779296875px);
+    filter: blur(100px);
+    opacity: 0.2;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.products-circle-background-left-2 {
+    position: absolute;
+    top: 90%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+    backdrop-filter: blur(285.79998779296875px);
+    filter: blur(100px);
+    opacity: 0.2;
+    z-index: 1;
+    pointer-events: none;
 }
 
 /* Products Center Section */

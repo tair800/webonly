@@ -167,6 +167,9 @@ function ServiceDetail() {
 
     return (
         <div className="service-detail-container">
+            {/* Circle Background Element */}
+            <div className="service-detail-circle-background-right"></div>
+
             <div className="service-detail-content">
                 <div className="service-detail-left">
                     <h3 className="service-detail-sidebar-title">Xidmətlərimiz</h3>

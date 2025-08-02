@@ -7,6 +7,73 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    position: relative;
+    overflow: visible;
+}
+
+/* Circle Background Elements */
+.equipment-detail-circle-background-1 {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+    backdrop-filter: blur(285.79998779296875px);
+    filter: blur(100px);
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.equipment-detail-circle-background-2 {
+    position: absolute;
+    top: 55%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+    backdrop-filter: blur(285.79998779296875px);
+    filter: blur(100px);
+    opacity: 0.06;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.equipment-detail-circle-background-3 {
+    position: absolute;
+    top: 80%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+    backdrop-filter: blur(285.79998779296875px);
+    filter: blur(100px);
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.equipment-detail-circle-background-4 {
+    position: absolute;
+    top: 90%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
+    backdrop-filter: blur(285.79998779296875px);
+    filter: blur(100px);
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .equipment-detail-content {
@@ -258,13 +325,11 @@
 .spec-line-css {
     height: 2px;
     flex-grow: 1;
-    background: repeating-linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.3) 0px,
-        rgba(255, 255, 255, 0.3) 8px,
-        transparent 8px,
-        transparent 16px
-    );
+    background: repeating-linear-gradient(to right,
+            rgba(255, 255, 255, 0.3) 0px,
+            rgba(255, 255, 255, 0.3) 8px,
+            transparent 8px,
+            transparent 16px);
     margin: 0 1rem;
 }
 

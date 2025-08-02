@@ -9,6 +9,11 @@ function Services() {
 
     return (
         <div className="services-container">
+            {/* Circle Background Elements */}
+            <div className="services-circle-background-1"></div>
+            <div className="services-circle-background-2"></div>
+            <div className="services-circle-background-3"></div>
+
             <div className="services-center">
                 <div className="services-logo">
                     <img src="/assets/logo-white.png" alt="Logo" />

@@ -140,6 +140,10 @@ function ProductDetail() {
 
     return (
         <div className="product-detail-container">
+            {/* Circle Background Elements */}
+            <div className="product-detail-circle-background-1"></div>
+            <div className="product-detail-circle-background-2"></div>
+
             <div className="product-detail-content">
                 <div className="main-section" ref={mainSectionRef}>
                     <div className="main-left">

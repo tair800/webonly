@@ -23,6 +23,10 @@ function Contact() {
 
     return (
         <div className="contact-container">
+            {/* Circle Background Elements */}
+            <div className="contact-circle-background-left"></div>
+            <div className="contact-circle-background-right"></div>
+
             <div className="contact-center">
                 <div className="contact-logo">
                     <img src="/assets/logo-white.png" alt="Logo" />
@@ -159,4 +163,4 @@ function Contact() {
 }
 
 export default Contact;
- 
+

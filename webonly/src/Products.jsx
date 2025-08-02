@@ -14,6 +14,10 @@ function Products() {
 
     return (
         <div className="products-container">
+            {/* Circle Background Elements */}
+            <div className="products-circle-background-left-1"></div>
+            <div className="products-circle-background-left-2"></div>
+
             <div className="products-center">
                 <div className="products-logo">
                     <img src="/assets/logo-white.png" alt="Logo" />
@@ -66,4 +70,4 @@ function Products() {
     );
 }
 
-export default Products; 
+export default Products;    

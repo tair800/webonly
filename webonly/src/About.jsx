@@ -20,18 +20,24 @@ function About() {
 
     return (
         <div className="about-container">
+            {/* Circle Background Elements */}
+            <div className="about-circle-background"></div>
+            <div className="about-circle-background-left-2"></div>
+            <div className="about-circle-background-right"></div>
+            <div className="about-circle-background-right-2"></div>
+
             <div className="about-logo-top">
-                                    <img src="/assets/logo-white.png" alt="Logo" />
+                <img src="/assets/logo-white.png" alt="Logo" />
             </div>
             <div className="about-text">
                 <p>Haqqımızda</p>
             </div>
             <div className="about-rainbow">
-                                    <img src="/assets/rainbow.png" alt="Rainbow" />
+                <img src="/assets/rainbow.png" alt="Rainbow" />
             </div>
 
             <div className="about-logo">
-                                    <img src="/assets/logo-only.png" alt="Logo" />
+                <img src="/assets/logo-only.png" alt="Logo" />
                 <p className="about-logo-text">Texnologiya ilə Gələcəyə Doğru</p>
                 <p className="about-logo-description">10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.</p>
             </div>
@@ -47,14 +53,14 @@ function About() {
             </div>
 
             <div className="about-description-section">
-                                        <img src="/assets/director.png" alt="Director" className="about-director-img" />
+                <img src="/assets/director.png" alt="Director" className="about-director-img" />
                 <div className="about-name">Name Surname</div>
                 <div className="about-position">director</div>
                 <div>
                     <p className="about-description-text">
                         10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.
                     </p>
-                                            <img src="/assets/comma.png" alt="Comma" className="about-comma" />
+                    <img src="/assets/comma.png" alt="Comma" className="about-comma" />
                 </div>
             </div>
 

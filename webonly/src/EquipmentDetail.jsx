@@ -24,6 +24,12 @@ function EquipmentDetail() {
 
     return (
         <div className="equipment-detail-container">
+            {/* Circle Background Elements */}
+            <div className="equipment-detail-circle-background-1"></div>
+            <div className="equipment-detail-circle-background-2"></div>
+            <div className="equipment-detail-circle-background-3"></div>
+            <div className="equipment-detail-circle-background-4"></div>
+
             <div className="equipment-detail-content">
                 <div className="equipment-detail-left">
                     <h1 className="equipment-detail-title">{equipment.name}</h1>

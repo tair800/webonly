@@ -158,6 +158,10 @@ export default function Home() {
 
     return (
         <div className="home-container">
+            {/* Circle Background Elements */}
+            <div className="circle-background-left"></div>
+            <div className="circle-background-right"></div>
+
             <div className="slider-container">
                 {/* Top Ellipse */}
                 <div className="top-ellipse">

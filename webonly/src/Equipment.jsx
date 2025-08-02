@@ -53,6 +53,12 @@ function Equipment() {
 
     return (
         <div className="equipment-container">
+            {/* Circle Background Elements */}
+            <div className="equipment-circle-background-left-1"></div>
+            <div className="equipment-circle-background-left-2"></div>
+            <div className="equipment-circle-background-left-3"></div>
+            <div className="equipment-circle-background-left-4"></div>
+
             <div className="equipment-center">
                 <div className="equipment-logo">
                     <img src="/assets/logo-white.png" alt="Logo" />
