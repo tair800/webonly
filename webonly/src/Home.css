@@ -92,6 +92,7 @@ body {
     transform: translateX(0);
     margin: 0;
     padding: 0;
+    gap: 20px;
 }
 
 /* Individual image containers */

@@ -123,7 +123,9 @@ export default function Home() {
     // Update transform for smooth scrolling
     useEffect(() => {
         if (scrollerRef.current) {
-            const scrollPosition = currentIndex * imageWidth;
+            const gapWidth = 20; // 20px gap between images
+            const totalItemWidth = imageWidth + gapWidth;
+            const scrollPosition = currentIndex * totalItemWidth;
             scrollerRef.current.style.transform = `translateX(-${scrollPosition}px)`;
         }
     }, [currentIndex, imageWidth]);
@@ -170,7 +172,7 @@ export default function Home() {
                         <div
                             ref={scrollerRef}
                             className="image-scroller"
-                            style={{ width: `${slides.length * imageWidth}px` }}
+                            style={{ width: `${slides.length * (imageWidth + 20)}px` }}
                         >
                             {/* Duplicate images for infinite loop effect */}
                             {[...slides, ...slides, ...slides].map((slide, index) => (
