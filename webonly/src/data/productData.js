@@ -32,7 +32,7 @@ export const products = [
         alt: "Tekstil",
         path: "/textile",
         mainImage: "/assets/market1.png",
-        sectionImages: ["/assets/market2.png", "/assets/market3.png", "/assets/market4.png"],
+        sectionImages: ["/assets/market2.png", "/assets/market3.png"],
         description: "Tekstil Modulunuz Pambıqdan Başlayaraq Hazır Məhsula Qədər Bütün İstehsal Proseslərini İdarə Edə, Material Əsasında Xərc Və Qazanc Hesabatlarını Hazırlaya Bilər. Bu Proqram Vasitəsilə Siz Toxuculuq Və Tikiş Emalatxanalarınızı Rəqəmsallaşdıraraq İstehsal Səviyyənizi Artıra Biləcəksiniz.",
         sections: [
             {

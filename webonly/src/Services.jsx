@@ -9,7 +9,6 @@ function Services() {
 
     return (
         <div className="services-container">
-            {/* Circle Background Elements */}
             <div className="services-circle-background-1"></div>
             <div className="services-circle-background-2"></div>
             <div className="services-circle-background-3"></div>
@@ -25,7 +24,6 @@ function Services() {
                     <img src="/assets/rainbow.png" alt="Rainbow" />
                 </div>
 
-                {/* Services Cards Section */}
                 <div className="card-section">
                     {services.map((service) => (
                         <div key={service.id} className="card-border-wrapper" onClick={() => navigate(`/services/${service.id}`)}>

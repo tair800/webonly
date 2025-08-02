@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { equipmentList } from './data/equipmentData';
 import './EquipmentDetail.css';
@@ -6,6 +6,7 @@ import './EquipmentDetail.css';
 function EquipmentDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [currentPage, setCurrentPage] = useState(0);
 
     const equipment = equipmentList.find(item => item.id === parseInt(id));
 
@@ -24,7 +25,6 @@ function EquipmentDetail() {
 
     return (
         <div className="equipment-detail-container">
-            {/* Circle Background Elements */}
             <div className="equipment-detail-circle-background-1"></div>
             <div className="equipment-detail-circle-background-2"></div>
             <div className="equipment-detail-circle-background-3"></div>
@@ -34,7 +34,6 @@ function EquipmentDetail() {
                 <div className="equipment-detail-left">
                     <h1 className="equipment-detail-title">{equipment.name}</h1>
                     <p className="equipment-detail-description">{equipment.description}</p>
-
                     <div className="equipment-detail-features">
                         {equipment.features.map((feature, index) => (
                             <div key={index} className="equipment-feature-item">
@@ -44,7 +43,6 @@ function EquipmentDetail() {
                         ))}
                     </div>
                 </div>
-
                 <div className="equipment-detail-right">
                     <div className="equipment-image-container">
                         <img src={equipment.img} alt={equipment.name} className="equipment-detail-image" />
@@ -65,62 +63,47 @@ function EquipmentDetail() {
             <div className="equipment-specifications-section">
                 <div className="equipment-specifications-header">
                     <div className="equipment-model">{equipment.specifications.model}</div>
+                    <button className="equipment-detail-nav-button" onClick={() => setCurrentPage(currentPage === 0 ? 1 : 0)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: currentPage === 1 ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                            <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
                 </div>
 
                 <div className="equipment-specifications-list">
-                    <div className="specification-item">
-                        <div className="spec-label">Ekran ölçüsü</div>
-                        <div className="spec-line-css"></div>
-                        <div className="spec-value">
-                            <div className="spec-value-top">15 inch LED LCD proyeksiyalı</div>
-                            <div className="spec-value-bottom">Kapasitiv panel</div>
-                        </div>
-                    </div>
+                    {Object.entries({
+                        screenSize: "Ekran ölçüsü",
+                        multiTouch: "Multi-Touch Sensor Ekran",
+                        processor: "Prosessor",
+                        memory: "Yaddaş RAM",
+                        storage: "Flash Disk",
+                        operatingSystem: "Uyğun əməliyyat sistemi",
+                        graphics: "Qrafik Kartı",
+                        network: "Şəbəkə",
+                        ports: "Portlar",
+                        power: "Enerji Təchizatı",
+                        dimensions: "Ölçülər",
+                        weight: "Çəki"
+                    }).filter(([key, label]) => {
+                        const value = equipment.specifications[key];
+                        return value;
+                    }).slice(currentPage * 6, (currentPage * 6) + 6).map(([key, label]) => {
+                        const value = equipment.specifications[key];
+                        const parts = value.split(' - ');
+                        const topValue = parts[0];
+                        const bottomValue = parts[1] || '';
 
-                    <div className="specification-item">
-                        <div className="spec-label">Multi-Touch Sensor Ekran</div>
-                        <div className="spec-line-css"></div>
-                        <div className="spec-value">
-                            <div className="spec-value-top">10 barmaq</div>
-                            <div className="spec-value-bottom"></div>
-                        </div>
-                    </div>
-
-                    <div className="specification-item">
-                        <div className="spec-label">Prosessor</div>
-                        <div className="spec-line-css"></div>
-                        <div className="spec-value">
-                            <div className="spec-value-top">Intel BayTrail J1900</div>
-                            <div className="spec-value-bottom">2.0 GHZ</div>
-                        </div>
-                    </div>
-
-                    <div className="specification-item">
-                        <div className="spec-label">Yaddaş RAM</div>
-                        <div className="spec-line-css"></div>
-                        <div className="spec-value">
-                            <div className="spec-value-top">4GB DDR3 SODIMM - 8GB</div>
-                            <div className="spec-value-bottom">(1333/1666 MHz)</div>
-                        </div>
-                    </div>
-
-                    <div className="specification-item">
-                        <div className="spec-label">Flash Disk</div>
-                        <div className="spec-line-css"></div>
-                        <div className="spec-value">
-                            <div className="spec-value-top">120GB SSD HDD 2.5" /MSATA</div>
-                            <div className="spec-value-bottom">240GB SSD artırma imkanı</div>
-                        </div>
-                    </div>
-
-                    <div className="specification-item">
-                        <div className="spec-label">Uyğun əməliyyat sistemi</div>
-                        <div className="spec-line-css"></div>
-                        <div className="spec-value">
-                            <div className="spec-value-top">Microsoft Windows 7, Windows 8.1</div>
-                            <div className="spec-value-bottom">Windows 10, Windows 11, Posready 7</div>
-                        </div>
-                    </div>
+                        return (
+                            <div key={key} className="specification-item">
+                                <div className="spec-label">{label}</div>
+                                <div className="spec-line-css"></div>
+                                <div className="spec-value">
+                                    <div className="spec-value-top">{topValue}</div>
+                                    {bottomValue && <div className="spec-value-bottom">{bottomValue}</div>}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 

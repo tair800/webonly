@@ -158,58 +158,38 @@ export default function Home() {
 
     return (
         <div className="home-container">
-            {/* Circle Background Elements */}
             <div className="circle-background-left"></div>
             <div className="circle-background-right"></div>
 
             <div className="slider-container">
-                {/* Top Ellipse */}
                 <div className="top-ellipse">
                     <svg className="ellipse-svg" fill="none" preserveAspectRatio="none" viewBox="0 0 1920 147">
                         <ellipse cx="960" cy="73.5" fill="#111214" rx="960" ry="73.5" />
                     </svg>
                 </div>
 
-                {/* Image Scroller Container - Shows 3 images */}
                 <div className="image-scroller-wrapper">
                     <div className="image-scroller-container">
-                        <div
-                            ref={scrollerRef}
-                            className="image-scroller"
-                            style={{ width: `${slides.length * (imageWidth + 20)}px` }}
-                        >
-                            {/* Duplicate images for infinite loop effect */}
+                        <div ref={scrollerRef} className="image-scroller" style={{ width: `${slides.length * (imageWidth + 20)}px` }}>
                             {[...slides, ...slides, ...slides].map((slide, index) => (
-                                <div
-                                    key={`${index}-${slide.id}`}
-                                    className="image-slide"
-                                    style={{
-                                        width: `${imageWidth}px`,
-                                        backgroundImage: `url('${slide.img}')`
-                                    }}
-                                />
+                                <div key={`${index}-${slide.id}`} className="image-slide" style={{ width: `${imageWidth}px`, backgroundImage: `url('${slide.img}')` }} />
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Ellipse */}
                 <div className="bottom-ellipse">
                     <svg className="ellipse-svg" fill="none" preserveAspectRatio="none" viewBox="0 0 1920 147">
                         <ellipse cx="960" cy="73.5" fill="#111214" rx="960" ry="73.5" />
                     </svg>
                 </div>
-
             </div>
 
-            {/* Circular progress with buttons on sides */}
             <div className="circular-progress-container">
                 <button className="slider-nav-btn slider-prev-btn" onClick={prevSlide} disabled={isTransitioning}>
                     <img src={prevIcon} alt="Previous" className="slider-nav-icon" />
                 </button>
-
                 <CircularProgress currentIndex={currentIndex} totalSlides={slides.length} />
-
                 <button className="slider-nav-btn slider-next-btn" onClick={nextSlide} disabled={isTransitioning}>
                     <img src={nextIcon} alt="Next" className="slider-nav-icon" />
                 </button>

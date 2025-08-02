@@ -11,14 +11,11 @@ function Footer() {
     return (
         <footer className="footer">
             <div className="footer-content">
-                {/* Left Section - Company Information and Newsletter */}
                 <div className="footer-col footer-col-left">
                     <div className="footer-logo-row">
                         <img src={logoWhite} alt="Logo White" className="footer-logo-white" />
                     </div>
-                    <p className="footer-desc">
-                        Şirkət yeni standartlarla proqram təminatı satışı və servisi həyata keçirən proqramlaşdırma şirkətidir.
-                    </p>
+                    <p className="footer-desc">Şirkət yeni standartlarla proqram təminatı satışı və servisi həyata keçirən proqramlaşdırma şirkətidir.</p>
                     <form className="footer-email-form">
                         <input type="email" placeholder="Email daxil edin" className="footer-email-input" />
                         <button type="submit" className="footer-email-btn">
@@ -39,7 +36,6 @@ function Footer() {
                     </div>
                 </div>
 
-                {/* Middle Section - Products */}
                 <div className="footer-col footer-col-center">
                     <h3 className="footer-title">Məhsullar</h3>
                     <ul className="footer-links">
@@ -55,7 +51,6 @@ function Footer() {
                     </ul>
                 </div>
 
-                {/* Right Section - Contact */}
                 <div className="footer-col footer-col-right">
                     <h3 className="footer-title">Əlaqə</h3>
                     <ul className="footer-contact">
@@ -64,7 +59,6 @@ function Footer() {
                         <li><FontAwesomeIcon icon={faEnvelope} className="footer-contact-icon" /> example@mail.az</li>
                     </ul>
                 </div>
-                {/* Decorative image */}
                 <img src={footerLogo} alt="Footer Decorative" className="footer-bg-img" />
             </div>
         </footer>

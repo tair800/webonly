@@ -76,6 +76,38 @@
     pointer-events: none;
 }
 
+/* Navigation Button */
+.equipment-detail-nav-button {
+    position: relative;
+    width: 60px;
+    height: 40px;
+    background: linear-gradient(90deg, #17DBFC, #467EFE);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(23, 219, 252, 0.3);
+    margin-left: auto;
+}
+
+.equipment-detail-nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(23, 219, 252, 0.4);
+}
+
+.equipment-detail-nav-button:active {
+    transform: translateY(0);
+}
+
+.equipment-detail-nav-button svg {
+    width: 20px;
+    height: 20px;
+}
+
 .equipment-detail-content {
     max-width: 1200px;
     width: 80%;
@@ -281,6 +313,7 @@
     margin: 0 auto;
     padding: 2rem;
     background: transparent;
+    position: relative;
 }
 
 .equipment-specifications-header {

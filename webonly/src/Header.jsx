@@ -32,42 +32,20 @@ function Header() {
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="navbar-logo-frame">
-                    <img
-                        src={logoWhite}
-                        alt="Logo White"
-                        className="logo-white"
-                        style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }}
-                    />
+                    <img src={logoWhite} alt="Logo White" className="logo-white" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
                 </div>
                 <ul className="navbar-links">
                     <li><Link to="/" className={location.pathname === "/" ? "active" : ""}>Əsas Səhifə</Link></li>
                     <li><Link to="/about" className={location.pathname === "/about" ? "active" : ""}>Haqqımızda</Link></li>
                     <li><Link to="/products" className={location.pathname === "/products" || location.pathname.startsWith("/product/") ? "active" : ""}>Məhsullar</Link></li>
                     <li><Link to="/services" className={location.pathname === "/services" ? "active" : ""}>Xidmətlər</Link></li>
-                    <li><Link to="/equipment" className={location.pathname === "/equipment" ? "active" : ""}>Avadanlıqlar</Link></li>
+                    <li><Link to="/equipment" className={location.pathname === "/equipment" || location.pathname.startsWith("/equipment/") ? "active" : ""}>Avadanlıqlar</Link></li>
                     <li><a href="#">Bloq</a></li>
                     <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Əlaqə</Link></li>
                 </ul>
-                <div
-                    className="navbar-lang"
-                    ref={langRef}
-                    tabIndex={0}
-                    onClick={() => setDropdownOpen((open) => !open)}
-                >
-                    <img
-                        src={globeImg}
-                        alt="Language Globe"
-                        className="lang-globe"
-                        width="19.25"
-                        height="19.25"
-                    />
-                    <img
-                        src={dropdownIcon}
-                        alt="Dropdown Icon"
-                        className="dropdown-icon"
-                        width="21"
-                        height="21"
-                    />
+                <div className="navbar-lang" ref={langRef} tabIndex={0} onClick={() => setDropdownOpen((open) => !open)}>
+                    <img src={globeImg} alt="Language Globe" className="lang-globe" width="19.25" height="19.25" />
+                    <img src={dropdownIcon} alt="Dropdown Icon" className="dropdown-icon" width="21" height="21" />
                     {dropdownOpen && (
                         <div className="lang-dropdown">
                             <div className="lang-option">az</div>

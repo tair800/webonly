@@ -18,7 +18,13 @@ export const equipmentList = [
             processor: "Intel BayTrail J1900 2.0 GHZ",
             memory: "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
             storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
-            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
+            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7",
+            graphics: "Intel HD Graphics 4000",
+            network: "10/100/1000 Mbps Ethernet, Wi-Fi 802.11 b/g/n",
+            ports: "4x USB 2.0, 2x USB 3.0, 1x HDMI, 1x VGA, 1x RJ45",
+            power: "12V DC, 65W Power Adapter",
+            dimensions: "400 x 300 x 80 mm (W x D x H)",
+            weight: "2.5 kg"
         },
         img: "/assets/equipment1.png"
     },
@@ -41,7 +47,13 @@ export const equipmentList = [
             processor: "Intel BayTrail J1900 2.0 GHZ",
             memory: "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
             storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
-            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
+            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7",
+            graphics: "Intel HD Graphics 4000",
+            network: "10/100/1000 Mbps Ethernet, Wi-Fi 802.11 b/g/n",
+            ports: "4x USB 2.0, 2x USB 3.0, 1x HDMI, 1x VGA, 1x RJ45",
+            power: "12V DC, 65W Power Adapter",
+            dimensions: "400 x 300 x 80 mm (W x D x H)",
+            weight: "2.5 kg"
         },
         img: "/assets/equipment1.png"
     },
@@ -64,7 +76,13 @@ export const equipmentList = [
             processor: "Intel BayTrail J1900 2.0 GHZ",
             memory: "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
             storage: "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
-            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
+            operatingSystem: "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7",
+            graphics: "Intel HD Graphics 4000",
+            network: "10/100/1000 Mbps Ethernet, Wi-Fi 802.11 b/g/n",
+            ports: "4x USB 2.0, 2x USB 3.0, 1x HDMI, 1x VGA, 1x RJ45",
+            power: "12V DC, 65W Power Adapter",
+            dimensions: "400 x 300 x 80 mm (W x D x H)",
+            weight: "2.5 kg"
         },
         img: "/assets/equipment1.png"
     }

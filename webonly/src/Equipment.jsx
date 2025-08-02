@@ -53,7 +53,6 @@ function Equipment() {
 
     return (
         <div className="equipment-container">
-            {/* Circle Background Elements */}
             <div className="equipment-circle-background-left-1"></div>
             <div className="equipment-circle-background-left-2"></div>
             <div className="equipment-circle-background-left-3"></div>
@@ -73,10 +72,7 @@ function Equipment() {
 
             <div className="equipment-content-row">
                 <div className="equipment-left">
-                    <div
-                        className="equipment-square"
-                        style={slideDirection ? getSlideStyle() : resetSlideStyle()}
-                    >
+                    <div className="equipment-square" style={slideDirection ? getSlideStyle() : resetSlideStyle()}>
                         <div className="equipment-square-content">
                             <div className="equipment-product-title">
                                 {currentItem.name.split(' ').slice(0, -1).join(' ')}<br />
@@ -96,30 +92,19 @@ function Equipment() {
                             {currentItem.name}
                         </div>
                         <button className="equipment-nav-btn prev-btn" onClick={() => startSlide('right')}>&#60;</button>
-                        <img
-                            src={currentItem.img}
-                            alt={currentItem.name}
-                            className="equipment-main-img"
-                            onClick={() => setShowModal(true)} // ← NEW HANDLER
-                        />
+                        <img src={currentItem.img} alt={currentItem.name} className="equipment-main-img" onClick={() => setShowModal(true)} />
                         <button className="equipment-nav-btn next-btn" onClick={() => startSlide('left')}>&#62;</button>
                     </div>
-                    <div className="equipment-details"
-                        style={slideDirection ? getSlideStyle() : resetSlideStyle()}>
+                    <div className="equipment-details" style={slideDirection ? getSlideStyle() : resetSlideStyle()}>
                         <div className="equipment-cpu">{currentItem.core}</div>
                         <div className="equipment-model">{currentItem.version}</div>
                     </div>
                 </div>
             </div>
 
-            {/* Modal for full-screen image */}
             {showModal && (
                 <div className="equipment-modal" onClick={() => setShowModal(false)}>
-                    <img
-                        src={currentItem.img}
-                        alt={currentItem.name}
-                        className="equipment-modal-img"
-                    />
+                    <img src={currentItem.img} alt={currentItem.name} className="equipment-modal-img" />
                 </div>
             )}
         </div>

@@ -20,7 +20,6 @@ function About() {
 
     return (
         <div className="about-container">
-            {/* Circle Background Elements */}
             <div className="about-circle-background"></div>
             <div className="about-circle-background-left-2"></div>
             <div className="about-circle-background-right"></div>
@@ -57,9 +56,7 @@ function About() {
                 <div className="about-name">Name Surname</div>
                 <div className="about-position">director</div>
                 <div>
-                    <p className="about-description-text">
-                        10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.
-                    </p>
+                    <p className="about-description-text">10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.</p>
                     <img src="/assets/comma.png" alt="Comma" className="about-comma" />
                 </div>
             </div>
@@ -108,13 +105,11 @@ function About() {
             <div className="logo-carousel-container">
                 <div className="logo-carousel">
                     <div className="logo-carousel-track">
-                        {/* First set of logos */}
                         {logosState.map((logo) => (
                             <div key={`first-${logo.id}`} className="logo-item">
                                 <img src={logo.image} alt={logo.alt} />
                             </div>
                         ))}
-                        {/* Duplicate set for seamless infinite scroll */}
                         {logosState.map((logo) => (
                             <div key={`second-${logo.id}`} className="logo-item">
                                 <img src={logo.image} alt={logo.alt} />

@@ -14,7 +14,6 @@ function Products() {
 
     return (
         <div className="products-container">
-            {/* Circle Background Elements */}
             <div className="products-circle-background-left-1"></div>
             <div className="products-circle-background-left-2"></div>
 
@@ -42,27 +41,9 @@ function Products() {
 
             <div className="products-grid">
                 {productsState.map((product) => (
-                    <div
-                        key={product.id}
-                        className="product-card"
-                        onClick={() => handleProductClick(product)}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <div
-                            className="product-icon"
-                            style={{
-                                width: '100px',
-                                height: '100px',
-                                WebkitMask: `url(${product.icon}) no-repeat center / contain`,
-                                mask: `url(${product.icon}) no-repeat center / contain`,
-                                background: 'linear-gradient(180deg, rgba(70, 126, 254, 0.9) 0%, rgba(255,255,255,0.9) 100%)',
-                                margin: '0 auto'
-                            }}
-                            aria-label={product.alt}
-                        ></div>
-                        <div className="product-name">
-                            {product.name}
-                        </div>
+                    <div key={product.id} className="product-card" onClick={() => handleProductClick(product)} style={{ cursor: 'pointer' }}>
+                        <div className="product-icon" style={{ width: '100px', height: '100px', WebkitMask: `url(${product.icon}) no-repeat center / contain`, mask: `url(${product.icon}) no-repeat center / contain`, background: 'linear-gradient(180deg, rgba(70, 126, 254, 0.9) 0%, rgba(255,255,255,0.9) 100%)', margin: '0 auto' }} aria-label={product.alt}></div>
+                        <div className="product-name">{product.name}</div>
                     </div>
                 ))}
             </div>
