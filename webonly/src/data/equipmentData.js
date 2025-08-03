@@ -26,7 +26,12 @@ export const equipmentList = [
             dimensions: "400 x 300 x 80 mm (W x D x H)",
             weight: "2.5 kg"
         },
-        img: "/assets/equipment1.png"
+        img: "/assets/equipment1.png",
+        images: [
+            "/assets/equipment1.png",
+            "/assets/equipment2.png",
+            "/assets/equipment1.png"
+        ]
     },
     {
         id: 2,
@@ -55,7 +60,11 @@ export const equipmentList = [
             dimensions: "400 x 300 x 80 mm (W x D x H)",
             weight: "2.5 kg"
         },
-        img: "/assets/equipment1.png"
+        img: "/assets/equipment1.png",
+        images: [
+            "/assets/equipment1.png",
+            "/assets/equipment2.png",
+        ]
     },
     {
         id: 3,

@@ -7,7 +7,7 @@
     flex-direction: column;
     position: relative;
     overflow-x: hidden;
-    overflow: visible;
+    overflow: hidden;
 }
 
 /* Circle Background Elements */
@@ -292,6 +292,11 @@
     box-sizing: border-box;
     margin: 0;
     position: relative;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .equipment-square-content {
@@ -361,14 +366,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: fit-content;
+    width: 350px;
+    height: 350px;
     margin: 0 auto;
 }
 
 .equipment-main-img {
     display: block;
     width: 350px;
-    height: auto;
+    height: 350px;
+    object-fit: contain;
+    object-position: center;
 }
 
 .equipment-nav-btn {
@@ -459,4 +467,41 @@
     border-radius: 12px;
 }
 
-/* Your styles will go here */
+/* Equipment Image Scroller */
+.equipment-image-scroller {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    bottom: 10px;
+    width: 8px;
+    z-index: 10;
+}
+
+.equipment-scroller-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: pan-y;
+    overflow: hidden;
+}
+
+.equipment-scroller-thumb {
+    position: absolute;
+    width: 100%;
+    background: linear-gradient(180deg, #17DBFC 0%, #467EFE 100%);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(23, 219, 252, 0.4);
+}
+
+.equipment-scroller-track:hover .equipment-scroller-thumb {
+    background: linear-gradient(180deg, #17DBFC 0%, #467EFE 100%);
+    box-shadow: 0 0 12px rgba(23, 219, 252, 0.6);
+}
