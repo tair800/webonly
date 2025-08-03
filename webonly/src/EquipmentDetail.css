@@ -393,12 +393,127 @@
     line-height: 1.2;
 }
 
-/* Responsive Design */
+/* Comprehensive Responsive Design */
+@media (max-width: 1200px) {
+    .equipment-detail-container {
+        padding: 1.5rem;
+    }
+
+    .equipment-detail-content {
+        width: 85%;
+        padding: 2.5rem;
+        gap: 3rem;
+        margin-top: 120px;
+    }
+
+    .equipment-detail-title {
+        font-size: 3.5rem;
+        width: 60%;
+    }
+
+    .equipment-detail-description {
+        font-size: 20px;
+        max-width: 500px;
+    }
+
+    .equipment-detail-features {
+        gap: 0.8rem;
+    }
+
+    .feature-text {
+        font-size: 0.85rem;
+    }
+
+    .equipment-specifications-section {
+        width: 85%;
+        padding: 1.5rem;
+    }
+
+    .equipment-model {
+        font-size: 1.8rem;
+    }
+
+    .spec-label,
+    .spec-value-top,
+    .spec-value-bottom {
+        font-size: 1rem;
+    }
+
+    .equipment-detail-team-header {
+        width: 85%;
+        padding: 0 2rem 0 2rem;
+        margin: 2.5rem auto 2rem auto;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 32px;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 300px;
+        height: 300px;
+    }
+}
+
 @media (max-width: 1000px) {
+    .equipment-detail-container {
+        padding: 1.2rem;
+    }
+
     .equipment-detail-content {
         flex-direction: column;
         gap: 2rem;
         padding: 2rem;
+        width: 90%;
+        margin-top: 100px;
+    }
+
+    .equipment-detail-title {
+        font-size: 3rem;
+        width: 100%;
+    }
+
+    .equipment-detail-description {
+        max-width: 100%;
+        font-size: 18px;
+    }
+
+    .equipment-detail-features {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .equipment-specifications-section {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .equipment-detail-team-header {
+        width: 90%;
+        padding: 0 1.5rem 0 1.5rem;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (max-width: 900px) {
+    .equipment-detail-container {
+        padding: 1rem;
+    }
+
+    .equipment-detail-content {
+        padding: 1.8rem;
+        width: 95%;
+        margin-top: 80px;
     }
 
     .equipment-detail-title {
@@ -406,17 +521,54 @@
     }
 
     .equipment-detail-description {
-        max-width: 100%;
+        font-size: 16px;
+    }
+
+    .equipment-specifications-section {
+        width: 95%;
+        padding: 1.2rem;
+    }
+
+    .equipment-model {
+        font-size: 1.6rem;
+    }
+
+    .equipment-detail-team-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 1rem 0 1rem;
+        min-height: 60px;
+        margin-bottom: 1.2rem;
+        width: 95%;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 28px;
+        margin-bottom: 0.5rem;
+    }
+
+    .equipment-detail-team-bar {
+        width: 200px;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 200px;
+        height: 200px;
     }
 }
 
 @media (max-width: 768px) {
     .equipment-detail-container {
-        padding: 1rem;
+        padding: 0.8rem;
     }
 
     .equipment-detail-content {
         padding: 1.5rem;
+        width: 100%;
+        margin-top: 60px;
     }
 
     .equipment-detail-title {
@@ -424,22 +576,21 @@
     }
 
     .equipment-detail-description {
-        font-size: 1rem;
+        font-size: 14px;
     }
 
     .feature-text {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     .equipment-specifications-section {
+        width: 100%;
         padding: 1rem;
     }
 
     .equipment-model {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
-
-
 
     .specification-item {
         flex-direction: column;
@@ -449,29 +600,57 @@
 
     .spec-label {
         min-width: auto;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
-    .spec-line {
+    .spec-line-css {
         max-width: 100%;
         width: 100%;
     }
 
-    .spec-value {
-        font-size: 1rem;
+    .spec-value-top,
+    .spec-value-bottom {
+        font-size: 0.9rem;
+    }
+
+    .equipment-detail-team-header {
+        width: 100%;
+        padding: 0 0.8rem 0 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 24px;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 150px;
+        height: 150px;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+    .equipment-detail-container {
+        padding: 0.6rem;
+    }
+
+    .equipment-detail-content {
+        padding: 1.2rem;
+        margin-top: 50px;
+    }
+
     .equipment-detail-title {
         font-size: 1.8rem;
     }
 
-    .equipment-detail-content {
-        padding: 1rem;
+    .equipment-detail-description {
+        font-size: 13px;
     }
 
-    .equipment-feature-item {
+    .equipment-detail-features {
         gap: 0.8rem;
     }
 
@@ -480,39 +659,182 @@
         height: 20px;
         font-size: 12px;
     }
-}
 
-@media (max-width: 900px) {
-    .equipment-detail-team-header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0 1rem 0 1rem;
-        min-height: 60px;
-        margin-bottom: 1.2rem;
+    .feature-text {
+        font-size: 0.75rem;
     }
 
-    .equipment-detail-team-title {
-        font-size: 26px;
-        margin-bottom: 0.5rem;
+    .equipment-specifications-section {
+        padding: 0.8rem;
     }
 
-    .equipment-detail-team-bar {
-        width: 200px;
+    .equipment-model {
+        font-size: 1.2rem;
     }
-}
 
-@media (max-width: 600px) {
+    .spec-label,
+    .spec-value-top,
+    .spec-value-bottom {
+        font-size: 0.8rem;
+    }
+
     .equipment-detail-team-header {
         padding: 0 0.5rem 0 0.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
     }
 
     .equipment-detail-team-title {
-        font-size: 22px;
+        font-size: 20px;
     }
 
     .equipment-detail-team-bar {
         width: 150px;
         height: 25px;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .equipment-detail-container {
+        padding: 0.4rem;
+    }
+
+    .equipment-detail-content {
+        padding: 1rem;
+        margin-top: 40px;
+    }
+
+    .equipment-detail-title {
+        font-size: 1.6rem;
+    }
+
+    .equipment-detail-description {
+        font-size: 12px;
+    }
+
+    .equipment-feature-item {
+        gap: 0.6rem;
+    }
+
+    .feature-checkmark {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+
+    .feature-text {
+        font-size: 0.7rem;
+    }
+
+    .equipment-specifications-section {
+        padding: 0.6rem;
+    }
+
+    .equipment-model {
+        font-size: 1.1rem;
+    }
+
+    .spec-label,
+    .spec-value-top,
+    .spec-value-bottom {
+        font-size: 0.75rem;
+    }
+
+    .equipment-detail-team-header {
+        padding: 0 0.4rem 0 0.4rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 18px;
+    }
+
+    .equipment-detail-team-bar {
+        width: 120px;
+        height: 20px;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 360px) {
+    .equipment-detail-container {
+        padding: 0.3rem;
+    }
+
+    .equipment-detail-content {
+        padding: 0.8rem;
+        margin-top: 30px;
+    }
+
+    .equipment-detail-title {
+        font-size: 1.4rem;
+    }
+
+    .equipment-detail-description {
+        font-size: 11px;
+    }
+
+    .equipment-feature-item {
+        gap: 0.5rem;
+    }
+
+    .feature-checkmark {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+
+    .feature-text {
+        font-size: 0.65rem;
+    }
+
+    .equipment-specifications-section {
+        padding: 0.5rem;
+    }
+
+    .equipment-model {
+        font-size: 1rem;
+    }
+
+    .spec-label,
+    .spec-value-top,
+    .spec-value-bottom {
+        font-size: 0.7rem;
+    }
+
+    .equipment-detail-team-header {
+        padding: 0 0.3rem 0 0.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .equipment-detail-team-title {
+        font-size: 16px;
+    }
+
+    .equipment-detail-team-bar {
+        width: 100px;
+        height: 18px;
+    }
+
+    .equipment-detail-circle-background-1,
+    .equipment-detail-circle-background-2,
+    .equipment-detail-circle-background-3,
+    .equipment-detail-circle-background-4 {
+        width: 80px;
+        height: 80px;
     }
 }

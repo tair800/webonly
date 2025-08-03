@@ -350,4 +350,303 @@
     }
 }
 
-/* Your styles will go here */
+/* Comprehensive Responsive Design */
+@media (max-width: 1200px) {
+    .products-container {
+        padding: 1.5rem 0;
+    }
+
+    .products-center {
+        top: 150px;
+    }
+
+    .products-logo {
+        width: 40%;
+    }
+
+    .products-text {
+        font-size: 36px;
+        margin-left: 30px;
+    }
+
+    .products-rainbow {
+        margin-top: -15%;
+    }
+
+    .products-team-header {
+        margin: 600px auto 2rem auto;
+    }
+
+    .products-team-title {
+        font-size: 32px;
+    }
+
+    .products-grid {
+        gap: 5rem;
+        margin-left: 80px;
+        margin-bottom: 6rem;
+    }
+
+    .product-card {
+        padding: 5rem;
+        max-width: 350px;
+    }
+
+    .product-name {
+        font-size: 20px;
+    }
+
+    .products-circle-background-left-1,
+    .products-circle-background-left-2 {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@media (max-width: 900px) {
+    .products-container {
+        padding: 1rem 0;
+    }
+
+    .products-center {
+        top: 120px;
+    }
+
+    .products-logo {
+        width: 45%;
+    }
+
+    .products-text {
+        font-size: 30px;
+        margin-left: 25px;
+    }
+
+    .products-rainbow {
+        margin-top: -12%;
+    }
+
+    .products-team-header {
+        margin: 500px auto 2rem auto;
+    }
+
+    .products-team-title {
+        font-size: 28px;
+    }
+
+    .products-grid {
+        gap: 3rem;
+        margin-left: 40px;
+        margin-bottom: 5rem;
+    }
+
+    .product-card {
+        padding: 4rem;
+        max-width: 300px;
+    }
+
+    .product-name {
+        font-size: 18px;
+    }
+
+    .products-circle-background-left-1,
+    .products-circle-background-left-2 {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-container {
+        padding: 0.5rem 0;
+    }
+
+    .products-center {
+        top: 100px;
+    }
+
+    .products-logo {
+        width: 50%;
+    }
+
+    .products-text {
+        font-size: 26px;
+        margin-left: 20px;
+    }
+
+    .products-rainbow {
+        margin-top: -10%;
+    }
+
+    .products-team-header {
+        margin: 400px auto 2rem auto;
+    }
+
+    .products-team-title {
+        font-size: 24px;
+    }
+
+    .products-grid {
+        gap: 2rem;
+        margin-left: 20px;
+        margin-bottom: 4rem;
+    }
+
+    .product-card {
+        padding: 3rem 2rem;
+        max-width: 250px;
+    }
+
+    .product-name {
+        font-size: 16px;
+    }
+
+    .products-circle-background-left-1,
+    .products-circle-background-left-2 {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .products-center {
+        top: 80px;
+    }
+
+    .products-logo {
+        width: 60%;
+    }
+
+    .products-text {
+        font-size: 22px;
+        margin-left: 15px;
+    }
+
+    .products-rainbow {
+        margin-top: -8%;
+    }
+
+    .products-team-header {
+        margin: 350px auto 2rem auto;
+    }
+
+    .products-team-title {
+        font-size: 20px;
+    }
+
+    .products-grid {
+        gap: 1.5rem;
+        margin-left: 10px;
+        margin-bottom: 3rem;
+    }
+
+    .product-card {
+        padding: 2.5rem 1.5rem;
+        max-width: 200px;
+    }
+
+    .product-name {
+        font-size: 14px;
+    }
+
+    .products-circle-background-left-1,
+    .products-circle-background-left-2 {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-center {
+        top: 60px;
+    }
+
+    .products-logo {
+        width: 70%;
+    }
+
+    .products-text {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    .products-rainbow {
+        margin-top: -6%;
+    }
+
+    .products-team-header {
+        margin: 300px auto 2rem auto;
+    }
+
+    .products-team-title {
+        font-size: 18px;
+    }
+
+    .products-grid {
+        gap: 1rem;
+        margin-left: 5px;
+        margin-bottom: 2rem;
+    }
+
+    .product-card {
+        padding: 2rem 1rem;
+        max-width: 180px;
+    }
+
+    .product-name {
+        font-size: 12px;
+    }
+
+    .products-circle-background-left-1,
+    .products-circle-background-left-2 {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 360px) {
+    .products-center {
+        top: 50px;
+    }
+
+    .products-logo {
+        width: 80%;
+    }
+
+    .products-text {
+        font-size: 18px;
+        margin-left: 5px;
+    }
+
+    .products-rainbow {
+        margin-top: -5%;
+    }
+
+    .products-team-header {
+        margin: 250px auto 2rem auto;
+    }
+
+    .products-team-title {
+        font-size: 16px;
+    }
+
+    .products-grid {
+        gap: 0.75rem;
+        margin-left: 2px;
+        margin-bottom: 1.5rem;
+    }
+
+    .product-card {
+        padding: 1.5rem 0.75rem;
+        max-width: 160px;
+    }
+
+    .product-name {
+        font-size: 11px;
+    }
+
+    .products-circle-background-left-1,
+    .products-circle-background-left-2 {
+        width: 100px;
+        height: 100px;
+    }
+}

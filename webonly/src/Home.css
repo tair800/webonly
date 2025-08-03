@@ -384,15 +384,99 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+    .home-container {
+        padding-top: 15vh;
+    }
+
+    .slider-container {
+        height: 50vh;
+    }
+
     .image-scroller-wrapper {
-        width: 100vw;
-        height: 60vh;
+        height: 50vh;
     }
 
     .image-slide {
-        width: 33.333333vw;
-        height: 60vh;
+        height: 50vh;
+    }
+
+    .top-ellipse,
+    .bottom-ellipse {
+        width: 1400px;
+        height: 110px;
+    }
+
+    .circular-progress {
+        width: 300px;
+        height: 240px;
+        top: 112px;
+    }
+
+    .circular-progress svg {
+        width: 300px;
+        height: 240px;
+    }
+
+    .circle-logo-icon {
+        width: 240px;
+        height: 170px;
+    }
+
+    .logo-text-background {
+        width: 380px;
+    }
+
+    .slider-nav-btn {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        min-height: 60px;
+        max-width: 60px;
+        max-height: 60px;
+    }
+
+    .slider-nav-btn:hover:not(:disabled) {
+        width: 65px;
+        height: 65px;
+        min-width: 65px;
+        min-height: 65px;
+        max-width: 65px;
+        max-height: 65px;
+    }
+
+    .slider-prev-btn {
+        left: 40px;
+        top: calc(50% - 30px);
+    }
+
+    .slider-next-btn {
+        right: 40px;
+        top: calc(50% - 30px);
+    }
+}
+
+@media (max-width: 768px) {
+    .home-container {
+        padding-top: 12vh;
+    }
+
+    .slider-container {
+        height: 45vh;
+    }
+
+    .image-scroller-wrapper {
+        height: 45vh;
+    }
+
+    .image-slide {
+        height: 45vh;
+    }
+
+    .top-ellipse,
+    .bottom-ellipse {
+        width: 1000px;
+        height: 80px;
     }
 
     .slider-nav-btn {
@@ -414,21 +498,13 @@ body {
     }
 
     .slider-prev-btn {
-        left: 30px;
-        top: calc(50% - 25px);
-    }
-
-    .slider-next-btn {
-        right: 30px;
-        top: calc(50% - 25px);
-    }
-
-    .slider-prev-btn {
         left: 20px;
+        top: calc(50% - 25px);
     }
 
     .slider-next-btn {
         right: 20px;
+        top: calc(50% - 25px);
     }
 
     .slider-nav-icon {
@@ -436,32 +512,48 @@ body {
         height: 20px;
     }
 
-    .arrow {
-        font-size: 1.2rem;
-    }
-
     .slide-number {
         font-size: 2rem;
     }
 
     .circular-progress-container {
-        height: 120px;
-        margin-top: -60px;
+        height: 100px;
+        margin-top: -50px;
     }
 
     .circular-progress {
-        width: 150px;
-        height: 150px;
-        transform: translateY(0);
+        width: 120px;
+        height: 100px;
+        top: 47px;
+    }
+
+    .circular-progress svg {
+        width: 120px;
+        height: 100px;
+    }
+
+    .circle-logo-icon {
+        width: 80px;
+        height: 60px;
+    }
+
+    .logo-text-background {
+        width: 120px;
     }
 
     .slider-name {
-        font-size: 10px;
+        font-size: 8px;
     }
 
     .slider-name:hover,
     .slider-name.active {
-        font-size: 11px;
+        font-size: 9px;
+    }
+
+    .circle-background-left,
+    .circle-background-right {
+        width: 300px;
+        height: 300px;
     }
 }
 
@@ -502,36 +594,301 @@ body {
 }
 
 @media (max-width: 600px) {
-    .circular-progress-container {
-        height: 80px;
-        margin-top: -40px;
+    .home-container {
+        padding-top: 10vh;
     }
 
-    .circular-progress {
-        width: 180px;
-        height: 120px;
-        transform: translateY(0);
+    .slider-container {
+        height: 40vh;
     }
 
-    .circle-logo {
-        top: 10%;
+    .image-scroller-wrapper {
+        height: 40vh;
     }
 
-    .circle-logo-icon {
-        width: 100px;
+    .image-slide {
+        height: 40vh;
+    }
+
+    .top-ellipse,
+    .bottom-ellipse {
+        width: 800px;
         height: 60px;
     }
 
+    .slider-nav-btn {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+        min-height: 45px;
+        max-width: 45px;
+        max-height: 45px;
+    }
+
+    .slider-nav-btn:hover:not(:disabled) {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+    }
+
+    .slider-prev-btn {
+        left: 15px;
+        top: calc(50% - 22.5px);
+    }
+
+    .slider-next-btn {
+        right: 15px;
+        top: calc(50% - 22.5px);
+    }
+
+    .slider-nav-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .circular-progress-container {
+        height: 60px;
+        margin-top: -30px;
+    }
+
+    .circular-progress {
+        width: 80px;
+        height: 60px;
+        top: 28px;
+    }
+
+    .circular-progress svg {
+        width: 80px;
+        height: 60px;
+    }
+
+    .circle-logo {
+        top: 8%;
+    }
+
+    .circle-logo-icon {
+        width: 60px;
+        height: 40px;
+    }
+
     .circle-logo-text {
-        top: 4%;
+        top: 2%;
     }
 
     .logo-text-background {
-        width: 120px;
-        opacity: 0.12;
+        width: 80px;
+        opacity: 0.15;
     }
 
     .slider-name {
-        font-size: 9px;
+        font-size: 6px;
+    }
+
+    .slider-name:hover,
+    .slider-name.active {
+        font-size: 7px;
+    }
+
+    .circle-background-left,
+    .circle-background-right {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-container {
+        padding-top: 8vh;
+    }
+
+    .slider-container {
+        height: 35vh;
+    }
+
+    .image-scroller-wrapper {
+        height: 35vh;
+    }
+
+    .image-slide {
+        height: 35vh;
+    }
+
+    .top-ellipse,
+    .bottom-ellipse {
+        width: 600px;
+        height: 45px;
+    }
+
+    .slider-nav-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        max-width: 40px;
+        max-height: 40px;
+    }
+
+    .slider-nav-btn:hover:not(:disabled) {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+        min-height: 45px;
+        max-width: 45px;
+        max-height: 45px;
+    }
+
+    .slider-prev-btn {
+        left: 10px;
+        top: calc(50% - 20px);
+    }
+
+    .slider-next-btn {
+        right: 10px;
+        top: calc(50% - 20px);
+    }
+
+    .slider-nav-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .circular-progress-container {
+        height: 40px;
+        margin-top: -20px;
+    }
+
+    .circular-progress {
+        width: 60px;
+        height: 40px;
+        top: 19px;
+    }
+
+    .circular-progress svg {
+        width: 60px;
+        height: 40px;
+    }
+
+    .circle-logo-icon {
+        width: 40px;
+        height: 30px;
+    }
+
+    .logo-text-background {
+        width: 60px;
+    }
+
+    .slider-name {
+        font-size: 5px;
+    }
+
+    .slider-name:hover,
+    .slider-name.active {
+        font-size: 6px;
+    }
+
+    .circle-background-left,
+    .circle-background-right {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 360px) {
+    .home-container {
+        padding-top: 6vh;
+    }
+
+    .slider-container {
+        height: 30vh;
+    }
+
+    .image-scroller-wrapper {
+        height: 30vh;
+    }
+
+    .image-slide {
+        height: 30vh;
+    }
+
+    .top-ellipse,
+    .bottom-ellipse {
+        width: 400px;
+        height: 30px;
+    }
+
+    .slider-nav-btn {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+        min-height: 35px;
+        max-width: 35px;
+        max-height: 35px;
+    }
+
+    .slider-nav-btn:hover:not(:disabled) {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        max-width: 40px;
+        max-height: 40px;
+    }
+
+    .slider-prev-btn {
+        left: 8px;
+        top: calc(50% - 17.5px);
+    }
+
+    .slider-next-btn {
+        right: 8px;
+        top: calc(50% - 17.5px);
+    }
+
+    .slider-nav-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .circular-progress-container {
+        height: 30px;
+        margin-top: -15px;
+    }
+
+    .circular-progress {
+        width: 40px;
+        height: 30px;
+        top: 14px;
+    }
+
+    .circular-progress svg {
+        width: 40px;
+        height: 30px;
+    }
+
+    .circle-logo-icon {
+        width: 30px;
+        height: 20px;
+    }
+
+    .logo-text-background {
+        width: 40px;
+    }
+
+    .slider-name {
+        font-size: 4px;
+    }
+
+    .slider-name:hover,
+    .slider-name.active {
+        font-size: 5px;
+    }
+
+    .circle-background-left,
+    .circle-background-right {
+        width: 150px;
+        height: 150px;
     }
 }
