@@ -1,10 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { servicesList } from './data/servicesData.js';
+import ServiceCard3D from './components/ServiceCard3D';
 import './Services.css';
 
 function Services() {
-    const navigate = useNavigate();
     const services = servicesList;
 
     return (
@@ -24,16 +23,10 @@ function Services() {
                     <img src="/assets/rainbow.png" alt="Rainbow" />
                 </div>
 
-                <div className="card-section">
+                <div className="services-grid-3d">
                     {services.map((service) => (
-                        <div key={service.id} className="card-border-wrapper" onClick={() => navigate(`/services/${service.id}`)}>
-                            <div className="mobile-card">
-                                <img src={service.icon} alt={service.name} className="icon" />
-                                <div className="card-text-content">
-                                    <div className="card-title">{service.name}</div>
-                                    <div className="card-subtitle">{service.subtitle}</div>
-                                </div>
-                            </div>
+                        <div key={service.id} className="service-card-3d-wrapper">
+                            <ServiceCard3D service={service} />
                         </div>
                     ))}
                 </div>

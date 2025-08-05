@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { products } from './data/productData';
+import ProductCard3D from './components/ProductCard3D';
 import './Products.css';
 
 function Products() {
-    const navigate = useNavigate();
-
     const [productsState] = useState(products);
-
-    const handleProductClick = (product) => {
-        navigate(`/product/${product.id}`);
-    };
 
     return (
         <div className="products-container">
@@ -31,6 +25,7 @@ function Products() {
 
             <div className="products-team-header">
                 <div className="products-team-title">Kategoriyalar</div>
+
                 <div className="products-team-nav">
                     <div className="products-team-nav-dot products-team-nav-dot-faded"></div>
                     <div className="products-team-nav-dot products-team-nav-dot-gradient"></div>
@@ -39,11 +34,10 @@ function Products() {
                 </div>
             </div>
 
-            <div className="products-grid">
+            <div className="products-grid-3d">
                 {productsState.map((product) => (
-                    <div key={product.id} className="product-card" onClick={() => handleProductClick(product)} style={{ cursor: 'pointer' }}>
-                        <div className="product-icon" style={{ width: '100px', height: '100px', WebkitMask: `url(${product.icon}) no-repeat center / contain`, mask: `url(${product.icon}) no-repeat center / contain`, background: 'linear-gradient(180deg, rgba(70, 126, 254, 0.9) 0%, rgba(255,255,255,0.9) 100%)', margin: '0 auto' }} aria-label={product.alt}></div>
-                        <div className="product-name">{product.name}</div>
+                    <div key={product.id} className="product-card-3d-wrapper">
+                        <ProductCard3D product={product} />
                     </div>
                 ))}
             </div>

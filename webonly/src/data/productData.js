@@ -2,6 +2,7 @@ export const products = [
     {
         id: 1,
         name: "Market",
+        subtext: "Satış və anbar",
         icon: "/assets/market-icon.png",
         alt: "Market",
         path: "/market",
@@ -28,6 +29,7 @@ export const products = [
     {
         id: 2,
         name: "Tekstil Modulu",
+        subtext: "İstehsal və toxuculuq",
         icon: "/assets/textile.png",
         alt: "Tekstil",
         path: "/textile",
@@ -53,6 +55,7 @@ export const products = [
     {
         id: 3,
         name: "Mobil satış",
+        subtext: "Mobil satış nöqtələri",
         icon: "/assets/mobile.png",
         alt: "Mobil",
         path: "/mobile",
@@ -78,6 +81,7 @@ export const products = [
     {
         id: 4,
         name: "Aptek İdarəetmə sistemi",
+        subtext: "Dərman və reçetə",
         icon: "/assets/medicine.png",
         alt: "Aptek",
         path: "/medicine",
@@ -103,6 +107,7 @@ export const products = [
     {
         id: 5,
         name: "Ticarət və Anbar",
+        subtext: "Böyük həcmli ticarət",
         icon: "/assets/factory.png",
         alt: "Fabrika",
         path: "/factory",
@@ -128,6 +133,7 @@ export const products = [
     {
         id: 6,
         name: "Kredit və Lombard",
+        subtext: "Maliyyə xidmətləri",
         icon: "/assets/credit.png",
         alt: "Kredit",
         path: "/credit",

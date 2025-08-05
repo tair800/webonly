@@ -125,6 +125,20 @@
     color: #ffffff;
 }
 
+.products-team-subtext {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 300;
+    text-align: center;
+    margin: 10px 0 20px 0;
+    position: relative;
+    z-index: 2;
+    line-height: 1.5;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .products-team-nav {
     display: flex;
     align-items: center;
@@ -189,6 +203,12 @@
         margin-bottom: 0.5rem;
     }
 
+    .products-team-subtext {
+        font-size: 13px;
+        margin: 8px 0 15px 0;
+        max-width: 500px;
+    }
+
     .products-team-bar {
         width: 200px;
     }
@@ -199,6 +219,12 @@
         font-size: 22px;
     }
 
+    .products-team-subtext {
+        font-size: 12px;
+        margin: 6px 0 12px 0;
+        max-width: 400px;
+    }
+
     .products-team-bar {
         width: 150px;
         height: 25px;
@@ -206,6 +232,29 @@
 }
 
 /* Products Grid */
+.products-grid-3d {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    justify-items: center;
+}
+
+.product-card-3d-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.product-card-3d-wrapper:hover {
+    transform: scale(1.05);
+}
+
 .products-grid {
     display: flex;
     justify-content: flex-start;
@@ -273,6 +322,13 @@
 
 /* Responsive Design for Product Card */
 @media (max-width: 768px) {
+    .products-grid-3d {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        padding: 1rem;
+        margin-top: 350px;
+    }
+
     .products-grid {
         padding: 0 1rem;
     }
@@ -288,6 +344,13 @@
 }
 
 @media (max-width: 480px) {
+    .products-grid-3d {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0.5rem;
+        margin-top: 300px;
+    }
+
     .product-card {
         padding: 1.5rem;
     }

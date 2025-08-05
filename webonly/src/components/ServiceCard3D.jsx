@@ -1,26 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
-const Card = () => {
-    return (
-        <StyledWrapper>
-            <div className="card">
-                <p className="heading">
-                </p>
-                <p>
-                </p>
-                <p>
-                </p></div>
-        </StyledWrapper>
-    );
-}
+import { Link } from 'react-router-dom';
 
 const StyledWrapper = styled.div`
   .card {
     position: relative;
     width: 190px;
     height: 254px;
-    background-color: #000;
+    background-color: #111214;
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -59,10 +46,19 @@ const StyledWrapper = styled.div`
     font-size: 20px;
     text-transform: capitalize;
     font-weight: 700;
+    color: white;
+    margin-bottom: 0;
+  }
+
+  .icon {
+    width: 80px;
+    height: 80px;
+    align-self: center;
   }
 
   .card p:not(.heading) {
     font-size: 14px;
+    color: white;
   }
 
   .card p:last-child {
@@ -78,5 +74,22 @@ const StyledWrapper = styled.div`
     transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
   }`;
 
-export default Card;
+const ServiceCard3D = ({ service }) => {
+    return (
+        <Link to={`/services/${service.id}`} style={{ textDecoration: 'none' }}>
+            <StyledWrapper>
+                <div className="card">
+                    <img src={service.icon} alt={service.name} className="icon" />
+                    <p className="heading">
+                        {service.name}
+                    </p>
+                    <p>
+                        {service.subtitle}
+                    </p>
+                </div>
+            </StyledWrapper>
+        </Link>
+    );
+};
 
+export default ServiceCard3D; 
