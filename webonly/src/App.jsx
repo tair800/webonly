@@ -13,29 +13,40 @@ import Products from './Products';
 import Factory from './Factory';
 import ProductDetail from './ProductDetail';
 import TestPage from './TestPage';
+import AdminPanel from './AdminPanel';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Header />
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/:id" element={<ServiceDetail />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/equipment" element={<Equipment />} />
-            <Route path="/equipment/:id" element={<EquipmentDetail />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/factory" element={<Factory />} />
-            <Route path="/test" element={<TestPage />} />
-          </Routes>
-        </div>
-        <Footer />
+        <Routes>
+          {/* Admin Panel Routes - No Header/Footer */}
+          <Route path="/admin-panel/*" element={<AdminPanel />} />
+
+          {/* Main App Routes - With Header/Footer */}
+          <Route path="/*" element={
+            <>
+              <Header />
+              <div style={{ flex: 1 }}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/services/:id" element={<ServiceDetail />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/equipment" element={<Equipment />} />
+                  <Route path="/equipment/:id" element={<EquipmentDetail />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/factory" element={<Factory />} />
+                  <Route path="/test" element={<TestPage />} />
+                </Routes>
+              </div>
+              <Footer />
+            </>
+          } />
+        </Routes>
       </div>
     </Router>
   );

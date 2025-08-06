@@ -1,0 +1,47 @@
+/* Admin Panel Base Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --admin-primary: #17DBFC;
+    --admin-secondary: #467EFE;
+    --admin-bg: #0f0f0f;
+    --admin-card-bg: rgba(255, 255, 255, 0.05);
+    --admin-border: rgba(255, 255, 255, 0.1);
+    --admin-text: #ffffff;
+    --admin-text-secondary: #cccccc;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+#root {
+    min-height: 100vh;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--admin-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--admin-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-secondary);
+}
