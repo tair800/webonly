@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { servicesList } from './data/servicesData.js';
 import ServiceCard3D from './components/ServiceCard3D';
+import Spline from '@splinetool/react-spline';
 import './Services.css';
 
 function Services() {
     const services = servicesList;
+    const [splineError, setSplineError] = useState(false);
 
     return (
         <div className="services-container">
@@ -13,14 +15,20 @@ function Services() {
             <div className="services-circle-background-3"></div>
 
             <div className="services-center">
-                <div className="services-logo">
-                    <img src="/assets/logo-white.png" alt="Logo" />
-                </div>
-                <div className="services-text">
-                    <p>Xidmətlər</p>
-                </div>
                 <div className="services-rainbow">
-                    <img src="/assets/rainbow.png" alt="Rainbow" />
+                    {!splineError ? (
+                        <Spline
+                            scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
+                            onError={(error) => {
+                                console.log('Spline error:', error);
+                                setSplineError(true);
+                            }}
+                        />
+                    ) : (
+                        <div className="spline-fallback">
+                            <img src="/assets/rainbow.png" alt="Rainbow" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="services-grid-3d">

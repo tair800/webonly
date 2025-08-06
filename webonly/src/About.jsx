@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { teamMembers } from './data/teamData';
 import { logos } from './data/logoData';
+import Spline from '@splinetool/react-spline';
 import './About.css';
 
 function About() {
     const [teamMembersState] = useState(teamMembers);
     const [logosState] = useState(logos);
+    const [splineError, setSplineError] = useState(false);
 
     // Update CSS custom properties for dynamic animation
     useEffect(() => {
@@ -25,14 +27,20 @@ function About() {
             <div className="about-circle-background-right"></div>
             <div className="about-circle-background-right-2"></div>
 
-            <div className="about-logo-top">
-                <img src="/assets/logo-white.png" alt="Logo" />
-            </div>
-            <div className="about-text">
-                <p>Haqqımızda</p>
-            </div>
             <div className="about-rainbow">
-                <img src="/assets/rainbow.png" alt="Rainbow" />
+                {!splineError ? (
+                    <Spline
+                        scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
+                        onError={(error) => {
+                            console.log('Spline error:', error);
+                            setSplineError(true);
+                        }}
+                    />
+                ) : (
+                    <div className="spline-fallback">
+                        <img src="/assets/rainbow.png" alt="Rainbow" />
+                    </div>
+                )}
             </div>
 
             <div className="about-logo">

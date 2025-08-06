@@ -18,6 +18,7 @@ body {
     background-color: #111214;
     overflow: visible;
     padding-top: 20vh;
+    margin-bottom: -15vh;
 }
 
 .home-container h1 {
@@ -180,13 +181,14 @@ body {
 /* Circular Progress Container */
 .circular-progress-container {
     position: relative;
-    width: 100%;
+    width: 100vw;
     height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: -100px;
     overflow: visible;
+    margin-left: calc(-50vw + 50%);
 }
 
 /* Circular Progress Indicator */
@@ -202,11 +204,12 @@ body {
     outline: none;
     transform: translateY(0);
     top: 150px;
+    clip-path: inset(0 0 50% 0);
 }
 
 .circle-logo {
     position: absolute;
-    top: 30%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 15;
@@ -217,15 +220,14 @@ body {
 
 .circle-logo-icon {
     width: 350px;
-    height: 248px;
+    height: 90px;
     object-fit: contain;
-    filter: brightness(1.1) brightness(0) invert(1);
-    clip-path: inset(0 0 38% 0);
+
     /* Crop bottom 25% to hide "technology" text */
 }
 
 .circle-logo-text {
-    position: absolute;
+    position: fixed;
     top: 18%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -233,13 +235,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100vw;
+    max-width: 1400px;
+    pointer-events: none;
 }
 
 .logo-text-background {
-    width: 600px;
+    width: 100%;
+    max-width: 1400px;
     height: auto;
     object-fit: contain;
-    opacity: 0.05;
     filter: brightness(0) invert(1);
     image-rendering: auto;
     transform: scale(1);
@@ -891,4 +896,29 @@ body {
         width: 150px;
         height: 150px;
     }
+}
+
+/* Home Logo Text */
+.home-logo-text {
+    position: absolute;
+    top: 59%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43vw;
+    max-width: 1400px;
+    pointer-events: none;
+}
+
+.home-logo-text-background {
+    width: 100%;
+    max-width: 1400px;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    image-rendering: auto;
+    transform: scale(1);
 }

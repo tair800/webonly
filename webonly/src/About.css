@@ -88,19 +88,7 @@
   z-index: 2;
 }
 
-.about-logo-top {
-  width: 37%;
-  height: auto;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.about-logo-top img {
-  width: 100%;
-  height: auto;
-}
 
 .about-text {
   color: #17DBFC;
@@ -115,14 +103,29 @@
 }
 
 .about-rainbow {
-  margin-top: -19%;
+  margin-top: -10%;
   width: 100vw;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.about-rainbow img {
+.about-rainbow>div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.about-rainbow canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.spline-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.spline-fallback img {
   width: 100%;
   height: auto;
 }
@@ -142,7 +145,6 @@
   width: 100%;
   height: auto;
   display: block;
-  opacity: 10%;
 }
 
 .about-logo-text {
@@ -185,7 +187,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 2.5rem 0 2.5rem;
-  top: -50px;
+  top: -20px;
   margin: 0 auto 2.5rem auto;
   z-index: 10;
   box-sizing: border-box;
@@ -600,9 +602,7 @@
     padding: 150px 1.5rem 2rem 1.5rem;
   }
 
-  .about-logo-top {
-    width: 45%;
-  }
+
 
   .about-text {
     font-size: 36px;
@@ -681,9 +681,7 @@
     padding: 120px 1rem 2rem 1rem;
   }
 
-  .about-logo-top {
-    width: 50%;
-  }
+
 
   .about-text {
     font-size: 30px;
@@ -761,9 +759,7 @@
     padding: 100px 1rem 2rem 1rem;
   }
 
-  .about-logo-top {
-    width: 60%;
-  }
+
 
   .about-text {
     font-size: 26px;
@@ -889,9 +885,7 @@
     padding: 80px 0.5rem 2rem 0.5rem;
   }
 
-  .about-logo-top {
-    width: 70%;
-  }
+
 
   .about-text {
     font-size: 22px;
@@ -965,9 +959,7 @@
     padding: 60px 0.5rem 2rem 0.5rem;
   }
 
-  .about-logo-top {
-    width: 80%;
-  }
+
 
   .about-text {
     font-size: 20px;

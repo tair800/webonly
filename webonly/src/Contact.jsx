@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Spline from '@splinetool/react-spline';
 import './Contact.css';
 
 function Contact() {
@@ -8,6 +9,7 @@ function Contact() {
         subject: '',
         message: ''
     });
+    const [splineError, setSplineError] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -27,14 +29,20 @@ function Contact() {
             <div className="contact-circle-background-right"></div>
 
             <div className="contact-center">
-                <div className="contact-logo">
-                    <img src="/assets/logo-white.png" alt="Logo" />
-                </div>
-                <div className="contact-text">
-                    <p>Bizimlə əlaqə</p>
-                </div>
                 <div className="contact-rainbow">
-                    <img src="/assets/rainbow.png" alt="Rainbow" />
+                    {!splineError ? (
+                        <Spline
+                            scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
+                            onError={(error) => {
+                                console.log('Spline error:', error);
+                                setSplineError(true);
+                            }}
+                        />
+                    ) : (
+                        <div className="spline-fallback">
+                            <img src="/assets/rainbow.png" alt="Rainbow" />
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -49,7 +57,7 @@ function Contact() {
                             <p>Texnoloji tərəfdaşınız olaraq suallarınızı, fikirlərinizi və əməkdaşlıq təkliflərinizi dəyərli sayırıq. Bizimlə əlaqə saxlamaq bir klik uzağınızdadır.</p>
                         </div>
                         <div className="contact-location">
-                            <span>Bakı, Azərbaycan</span>
+                            <span>1 Ahmad Rajabli, Baku, Azerbaijan</span>
                         </div>
                         <div className="contact-info">
                             <div className="contact-item">
@@ -109,7 +117,16 @@ function Contact() {
             </div>
 
             <div className="contact-map">
-                <img src="/assets/map.png" alt="Map" />
+                <iframe
+                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=1+Ahmad+Rajabli,Baku,Azerbaijan"
+                    width="100%"
+                    height="400"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Softech Location - 1 Ahmad Rajabli, Baku, Azerbaijan"
+                ></iframe>
             </div>
         </div>
     );

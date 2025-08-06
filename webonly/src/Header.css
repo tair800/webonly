@@ -164,10 +164,10 @@
 }
 
 .logo-white {
-    width: 180px;
+    width: 200px;
     height: auto;
     display: block;
-    margin-left: 0;
+    margin: 0 auto;
 }
 
 @media (max-width: 1200px) {

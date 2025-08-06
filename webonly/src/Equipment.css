@@ -109,7 +109,7 @@
 }
 
 .equipment-rainbow {
-    margin-top: -19%;
+    margin-top: -10%;
     width: 100vw;
     position: relative;
     left: 52%;
@@ -1024,4 +1024,24 @@
         width: 100px;
         height: 100px;
     }
+}
+
+.equipment-rainbow>div {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.equipment-rainbow canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.spline-fallback {
+    width: 100%;
+    height: 100%;
+}
+
+.spline-fallback img {
+    width: 100%;
+    height: auto;
 }

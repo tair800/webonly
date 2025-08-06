@@ -77,7 +77,7 @@
 }
 
 .contact-rainbow {
-  margin-top: -19%;
+  margin-top: -10%;
   width: 100vw;
   position: relative;
   left: 50%;
@@ -85,6 +85,26 @@
 }
 
 .contact-rainbow img {
+  width: 100%;
+  height: auto;
+}
+
+.contact-rainbow>div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.contact-rainbow canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.spline-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.spline-fallback img {
   width: 100%;
   height: auto;
 }
@@ -141,14 +161,14 @@
   color: rgba(255, 255, 255, 1);
   font-weight: 400;
   font-style: Regular;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 120%;
   letter-spacing: 0px;
   vertical-align: middle;
 }
 
 .contact-description p {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.6;
   color: #9BA1B6;
   margin: 0;
@@ -161,7 +181,7 @@
 }
 
 .contact-location span {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
 
@@ -192,7 +212,7 @@
 }
 
 .contact-item span {
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
   font-weight: 500;
 }

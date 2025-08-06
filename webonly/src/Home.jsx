@@ -22,10 +22,6 @@ function CircularProgress({ currentIndex, totalSlides }) {
 
     return (
         <div className="circular-progress">
-            {/* Logo text - positioned behind the circle with transparency */}
-            <div className="circle-logo-text">
-                <img src={logoText} alt="Logo Text" className="logo-text-background" />
-            </div>
             {/* Logo icon - positioned outside the rotating SVG so it doesn't rotate */}
             <div className="circle-logo">
                 <img src={logoIcon} alt="Logo" className="circle-logo-icon" />
@@ -160,6 +156,11 @@ export default function Home() {
         <div className="home-container">
             <div className="circle-background-left"></div>
             <div className="circle-background-right"></div>
+
+            {/* Logo text positioned absolutely */}
+            <div className="home-logo-text">
+                <img src={logoText} alt="Logo Text" className="home-logo-text-background" />
+            </div>
 
             <div className="slider-container">
                 <div className="top-ellipse">

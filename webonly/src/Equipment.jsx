@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { equipmentList } from './data/equipmentData';
+import Spline from '@splinetool/react-spline';
 import './Equipment.css';
 
 function Equipment() {
@@ -12,6 +13,7 @@ function Equipment() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [touchStartY, setTouchStartY] = useState(null);
     const [lastScrollTime, setLastScrollTime] = useState(0);
+    const [splineError, setSplineError] = useState(false);
     const timeoutRef = useRef(null);
 
     const slideDuration = 300;
@@ -137,14 +139,20 @@ function Equipment() {
             <div className="equipment-circle-background-left-4"></div>
 
             <div className="equipment-center">
-                <div className="equipment-logo">
-                    <img src="/assets/logo-white.png" alt="Logo" />
-                </div>
-                <div className="equipment-text">
-                    <p>Avadanlıqlar</p>
-                </div>
                 <div className="equipment-rainbow">
-                    <img src="/assets/rainbow.png" alt="Rainbow" />
+                    {!splineError ? (
+                        <Spline
+                            scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
+                            onError={(error) => {
+                                console.log('Spline error:', error);
+                                setSplineError(true);
+                            }}
+                        />
+                    ) : (
+                        <div className="spline-fallback">
+                            <img src="/assets/rainbow.png" alt="Rainbow" />
+                        </div>
+                    )}
                 </div>
             </div>
 
