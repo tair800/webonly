@@ -1,28 +1,24 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
-import AdminDashboard from './admin-panel/src/AdminDashboard';
-import AdminTest from './admin-panel/src/Test';
+import { Routes, Route } from 'react-router-dom';
+import AdminSidebar from './AdminSidebar';
+import AdminAbout from './AdminAbout';
+import AdminProducts from './AdminProducts';
 import './AdminPanel.css';
 
 function AdminPanel() {
     return (
-        <div className="admin-panel-container">
-            <nav className="admin-nav">
-                <div className="admin-nav-brand">
-                    <h1>Admin Panel</h1>
-                </div>
-                <ul className="admin-nav-links">
-                    <li><Link to="/admin-panel">Dashboaard</Link></li>
-                    <li><Link to="/admin-panel/test">Test Page</Link></li>
-                </ul>
-            </nav>
-
-            <main className="admin-main">
+        <div className="admin-panel-container" style={{ display: 'flex' }}>
+            <div style={{ flex: '0 0 280px' }}>
+                <AdminSidebar />
+            </div>
+            <div style={{ flex: 1 }}>
                 <Routes>
-                    <Route path="/" element={<AdminDashboard />} />
-                    <Route path="/test" element={<AdminTest />} />
+                    <Route path="/" element={<div />} />
+                    <Route path="/about" element={<AdminAbout />} />
+                    <Route path="/products" element={<AdminProducts />} />
+                    <Route path="/test" element={<div />} />
                 </Routes>
-            </main>
+            </div>
         </div>
     );
 }

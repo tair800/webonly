@@ -1,7 +1,7 @@
 import React from 'react';
-import './test.css';
+import './AdminTest.css';
 
-export default function Test() {
+export default function AdminTest() {
     return (
         <div className="test-container">
             <h1>Test Page</h1>

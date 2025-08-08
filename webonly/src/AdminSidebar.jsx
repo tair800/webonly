@@ -1,45 +1,47 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './AdminDashboard.css';
 import logoWhite from '/assets/logo-white.png';
 import logoIcon from '/assets/logo-icon.png';
 import footerLogo from '/assets/footer-logo.png';
 
-function AdminDashboard() {
+export default function AdminSidebar() {
+    const location = useLocation();
+    const currentPath = location.pathname;
+
     return (
         <div className="admin-sidebar">
-            {/* Top Logo */}
             <div className="sidebar-logo">
                 <img src={logoWhite} alt="Softech Logo" />
             </div>
 
-            {/* Navigation Menu */}
             <nav className="sidebar-nav">
-                <div className="nav-item active">
+                <Link to="/admin-panel" className={`nav-item ${currentPath === '/admin-panel' ? 'active' : ''}`}>
                     <div className="nav-icon">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z" />
                         </svg>
                     </div>
                     <span className="nav-text">İdarəetmə Paneli</span>
-                </div>
+                </Link>
 
-                <div className="nav-item">
+                <Link to="/admin-panel/about" className={`nav-item ${currentPath === '/admin-panel/about' ? 'active' : ''}`}>
                     <div className="nav-icon">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
                         </svg>
                     </div>
                     <span className="nav-text">Haqqımızda</span>
-                </div>
+                </Link>
 
-                <div className="nav-item">
+                <Link to="/admin-panel/products" className={`nav-item ${currentPath === '/admin-panel/products' ? 'active' : ''}`}>
                     <div className="nav-icon">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
                         </svg>
                     </div>
                     <span className="nav-text">Məhsullar</span>
-                </div>
+                </Link>
 
                 <div className="nav-item">
                     <div className="nav-icon">
@@ -69,7 +71,6 @@ function AdminDashboard() {
                 </div>
             </nav>
 
-            {/* User Profile Section */}
             <div className="user-profile">
                 <div className="user-avatar">
                     <img src={logoIcon} alt="User Avatar" />
@@ -80,12 +81,9 @@ function AdminDashboard() {
                 </div>
             </div>
 
-            {/* Footer Logo */}
             <div className="footer-logo">
                 <img src={footerLogo} alt="Footer Logo" />
             </div>
         </div>
     );
 }
-
-export default AdminDashboard; 
