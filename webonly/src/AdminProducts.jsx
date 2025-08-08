@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AdminProducts.css';
 import './AdminAbout.css';
 
 export default function AdminProducts() {
+    const [showModal, setShowModal] = useState(false);
+    const [newProduct, setNewProduct] = useState({
+        name: '',
+        subtext: ''
+    });
+
+    const handleAddProduct = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setNewProduct({ name: '', subtext: '' });
+    };
+
+    const handleSaveProduct = () => {
+        // Here you would typically save to API
+        console.log('Saving new product:', newProduct);
+        handleCloseModal();
+    };
+
     return (
         <div className="admin-products-container admin-about-container container-fluid">
             <div className="admin-products-header d-flex justify-content-between align-items-center mb-3 pt-3" style={{ padding: '0 15px' }}>
@@ -50,7 +71,7 @@ export default function AdminProducts() {
                             <path d="M20 20l-4.35-4.35" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                     </div>
-                    <button className="btn d-flex align-items-center gap-2" style={{
+                    <button className="btn d-flex align-items-center gap-2" onClick={handleAddProduct} style={{
                         background: 'linear-gradient(90deg, #007bff, #00d4ff)',
                         border: 'none',
                         color: 'white',
@@ -258,6 +279,75 @@ export default function AdminProducts() {
                     </div>
                 </div>
             </div>
+
+            {/* Add Product Modal */}
+            {showModal && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">Yeni Məhsul Əlavə Et</h3>
+                            <button className="modal-close" onClick={handleCloseModal}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="modal-body">
+                            <div className="form-group mb-3">
+                                <label className="form-label">Məhsul Adı</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Məhsul adını daxil edin"
+                                    value={newProduct.name}
+                                    onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Məhsul Təsviri</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    placeholder="Məhsul təsvirini daxil edin"
+                                    value={newProduct.subtext}
+                                    onChange={(e) => setNewProduct({ ...newProduct, subtext: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Şəkil</label>
+                                <div className="image-upload-container">
+                                    <div className="image-placeholder position-relative">
+                                        <div className="image-actions position-absolute">
+                                            <button className="action-btn delete-img" aria-label="Delete image">
+                                                <img src="/assets/admin-trash.png" alt="Delete" />
+                                            </button>
+                                            <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="image-info">
+                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                                Ləğv et
+                            </button>
+                            <button className="btn btn-primary" onClick={handleSaveProduct}>
+                                Əlavə et
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

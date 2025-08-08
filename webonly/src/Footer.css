@@ -2,7 +2,7 @@
     background: #111214;
     color: #fff;
     position: relative;
-    padding-top: 0;
+    padding: 0;
     overflow: hidden;
     width: 100%;
 }
@@ -165,7 +165,7 @@
 
 .footer-bg-img {
     position: absolute;
-    right: -7px;
+    right: 0;
     bottom: 0;
     width: 520px;
     max-width: 60vw;
@@ -324,5 +324,24 @@
     .footer-bg-img {
         width: 80px;
         right: 10px;
+    }
+}
+
+/* Large screen adjustments */
+@media (min-width: 1400px) {
+    .footer-bg-img {
+        right: -12px;
+        bottom: 0;
+        width: 600px;
+        max-width: 50vw;
+    }
+}
+
+
+
+@media (min-width: 1800px) {
+    .footer-bg-img {
+        width: 700px;
+        max-width: 45vw;
     }
 }

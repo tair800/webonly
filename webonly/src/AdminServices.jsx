@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AdminServices.css';
 import './AdminAbout.css';
 
 export default function AdminServices() {
+    const [showModal, setShowModal] = useState(false);
+    const [newService, setNewService] = useState({
+        name: '',
+        subtext: ''
+    });
+
+    const handleAddService = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setNewService({ name: '', subtext: '' });
+    };
+
+    const handleSaveService = () => {
+        // Here you would typically save to API
+        console.log('Saving new service:', newService);
+        handleCloseModal();
+    };
+
     return (
         <div className="admin-services-container admin-about-container container-fluid">
             <div className="admin-services-header d-flex justify-content-between align-items-center mb-3 pt-3" style={{ padding: '0 15px' }}>
@@ -51,7 +72,7 @@ export default function AdminServices() {
                             <path d="m21 21-4.35-4.35" />
                         </svg>
                     </div>
-                    <button className="add-btn btn d-flex align-items-center gap-2">
+                    <button className="add-btn btn d-flex align-items-center gap-2" onClick={handleAddService}>
                         <span style={{ fontSize: '16px' }}>+</span>
                         Əlavə et
                     </button>
@@ -63,10 +84,20 @@ export default function AdminServices() {
                 <div className="row g-3 align-items-start">
                     <div className="col-12 col-lg-8 d-flex flex-column gap-3">
                         <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="text-white m-0">Slide 1</h5>
+                            <h5 className="text-white m-0">Service 01</h5>
                         </div>
 
-                        {/* Main Service Details */}
+                        {/* Service ID (Fancy Badge) */}
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">ID</label>
+                            <div className="col-sm-9">
+                                <div className="service-id-badge">
+                                    <span className="id-number">01</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Service Name */}
                         <div className="form-group row g-3 align-items-start">
                             <label className="col-sm-3 col-form-label">Name</label>
                             <div className="col-sm-9">
@@ -79,6 +110,7 @@ export default function AdminServices() {
                             </div>
                         </div>
 
+                        {/* Service Subtext */}
                         <div className="form-group row g-3 align-items-start">
                             <label className="col-sm-3 col-form-label">Subtext</label>
                             <div className="col-sm-9">
@@ -90,10 +122,48 @@ export default function AdminServices() {
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className="col-12 col-lg-4">
+                        <div className="image-upload-container d-flex flex-column gap-2">
+                            <div className="image-placeholder position-relative">
+                                <div className="image-actions position-absolute">
+                                    <button className="action-btn delete-img" aria-label="Delete image">
+                                        <img src="/assets/admin-trash.png" alt="Delete" />
+                                    </button>
+                                    <button className="action-btn refresh-img" aria-label="Refresh image">
+                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="image-info">
+                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        {/* Sub-section 1 */}
+            {/* Second Service */}
+            <div className="admin-about-card p-3 mb-4">
+                <div className="row g-3 align-items-start">
+                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h5 className="text-white m-0">Service 02</h5>
+                        </div>
+
+                        {/* Service ID (Fancy Badge) */}
                         <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtitle</label>
+                            <label className="col-sm-3 col-form-label">ID</label>
+                            <div className="col-sm-9">
+                                <div className="service-id-badge">
+                                    <span className="id-number">02</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Service Name */}
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Name</label>
                             <div className="col-sm-9">
                                 <input
                                     className="form-control"
@@ -104,21 +174,60 @@ export default function AdminServices() {
                             </div>
                         </div>
 
+                        {/* Service Subtext */}
                         <div className="form-group row g-3 align-items-start">
                             <label className="col-sm-3 col-form-label">Subtext</label>
                             <div className="col-sm-9">
                                 <textarea
                                     className="form-control"
-                                    rows={4}
+                                    rows={6}
                                     placeholder="Mətn..."
                                     defaultValue="Satış nöqtəsinin idarə olunması, satış tempinə nəzarət və müxtəlif mal qruplarına görə çeşidləmə imkanı mövcuddur."
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className="col-12 col-lg-4">
+                        <div className="image-upload-container d-flex flex-column gap-2">
+                            <div className="image-placeholder position-relative">
+                                <div className="image-actions position-absolute">
+                                    <button className="action-btn delete-img" aria-label="Delete image">
+                                        <img src="/assets/admin-trash.png" alt="Delete" />
+                                    </button>
+                                    <button className="action-btn refresh-img" aria-label="Refresh image">
+                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="image-info">
+                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        {/* Sub-section 2 */}
+            {/* Third Service */}
+            <div className="admin-about-card p-3 mb-4">
+                <div className="row g-3 align-items-start">
+                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h5 className="text-white m-0">Service 03</h5>
+                        </div>
+
+                        {/* Service ID (Fancy Badge) */}
                         <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtitle</label>
+                            <label className="col-sm-3 col-form-label">ID</label>
+                            <div className="col-sm-9">
+                                <div className="service-id-badge">
+                                    <span className="id-number">03</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Service Name */}
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Name</label>
                             <div className="col-sm-9">
                                 <input
                                     className="form-control"
@@ -129,37 +238,13 @@ export default function AdminServices() {
                             </div>
                         </div>
 
+                        {/* Service Subtext */}
                         <div className="form-group row g-3 align-items-start">
                             <label className="col-sm-3 col-form-label">Subtext</label>
                             <div className="col-sm-9">
                                 <textarea
                                     className="form-control"
-                                    rows={4}
-                                    placeholder="Mətn..."
-                                    defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər."
-                                />
-                            </div>
-                        </div>
-
-                        {/* Sub-section 3 */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtitle</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Müştəri və CRM idarəetməsi"
-                                    defaultValue="Müştəri və CRM idarəetməsi"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={4}
+                                    rows={6}
                                     placeholder="Mətn..."
                                     defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər."
                                 />
@@ -185,6 +270,75 @@ export default function AdminServices() {
                     </div>
                 </div>
             </div>
+
+            {/* Add Service Modal */}
+            {showModal && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">Yeni Xidmət Əlavə Et</h3>
+                            <button className="modal-close" onClick={handleCloseModal}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="modal-body">
+                            <div className="form-group mb-3">
+                                <label className="form-label">Xidmət Adı</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Xidmət adını daxil edin"
+                                    value={newService.name}
+                                    onChange={(e) => setNewService({ ...newService, name: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Xidmət Təsviri</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    placeholder="Xidmət təsvirini daxil edin"
+                                    value={newService.subtext}
+                                    onChange={(e) => setNewService({ ...newService, subtext: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Şəkil</label>
+                                <div className="image-upload-container">
+                                    <div className="image-placeholder position-relative">
+                                        <div className="image-actions position-absolute">
+                                            <button className="action-btn delete-img" aria-label="Delete image">
+                                                <img src="/assets/admin-trash.png" alt="Delete" />
+                                            </button>
+                                            <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="image-info">
+                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                                Ləğv et
+                            </button>
+                            <button className="btn btn-primary" onClick={handleSaveService}>
+                                Əlavə et
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

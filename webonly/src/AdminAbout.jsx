@@ -16,6 +16,17 @@ export default function AdminAbout() {
     // References state (images will be fetched later)
     const [references, setReferences] = useState([]);
 
+    // Modal states
+    const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState(''); // 'employee' or 'reference'
+    const [newEmployee, setNewEmployee] = useState({
+        heading: '',
+        jobName: '',
+        telefon: '',
+        mail: '',
+        linkedin: ''
+    });
+
     const addEmployee = () => {
         const newEmployee = {
             id: Date.now(),
@@ -53,6 +64,44 @@ export default function AdminAbout() {
         e.target.value = '';
     };
 
+    // Modal handlers
+    const handleAddEmployee = () => {
+        setModalType('employee');
+        setShowModal(true);
+    };
+
+    const handleAddReference = () => {
+        setModalType('reference');
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setModalType('');
+        setNewEmployee({
+            heading: '',
+            jobName: '',
+            telefon: '',
+            mail: '',
+            linkedin: ''
+        });
+    };
+
+    const handleSaveEmployee = () => {
+        const employeeToAdd = {
+            id: Date.now(),
+            ...newEmployee
+        };
+        setEmployees([...employees, employeeToAdd]);
+        handleCloseModal();
+    };
+
+    const handleSaveReference = () => {
+        // Here you would typically save to API
+        console.log('Saving new reference');
+        handleCloseModal();
+    };
+
     return (
         <div className="admin-about-container container-fluid">
             {/* First Section - Main Content */}
@@ -61,7 +110,7 @@ export default function AdminAbout() {
                 <div className="admin-about-topbar d-flex justify-content-between align-items-center mb-3">
                     <div className="slide-indicator">Slide 1</div>
                     <div className="top-actions d-flex gap-2">
-                        <button className="add-btn btn">+ Əlavə et</button>
+                        <button className="add-btn btn" onClick={handleAddEmployee}>+ Əlavə et</button>
                         <button className="delete-btn btn" aria-label="Delete">
                             <img src="/assets/admin-trash.png" alt="Delete" />
                         </button>
@@ -127,8 +176,7 @@ export default function AdminAbout() {
 
                 <div className="references-grid">
                     {/* Upload tile */}
-                    <label className="upload-tile">
-                        <input type="file" className="d-none" onChange={handleReferenceUpload} />
+                    <label className="upload-tile" onClick={handleAddReference}>
                         <div className="upload-inner">
                             <div className="upload-title">Click to upload</div>
                             <div className="upload-sub">or drag and drop</div>
@@ -158,7 +206,7 @@ export default function AdminAbout() {
                 <div className="admin-about-topbar d-flex justify-content-between align-items-center mb-3">
                     <div className="slide-indicator">Kollektiv</div>
                     <div className="top-actions d-flex gap-2">
-                        <button className="add-btn btn" onClick={addEmployee}>+ Əlavə et</button>
+                        <button className="add-btn btn" onClick={handleAddEmployee}>+ Əlavə et</button>
                     </div>
                 </div>
 
@@ -384,6 +432,150 @@ export default function AdminAbout() {
                     </div>
                 ))}
             </div>
+
+            {/* Add Employee/Reference Modal */}
+            {showModal && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">
+                                {modalType === 'employee' ? 'Yeni İşçi Əlavə Et' : 'Yeni Referans Əlavə Et'}
+                            </h3>
+                            <button className="modal-close" onClick={handleCloseModal}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="modal-body">
+                            {modalType === 'employee' ? (
+                                <>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Ad Soyad</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="İşçi adını daxil edin"
+                                            value={newEmployee.heading}
+                                            onChange={(e) => setNewEmployee({ ...newEmployee, heading: e.target.value })}
+                                        />
+                                    </div>
+
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Vəzifə</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="İşçi vəzifəsini daxil edin"
+                                            value={newEmployee.jobName}
+                                            onChange={(e) => setNewEmployee({ ...newEmployee, jobName: e.target.value })}
+                                        />
+                                    </div>
+
+                                    <div className="row g-3">
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="form-label">Telefon</label>
+                                                <input
+                                                    type="tel"
+                                                    className="form-control"
+                                                    placeholder="0124444444"
+                                                    value={newEmployee.telefon}
+                                                    onChange={(e) => setNewEmployee({ ...newEmployee, telefon: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="form-label">Mail</label>
+                                                <input
+                                                    type="email"
+                                                    className="form-control"
+                                                    placeholder="namesurname@mail.ru"
+                                                    value={newEmployee.mail}
+                                                    onChange={(e) => setNewEmployee({ ...newEmployee, mail: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <div className="form-group">
+                                                <label className="form-label">LinkedIn</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="LinkedIn linki"
+                                                    value={newEmployee.linkedin}
+                                                    onChange={(e) => setNewEmployee({ ...newEmployee, linkedin: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group mb-3 mt-3">
+                                        <label className="form-label">Şəkil</label>
+                                        <div className="image-upload-container">
+                                            <div className="image-placeholder position-relative">
+                                                <div className="image-actions position-absolute">
+                                                    <button className="action-btn delete-img" aria-label="Delete image">
+                                                        <img src="/assets/admin-trash.png" alt="Delete" />
+                                                    </button>
+                                                    <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="image-info">
+                                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Referans Adı</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Referans adını daxil edin"
+                                        />
+                                    </div>
+
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Şəkil</label>
+                                        <div className="image-upload-container">
+                                            <div className="image-placeholder position-relative">
+                                                <div className="image-actions position-absolute">
+                                                    <button className="action-btn delete-img" aria-label="Delete image">
+                                                        <img src="/assets/admin-trash.png" alt="Delete" />
+                                                    </button>
+                                                    <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="image-info">
+                                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                                Ləğv et
+                            </button>
+                            <button className="btn btn-primary" onClick={modalType === 'employee' ? handleSaveEmployee : handleSaveReference}>
+                                Əlavə et
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 } 

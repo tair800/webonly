@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AdminEquipment.css';
 import './AdminAbout.css';
 
 export default function AdminEquipment() {
+    const [showModal, setShowModal] = useState(false);
+    const [newEquipment, setNewEquipment] = useState({
+        name: '',
+        features: '',
+        title: '',
+        specs: ''
+    });
+
+    const handleAddEquipment = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setNewEquipment({ name: '', features: '', title: '', specs: '' });
+    };
+
+    const handleSaveEquipment = () => {
+        // Here you would typically save to API
+        console.log('Saving new equipment:', newEquipment);
+        handleCloseModal();
+    };
+
     return (
         <div className="admin-equipment-container admin-about-container container-fluid">
             <div className="admin-equipment-header d-flex justify-content-between align-items-center mb-3 pt-3" style={{ padding: '0 15px' }}>
@@ -51,7 +74,7 @@ export default function AdminEquipment() {
                             <path d="m21 21-4.35-4.35" />
                         </svg>
                     </div>
-                    <button className="add-btn btn d-flex align-items-center gap-2">
+                    <button className="add-btn btn d-flex align-items-center gap-2" onClick={handleAddEquipment}>
                         <span style={{ fontSize: '16px' }}>+</span>
                         Əlavə et
                     </button>
@@ -279,6 +302,97 @@ export default function AdminEquipment() {
                     </div>
                 </div>
             </div>
+
+            {/* Add Equipment Modal */}
+            {showModal && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">Yeni Avadanlıq Əlavə Et</h3>
+                            <button className="modal-close" onClick={handleCloseModal}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="modal-body">
+                            <div className="form-group mb-3">
+                                <label className="form-label">Avadanlıq Adı</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Avadanlıq adını daxil edin"
+                                    value={newEquipment.name}
+                                    onChange={(e) => setNewEquipment({ ...newEquipment, name: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Xüsusiyyətlər</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    placeholder="Avadanlıq xüsusiyyətlərini daxil edin"
+                                    value={newEquipment.features}
+                                    onChange={(e) => setNewEquipment({ ...newEquipment, features: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Başlıq</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Başlığı daxil edin"
+                                    value={newEquipment.title}
+                                    onChange={(e) => setNewEquipment({ ...newEquipment, title: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Spesifikasiyalar</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="4"
+                                    placeholder="Spesifikasiyaları daxil edin"
+                                    value={newEquipment.specs}
+                                    onChange={(e) => setNewEquipment({ ...newEquipment, specs: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Şəkil</label>
+                                <div className="image-upload-container">
+                                    <div className="image-placeholder position-relative">
+                                        <div className="image-actions position-absolute">
+                                            <button className="action-btn delete-img" aria-label="Delete image">
+                                                <img src="/assets/admin-trash.png" alt="Delete" />
+                                            </button>
+                                            <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="image-info">
+                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                                Ləğv et
+                            </button>
+                            <button className="btn btn-primary" onClick={handleSaveEquipment}>
+                                Əlavə et
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "giPfCUDK4safSjkYrU2kTNsWbmSx9iP6y2MPetp90qw=",
+  "Source": "WebOnlyAPI",
+  "BasePath": "_content/WebOnlyAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
