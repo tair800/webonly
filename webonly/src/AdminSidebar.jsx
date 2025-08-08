@@ -43,23 +43,23 @@ export default function AdminSidebar() {
                     <span className="nav-text">Məhsullar</span>
                 </Link>
 
-                <div className="nav-item">
+                <Link to="/admin-panel/equipment" className={`nav-item ${currentPath === '/admin-panel/equipment' ? 'active' : ''}`}>
                     <div className="nav-icon">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z" />
                         </svg>
                     </div>
                     <span className="nav-text">Avadanlıqlar</span>
-                </div>
+                </Link>
 
-                <div className="nav-item">
+                <Link to="/admin-panel/services" className={`nav-item ${currentPath === '/admin-panel/services' ? 'active' : ''}`}>
                     <div className="nav-icon">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" />
                         </svg>
                     </div>
                     <span className="nav-text">Xidmətlər</span>
-                </div>
+                </Link>
 
                 <div className="nav-item">
                     <div className="nav-icon">

@@ -99,8 +99,8 @@ const Logo = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
+  width: 110px;
+  height: 110px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -430,57 +430,57 @@ const Noselect = styled.div`
 `;
 
 const ProductCard3D = ({ product }) => {
-    const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-    return (
-        <Link to={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
-            <Noselect>
-                <StyledWrapper
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    <Canvas>
-                        <Tr1 />
-                        <Tr2 />
-                        <Tr3 />
-                        <Tr4 />
-                        <Tr5 />
-                        <Tr6 />
-                        <Tr7 />
-                        <Tr8 />
-                        <Tr9 />
-                        <Card>
-                            <CardContent>
-                                <CardGlare className="card-glare" />
-                                <CyberLines className="cyber-lines">
-                                    <span /><span /><span /><span />
-                                </CyberLines>
-                                <Prompt id="prompt">{isHovered ? "" : product.name}</Prompt>
-                                <Logo className="logo">
-                                    <img src={product.icon} alt={product.alt} />
-                                </Logo>
-                                <GlowingElements className="glowing-elements">
-                                    <Glow className="glow-1" />
-                                    <Glow className="glow-2" />
-                                    <Glow className="glow-3" />
-                                </GlowingElements>
-                                <Subtitle className="subtitle">
-                                    <span>{isHovered ? product.name : product.subtext}</span>
-                                </Subtitle>
-                                <CardParticles className="card-particles">
-                                    <span /><span /><span /> <span /><span /><span />
-                                </CardParticles>
-                                <CornerElements className="corner-elements">
-                                    <span /><span /><span /><span />
-                                </CornerElements>
-                                <ScanLine className="scan-line" />
-                            </CardContent>
-                        </Card>
-                    </Canvas>
-                </StyledWrapper>
-            </Noselect>
-        </Link>
-    );
+  return (
+    <Link to={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
+      <Noselect>
+        <StyledWrapper
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <Canvas>
+            <Tr1 />
+            <Tr2 />
+            <Tr3 />
+            <Tr4 />
+            <Tr5 />
+            <Tr6 />
+            <Tr7 />
+            <Tr8 />
+            <Tr9 />
+            <Card>
+              <CardContent>
+                <CardGlare className="card-glare" />
+                <CyberLines className="cyber-lines">
+                  <span /><span /><span /><span />
+                </CyberLines>
+                <Prompt id="prompt">{isHovered ? "" : product.name}</Prompt>
+                <Logo className="logo">
+                  <img src={product.icon} alt={product.alt} />
+                </Logo>
+                <GlowingElements className="glowing-elements">
+                  <Glow className="glow-1" />
+                  <Glow className="glow-2" />
+                  <Glow className="glow-3" />
+                </GlowingElements>
+                <Subtitle className="subtitle">
+                  <span>{isHovered ? product.name : product.subtext}</span>
+                </Subtitle>
+                <CardParticles className="card-particles">
+                  <span /><span /><span /> <span /><span /><span />
+                </CardParticles>
+                <CornerElements className="corner-elements">
+                  <span /><span /><span /><span />
+                </CornerElements>
+                <ScanLine className="scan-line" />
+              </CardContent>
+            </Card>
+          </Canvas>
+        </StyledWrapper>
+      </Noselect>
+    </Link>
+  );
 };
 
 export default ProductCard3D; 

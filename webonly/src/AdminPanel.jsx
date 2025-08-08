@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
 import AdminAbout from './AdminAbout';
 import AdminProducts from './AdminProducts';
+import AdminEquipment from './AdminEquipment';
+import AdminServices from './AdminServices';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -16,6 +18,8 @@ function AdminPanel() {
                     <Route path="/" element={<div />} />
                     <Route path="/about" element={<AdminAbout />} />
                     <Route path="/products" element={<AdminProducts />} />
+                    <Route path="/equipment" element={<AdminEquipment />} />
+                    <Route path="/services" element={<AdminServices />} />
                     <Route path="/test" element={<div />} />
                 </Routes>
             </div>

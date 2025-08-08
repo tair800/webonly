@@ -1,12 +1,12 @@
 import React from 'react';
-import './AdminProducts.css';
+import './AdminServices.css';
 import './AdminAbout.css';
 
-export default function AdminProducts() {
+export default function AdminServices() {
     return (
-        <div className="admin-products-container admin-about-container container-fluid">
-            <div className="admin-products-header d-flex justify-content-between align-items-center mb-3 pt-3" style={{ padding: '0 15px' }}>
-                <h2 className="m-0">Məhsullar</h2>
+        <div className="admin-services-container admin-about-container container-fluid">
+            <div className="admin-services-header d-flex justify-content-between align-items-center mb-3 pt-3" style={{ padding: '0 15px' }}>
+                <h2 className="m-0">Xidmətlər</h2>
                 <div className="d-flex gap-3 align-items-center" style={{ minWidth: 'fit-content' }}>
                     <span role="button" aria-label="Notifications" title="Bildirişlər" style={{ cursor: 'pointer', display: 'inline-flex' }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
@@ -35,54 +35,46 @@ export default function AdminProducts() {
                             type="text"
                             className="form-control"
                             placeholder="Axtar..."
-                            style={{ backgroundColor: '#2a2a2a', border: 'none', color: 'white', paddingLeft: '40px' }}
+                            style={{ paddingLeft: '40px' }}
                         />
                         <svg
-                            width="18"
-                            height="18"
+                            width="16"
+                            height="16"
                             viewBox="0 0 24 24"
                             fill="none"
+                            stroke="#ffffff"
+                            strokeWidth="2"
                             xmlns="http://www.w3.org/2000/svg"
                             style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}
-                            aria-hidden="true"
                         >
-                            <path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14Z" stroke="#ffffff" strokeWidth="2" />
-                            <path d="M20 20l-4.35-4.35" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
                         </svg>
                     </div>
-                    <button className="btn d-flex align-items-center gap-2" style={{
-                        background: 'linear-gradient(90deg, #007bff, #00d4ff)',
-                        border: 'none',
-                        color: 'white',
-                        borderRadius: '8px',
-                        padding: '8px 16px'
-                    }}>
+                    <button className="add-btn btn d-flex align-items-center gap-2">
                         <span style={{ fontSize: '16px' }}>+</span>
                         Əlavə et
                     </button>
                 </div>
             </div>
 
-            {/* Static card reusing About section layout */}
+            {/* Services Content */}
             <div className="admin-about-card p-3 mb-4">
-                {/* Top block: ID + Heading + Subtext with image on right */}
-                <div className="row g-3 align-items-start mb-4">
+                <div className="row g-3 align-items-start">
                     <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">ID</label>
-                            <div className="col-sm-9">
-                                <div className="form-control-plaintext">01</div>
-                            </div>
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h5 className="text-white m-0">Slide 1</h5>
                         </div>
 
+                        {/* Main Service Details */}
                         <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Heading</label>
+                            <label className="col-sm-3 col-form-label">Name</label>
                             <div className="col-sm-9">
                                 <input
                                     className="form-control"
                                     type="text"
-                                    placeholder="Market"
-                                    defaultValue="Market"
+                                    placeholder="Bazanın arxivləməsi"
+                                    defaultValue="Bazanın arxivləməsi"
                                 />
                             </div>
                         </div>
@@ -92,9 +84,84 @@ export default function AdminProducts() {
                             <div className="col-sm-9">
                                 <textarea
                                     className="form-control"
-                                    placeholder="Mətn..."
                                     rows={6}
-                                    defaultValue="Market modulunuz mallarınızı anbarınıza daxil olduğu andan etibarən satılan qədər bütün hərəkətlərini təqib edir..."
+                                    placeholder="Mətn..."
+                                    defaultValue="Bazanın arxivləməsi təhlükəsizlik, davamlılıq və məlumatların qorunması üçün vacibdir. Avtomatik və manual arxivləmə imkanları mövcuddur. Arxivlənmiş məlumatların bərpası, effektiv yaddaş istifadəsi, məlumat itkisinin qarşısının alınması və performansın artırılması üçün xidmət göstərilir."
+                                />
+                            </div>
+                        </div>
+
+                        {/* Sub-section 1 */}
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Subtitle</label>
+                            <div className="col-sm-9">
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    placeholder="Satış və Kassa idarəetməsi"
+                                    defaultValue="Satış və Kassa idarəetməsi"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Subtext</label>
+                            <div className="col-sm-9">
+                                <textarea
+                                    className="form-control"
+                                    rows={4}
+                                    placeholder="Mətn..."
+                                    defaultValue="Satış nöqtəsinin idarə olunması, satış tempinə nəzarət və müxtəlif mal qruplarına görə çeşidləmə imkanı mövcuddur."
+                                />
+                            </div>
+                        </div>
+
+                        {/* Sub-section 2 */}
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Subtitle</label>
+                            <div className="col-sm-9">
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    placeholder="Müştəri və CRM idarəetməsi"
+                                    defaultValue="Müştəri və CRM idarəetməsi"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Subtext</label>
+                            <div className="col-sm-9">
+                                <textarea
+                                    className="form-control"
+                                    rows={4}
+                                    placeholder="Mətn..."
+                                    defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər."
+                                />
+                            </div>
+                        </div>
+
+                        {/* Sub-section 3 */}
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Subtitle</label>
+                            <div className="col-sm-9">
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    placeholder="Müştəri və CRM idarəetməsi"
+                                    defaultValue="Müştəri və CRM idarəetməsi"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Subtext</label>
+                            <div className="col-sm-9">
+                                <textarea
+                                    className="form-control"
+                                    rows={4}
+                                    placeholder="Mətn..."
+                                    defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər."
                                 />
                             </div>
                         </div>
@@ -114,146 +181,6 @@ export default function AdminProducts() {
                             <div className="image-info">
                                 *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Section 1: Subtitle + Subtext with image on right */}
-                <div className="row g-3 align-items-start mb-4 ">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtitle</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Satış və Kassa idarəetməsi"
-                                    defaultValue="Satış və Kassa idarəetməsi"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={5}
-                                    placeholder="Mətn..."
-                                    defaultValue="Satış nöqtəsinin idarə olunması, satış tempinə nəzarət və müxtəlif mal qruplarına görə çeşidləmə imkanı mövcuddur..."
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={5}
-                                    placeholder="Mətn..."
-                                    defaultValue="Kassalara limitsiz kassir təyin etmək, günlük hesabatlar hazırlamaq, nağd və bank hesabları arası köçürmələri izləmək mümkündür..."
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Section 2: Subtitle + Subtext with image on right */}
-                <div className="row g-3 align-items-start mb-4">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtitle</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Müştəri və CRM idarəetməsi"
-                                    defaultValue="Müştəri və CRM idarəetməsi"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={5}
-                                    placeholder="Mətn..."
-                                    defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər..."
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Section 3: Subtitle + Subtext with image on right */}
-                <div className="row g-3 align-items-start">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtitle</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Müştəri və CRM idarəetməsi"
-                                    defaultValue="Müştəri və CRM idarəetməsi"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={5}
-                                    placeholder="Mətn..."
-                                    defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər..."
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır</div>
                         </div>
                     </div>
                 </div>

@@ -24,13 +24,22 @@ function App() {
           {/* Admin Panel Routes - No Header/Footer */}
           <Route path="/admin-panel/*" element={<AdminPanel />} />
 
-          {/* Main App Routes - With Header/Footer */}
+          {/* Home Route - With Header Only */}
+          <Route path="/" element={
+            <>
+              <Header />
+              <div style={{ flex: 1 }}>
+                <Home />
+              </div>
+            </>
+          } />
+
+          {/* Other Main App Routes - With Header/Footer */}
           <Route path="/*" element={
             <>
               <Header />
               <div style={{ flex: 1 }}>
                 <Routes>
-                  <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/services" element={<Services />} />
                   <Route path="/services/:id" element={<ServiceDetail />} />

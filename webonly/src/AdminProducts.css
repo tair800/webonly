@@ -1,2 +1,18 @@
+.admin-products-header h2 {
+    color: #ffffff;
+}
+
+/* Reuse About card sizing for consistent widths/heights */
+.admin-products-container .admin-about-card {
+    background: linear-gradient(265.98deg, rgba(70, 126, 254, 0.2) -8.44%, rgba(24, 24, 24, 0.2) 94.15%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+}
+
+/* Ensure right image blocks match About */
+.admin-products-container .image-placeholder {
+    height: 280px;
+}
+
 /* Admin Products Page Styles */
 /* CSS will be added later */

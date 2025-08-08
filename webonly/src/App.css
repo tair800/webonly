@@ -4,6 +4,8 @@ body,
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background-color: #111214;
+  color: #ffffff;
 }
 
 #root::before {
@@ -23,6 +25,30 @@ body,
 #root {
   position: relative;
   z-index: 1;
+  background-color: #111214;
+}
+
+/* Custom scrollbar styling for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure html element also has dark background */
+html {
+  background-color: #111214;
 }
 
 .logo {

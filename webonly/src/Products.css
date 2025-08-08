@@ -315,8 +315,8 @@
 }
 
 .product-icon img {
-    width: 100px;
-    height: 100px;
+    width: 222px;
+    height: 222px;
     object-fit: contain;
     filter: brightness(0) invert(1);
     transition: transform 0.3s ease;
@@ -400,8 +400,7 @@
     }
 
     .product-icon {
-        width: 70px !important;
-        height: 70px !important;
+        margin-bottom: 1.5rem;
     }
 
     .product-name {
@@ -424,8 +423,7 @@
     }
 
     .product-icon {
-        width: 80px !important;
-        height: 80px !important;
+        margin-bottom: 1.5rem;
     }
 
     .product-name {
