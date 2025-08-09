@@ -33,10 +33,10 @@ namespace WebOnlyAPI.Services
         {
             var employee = new Employee
             {
-                Heading = createDto.Heading,
-                JobName = createDto.JobName,
-                Telefon = createDto.Telefon,
-                Mail = createDto.Mail,
+                Name = createDto.Name,
+                Position = createDto.Position,
+                Phone = createDto.Phone,
+                Email = createDto.Email,
                 LinkedIn = createDto.LinkedIn,
                 ImageUrl = createDto.ImageUrl,
                 CreatedAt = DateTime.UtcNow
@@ -54,10 +54,10 @@ namespace WebOnlyAPI.Services
             if (employee == null)
                 return null;
 
-            employee.Heading = updateDto.Heading;
-            employee.JobName = updateDto.JobName;
-            employee.Telefon = updateDto.Telefon;
-            employee.Mail = updateDto.Mail;
+            employee.Name = updateDto.Name;
+            employee.Position = updateDto.Position;
+            employee.Phone = updateDto.Phone;
+            employee.Email = updateDto.Email;
             employee.LinkedIn = updateDto.LinkedIn;
             employee.ImageUrl = updateDto.ImageUrl;
             employee.UpdatedAt = DateTime.UtcNow;
@@ -84,10 +84,10 @@ namespace WebOnlyAPI.Services
             return new EmployeeResponseDto
             {
                 Id = employee.Id,
-                Heading = employee.Heading,
-                JobName = employee.JobName,
-                Telefon = employee.Telefon,
-                Mail = employee.Mail,
+                Name = employee.Name,
+                Position = employee.Position,
+                Phone = employee.Phone,
+                Email = employee.Email,
                 LinkedIn = employee.LinkedIn,
                 ImageUrl = employee.ImageUrl,
                 CreatedAt = employee.CreatedAt,

@@ -1,21 +1,23 @@
+using System;
+
 namespace WebOnlyAPI.DTOs
 {
     public class CreateEmployeeDto
     {
-        public string Heading { get; set; } = string.Empty;
-        public string JobName { get; set; } = string.Empty;
-        public string? Telefon { get; set; }
-        public string? Mail { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Position { get; set; } = string.Empty;
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
         public string? LinkedIn { get; set; }
         public string? ImageUrl { get; set; }
     }
 
     public class UpdateEmployeeDto
     {
-        public string Heading { get; set; } = string.Empty;
-        public string JobName { get; set; } = string.Empty;
-        public string? Telefon { get; set; }
-        public string? Mail { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Position { get; set; } = string.Empty;
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
         public string? LinkedIn { get; set; }
         public string? ImageUrl { get; set; }
     }
@@ -23,10 +25,10 @@ namespace WebOnlyAPI.DTOs
     public class EmployeeResponseDto
     {
         public int Id { get; set; }
-        public string Heading { get; set; } = string.Empty;
-        public string JobName { get; set; } = string.Empty;
-        public string? Telefon { get; set; }
-        public string? Mail { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Position { get; set; } = string.Empty;
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
         public string? LinkedIn { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }

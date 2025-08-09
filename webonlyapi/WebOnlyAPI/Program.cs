@@ -29,6 +29,7 @@ builder.Services.AddCors(options =>
 // Register Services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 
 var app = builder.Build();
 
@@ -36,7 +37,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebOnlyAPI v1");
+        // Serve Swagger UI at application root so https://localhost:7233/ opens it directly
+        options.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();

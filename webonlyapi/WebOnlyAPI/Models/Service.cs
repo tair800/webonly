@@ -10,6 +10,18 @@ namespace WebOnlyAPI.Models
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
         
+        [StringLength(100)]
+        public string? Subtitle { get; set; }
+        
+        [StringLength(100)]
+        public string? Icon { get; set; }
+        
+        [StringLength(500)]
+        public string? DetailImage { get; set; }
+        
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        
         [StringLength(1000)]
         public string? Subtext { get; set; }
         
@@ -18,5 +30,8 @@ namespace WebOnlyAPI.Models
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+        
+        // Navigation properties
+        public ICollection<ServiceArticle> Articles { get; set; } = new List<ServiceArticle>();
     }
 }
