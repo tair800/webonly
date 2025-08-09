@@ -17,6 +17,8 @@ namespace WebOnlyAPI.Services
             await SeedProductsAsync();
             await SeedServicesAsync();
             await SeedEquipmentAsync();
+            await SeedReferencesAsync();
+            await SeedEmployeesAsync();
             await SeedSlidersAsync();
             await _context.SaveChangesAsync();
         }
@@ -24,85 +26,334 @@ namespace WebOnlyAPI.Services
         private async Task SeedProductsAsync()
         {
             if (_context.Products.Any()) return;
-
-            var products = new List<Product>
+            // Based on webonly/src/data/productData.js
+            var seedDefs = new[]
             {
-                new Product
-                {
-                    Id = 1,
+                new {
                     Name = "Market",
                     Subtext = "Satış və anbar",
                     Icon = "/assets/market-icon.png",
                     Alt = "Market",
                     Path = "/market",
                     MainImage = "/assets/market1.png",
+                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
                     Description = "Market Modulunuz Mallarınız Anbarınıza Daxil Olduğu Andan Etibarən Satılana Qədər Bütün Hərəkətlərini Təqib Edə, Mal Əsasında Qazanc Və Ya Zərərinizin Hesabatını Hazırlaya Bilər.",
-                    ImageUrl = "/assets/market1.png"
+                    Sections = new (string title, string? description, string? moreText)[]
+                    {
+                        ("Satış və Kassa İdarəetməsi", "Satış nöqtəsinin idarə olunması, satış tempinə nəzarət və müxtəlif mal qruplarına görə çeşidləmə imkanı mövcuddur. Endirimlər mal, şöbə, tarix və saata əsasən təyin edilə bilər. Barkodlu satış, çəki və ədədə görə əməliyyatlar, barkodlu tərəzi ilə inteqrasiya mümkündür. Satış faizi ilə avtomatik qiymət hesablana bilər. Alış-veriş statistikası izlənir, sensorlu ekran dəstəyi və müştəriyə dərhal faktura verilməsi təmin olunur.", "Kassalara limitsiz kassir təyin etmək, günlük hesabatlar hazırlamaq, nağd və bank hesabları arası köçürmələri izləmək, qaytarma və ləğv əməliyyatlarını hesabatlarda göstərmək mümkündür."),
+                        ("Müştəri və CRM İdarəetməsi", "Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər. Alış-veriş tarixçəsinə əsasən müştəriləri qruplaşdırmaq və analiz etmək mümkündür. Şikayət və təkliflər toplanır, fərdi qiymət və endirim kartları təyin olunur.", null),
+                        ("Təchizat və Anbar İdarəetməsi", "Anbarlarda mal qrupları üzrə statistika, giriş-çıxış sənədləri və transferlər idarə olunur. Mağaza və anbarlara görə qalıqlar izlənir, avtomatik sənədləşmə aparılır. Barkodlu mobil cihaz dəstəyi, satış və maya dəyərinin analiz olunması, həmçinin avtomatik sayma funksiyası ilə mal itkisinə nəzarət mümkündür.", "Satınalma sifarişləri mərhələli şəkildə qəbul edilir, valyuta seçimi və e-poçtla təchizatçılara göndərmək mümkündür. Qaytarma, dəyişdirmə və hesablaşmalar təqib olunur.")
+                    }
                 },
-                new Product
-                {
-                    Id = 2,
+                new {
                     Name = "Tekstil Modulu",
                     Subtext = "İstehsal və toxuculuq",
                     Icon = "/assets/textile.png",
                     Alt = "Tekstil",
                     Path = "/textile",
                     MainImage = "/assets/market1.png",
+                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png" },
                     Description = "Tekstil Modulunuz Pambıqdan Başlayaraq Hazır Məhsula Qədər Bütün İstehsal Proseslərini İdarə Edə, Material Əsasında Xərc Və Qazanc Hesabatlarını Hazırlaya Bilər.",
-                    ImageUrl = "/assets/market1.png"
+                    Sections = new (string title, string? description, string? moreText)[]
+                    {
+                        ("İstehsal və Texnologiya İdarəetməsi", "İstehsal proseslərinin planlaşdırılması, texnologiya axınlarının idarə olunması və keyfiyyət nəzarəti funksiyaları mövcuddur. Material tələbatının hesablanması, istehsal cədvəllərinin hazırlanması və avtomatik sifariş sistemi ilə təchizat idarə olunur. Toxuculuq və tikiş avadanlıqlarının texniki xidməti izlənir, istehsal standartları təyin edilir.", null),
+                        ("Material və Anbar İdarəetməsi", "Xammal və yarımfabrikatların anbar idarəetməsi, material axınlarının izlənilməsi və keyfiyyət yoxlaması aparılır. Rəng və ölçü çeşidlərinin idarə olunması, material itkisinin minimuma endirilməsi və avtomatik hesabatlar hazırlanır.", null),
+                        ("Satış və Müştəri İdarəetməsi", "Hazır məhsulların satışı, müştəri sifarişlərinin idarə olunması və çatdırılma prosesləri izlənir. Müştəri tələblərinə uyğun məhsul dizaynı, ölçü və rəng seçimləri, həmçinin keyfiyyət zəmanəti xidmətləri təmin olunur.", "E-ticarət platformaları ilə inteqrasiya, onlayn sifariş sistemi və avtomatik qiymət hesablama funksiyaları mövcuddur. Müştəri məmnuniyyəti və geri qaytarma prosesləri idarə olunur.")
+                    }
+                },
+                new {
+                    Name = "Mobil satış",
+                    Subtext = "Mobil satış nöqtələri",
+                    Icon = "/assets/mobile.png",
+                    Alt = "Mobil",
+                    Path = "/mobile",
+                    MainImage = "/assets/market1.png",
+                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    Description = "Mobil Satış Modulunuz Satıcılarınızın Hər Yerdə Satış Əməliyyatlarını Həyata Keçirməsinə İmkan Verə, Real Vaxtda Mərkəzi Sistemlə Sinkronlaşdıra Bilər.",
+                    Sections = new (string title, string? description, string? moreText)[]
+                    {
+                        ("Mobil Satış Nöqtələri", "Mobil cihazlar vasitəsilə satış əməliyyatlarının həyata keçirilməsi, barkod skan etmə və QR kod oxuma funksiyaları mövcuddur. Nağd və kart ödənişləri, endirim və bonus sistemləri, həmçinin müştəri məlumatlarının dərhal qeydiyyatı təmin olunur.", null),
+                        ("Real Vaxt Sinkronizasiyası", "Mobil satış nöqtələri ilə mərkəzi sistem arasında real vaxtda məlumat mübadiləsi, anbar qalıqlarının avtomatik yenilənməsi və satış hesabatlarının dərhal hazırlanması funksiyaları mövcuddur.", null),
+                        ("Mobil Anbar İdarəetməsi", "Mobil cihazlarla anbar əməliyyatlarının idarə olunması, mal qəbulu və çıxarılması, inventar sayımı və avtomatik hesabatların hazırlanması funksiyaları mövcuddur.", "GPS izləmə sistemi ilə satıcıların hərəkətlərinin izlənilməsi, satış nöqtələrinin xəritədə göstərilməsi və performans analizi aparılır. Offline rejimdə işləmə imkanı və məlumatların avtomatik sinxronlaşdırılması təmin olunur.")
+                    }
+                },
+                new {
+                    Name = "Aptek İdarəetmə sistemi",
+                    Subtext = "Dərman və reçetə",
+                    Icon = "/assets/medicine.png",
+                    Alt = "Aptek",
+                    Path = "/medicine",
+                    MainImage = "/assets/market1.png",
+                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    Description = "Aptek İdarəetmə Sistemi Dərmanların Satışından Tutmuş Reçetə İdarəetməsinə Qədər Bütün Prosesləri Avtomatlaşdıraraq Təhlükəsiz və Səmərəli İdarəetmə Təmin Edir.",
+                    Sections = Array.Empty<(string,string?,string?)>()
+                },
+                new {
+                    Name = "Ticarət və Anbar",
+                    Subtext = "Böyük həcmli ticarət",
+                    Icon = "/assets/factory.png",
+                    Alt = "Fabrika",
+                    Path = "/factory",
+                    MainImage = "/assets/market1.png",
+                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    Description = "Ticarət və Anbar Modulunuz Böyük Həcmdə Mal Dövriyyəsinin İdarə Olunması...",
+                    Sections = Array.Empty<(string,string?,string?)>()
+                },
+                new {
+                    Name = "Kredit və Lombard",
+                    Subtext = "Maliyyə xidmətləri",
+                    Icon = "/assets/credit.png",
+                    Alt = "Kredit",
+                    Path = "/credit",
+                    MainImage = "/assets/market1.png",
+                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    Description = "Kredit və Lombard Modulunuz Müxtəlif Növ Kredit Xidmətlərinin Təqdim Edilməsi...",
+                    Sections = Array.Empty<(string,string?,string?)>()
                 }
             };
 
-            await _context.Products.AddRangeAsync(products);
+            foreach (var d in seedDefs)
+            {
+                var p = new Product
+                {
+                    Name = d.Name,
+                    Subtext = d.Subtext,
+                    Icon = d.Icon,
+                    Alt = d.Alt,
+                    Path = d.Path,
+                    MainImage = d.MainImage,
+                    Description = d.Description,
+                    ImageUrl = d.MainImage,
+                };
+                // Map up to first three sections into long text columns
+                if (d.Sections.Length > 0) { p.Section1Title = d.Sections[0].title; p.Section1Description = d.Sections[0].description; p.Section1MoreText = d.Sections[0].moreText; }
+                if (d.Sections.Length > 1) { p.Section2Title = d.Sections[1].title; p.Section2Description = d.Sections[1].description; p.Section2MoreText = d.Sections[1].moreText; }
+                if (d.Sections.Length > 2) { p.Section3Title = d.Sections[2].title; p.Section3Description = d.Sections[2].description; p.Section3MoreText = d.Sections[2].moreText; }
+
+                _context.Products.Add(p);
+                await _context.SaveChangesAsync();
+
+                // Add images as ProductImages with incrementing order
+                var order = 0;
+                var allImages = new List<string>();
+                if (!string.IsNullOrWhiteSpace(d.MainImage)) allImages.Add(d.MainImage);
+                allImages.AddRange(d.SectionImages);
+                foreach (var img in allImages.Distinct())
+                {
+                    _context.ProductImages.Add(new ProductImage
+                    {
+                        ProductId = p.Id,
+                        ImageUrl = img,
+                        Alt = p.Alt,
+                        OrderIndex = order++
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task SeedServicesAsync()
         {
             if (_context.Services.Any()) return;
-
-            var services = new List<Service>
+            // Based on webonly/src/data/servicesData.js
+            var services = new List<(string Name, string Subtitle, string Icon, string DetailImage, string Description, List<(string num, string title, string? desc)> Articles)>
             {
-                new Service { Id = 1, Name = "Bazanın arxivlənməsi", Subtitle = "Arxivləmə", Icon = "/assets/service1.png", DetailImage = "/assets/servicesDetail1.png", Description = "Arxivləmə prosesi sistemdəki məlumatların təhlükəsizliyini və davamlılığını təmin etmək üçün vacib funksiyadır." },
-                new Service { Id = 2, Name = "Logların saxlanılması", Subtitle = "Loglama", Icon = "/assets/service2.png", DetailImage = "/assets/servicesDetail2.png", Description = "Loglama sistemi bütün sistem əməliyyatlarının detallı qeydiyyatını saxlayır." }
+                ("Bazanın arxivlənməsi", "Arxivləmə", "/assets/service1.png", "/assets/servicesDetail1.png", "Arxivləmə prosesi sistemdəki məlumatların təhlükəsizliyini və davamlılığını təmin etmək üçün vacib funksiyadır.", new()),
+                ("Logların saxlanılması", "Loglama", "/assets/service2.png", "/assets/servicesDetail2.png", "Loglama sistemi bütün sistem əməliyyatlarının detallı qeydiyyatını saxlayır.", new List<(string,string,string?)> { ("01","Identify & Monitor Your Data","Verilənlərin buludda, mobil qurğuda və lokal mühitlərdə aşkarlanması və istifadəsinin izlənməsi imkanı təmin olunur."), ("02","Real-time Analytics","Sistem məlumatlarının real vaxtda analizi və hesabatların avtomatik hazırlanması funksiyası."), ("03","Security Monitoring","Təhlükəsizlik hadisələrinin izlənilməsi və avtomatik xəbərdarlıq sistemlərinin idarə edilməsi.") }),
+                ("Hesabatların e-poçt göndərilməsi", "E-poçt", "/assets/service3.png", "/assets/servicesDetail3.png", "E-poçt modulu hesabatların avtomatik olaraq müəyyən istifadəçilərə göndərilməsini təmin edir.", new()),
+                ("Mobil hesabatlar", "Mobil hesabatlar", "/assets/service4.png", "/assets/servicesDetail4.png", "Mobil hesabatlar modulu istifadəçilərə mobil cihazlar vasitəsilə sistem məlumatlarına daxil olmaq imkanı verir.", new()),
+                ("Bazanın nüsxəsinin alınması", "Nüsxələmə", "/assets/service5.png", "/assets/servicesDetail5.png", "Nüsxələmə modulu verilənlər bazasının tam və ya qismən nüsxələrini almaq üçün istifadə olunur.", new()),
+                ("Bonus modulunun tətbiqi", "Bonus modulu", "/assets/service6.png", "/assets/servicesDetail6.png", "Bonus modulu işçilərin performansını artırmaq və motivasiyalarını yüksəltmək üçün nəzərdə tutulmuşdur.", new()),
+                ("Hesabatların hazırlanması", "Hesabatlar", "/assets/service7.png", "/assets/servicesDetail7.png", "Hesabatlar modulu müxtəlif növ hesabatların hazırlanması və təqdim edilməsi üçün istifadə olunur.", new()),
+                ("Əməliyyat sisteminin yazılması", "Əməliyyat sistemi", "/assets/service8.png", "/assets/servicesDetail8.png", "Əməliyyat sistemi modulu müəssisənin əsas biznes proseslərini idarə etmək üçün nəzərdə tutulmuşdur.", new()),
+                ("Sistemin audit olunması", "Audit", "/assets/service9.png", "/assets/servicesDetail9.png", "Audit modulu sistemin təhlükəsizliyini və performansını qiymətləndirmək üçün istifadə olunur.", new())
             };
 
-            await _context.Services.AddRangeAsync(services);
+            foreach (var s in services)
+            {
+                var entity = new Service
+                {
+                    Name = s.Name,
+                    Subtitle = s.Subtitle,
+                    Icon = s.Icon,
+                    DetailImage = s.DetailImage,
+                    Description = s.Description
+                };
+                _context.Services.Add(entity);
+                await _context.SaveChangesAsync();
+
+                var order = 0;
+                foreach (var a in s.Articles)
+                {
+                    _context.ServiceArticles.Add(new ServiceArticle
+                    {
+                        ServiceId = entity.Id,
+                        Number = a.num,
+                        Title = a.title,
+                        Description = a.desc,
+                        OrderIndex = order++
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task SeedEquipmentAsync()
         {
             if (_context.Equipment.Any()) return;
-
-            var equipment = new List<Equipment>
+            // Based on webonly/src/data/equipmentData.js (first three items)
+            var eqDefs = new[]
             {
-                new Equipment
-                {
-                    Id = 1,
+                new {
                     Name = "PosClass TX-1500S",
                     Version = "J-1900",
                     Core = "İntel Core I5",
-                    Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal.",
-                    ImageUrl = "/assets/equipment1.png"
+                    Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal. İnteqrasiya olunmuş kart və RFID oxuyucu ilə təhlükəsiz ödəniş imkanı yaradır.",
+                    Img = "/assets/equipment1.png",
+                    Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["model"] = "J-1900",
+                        ["screenSize"] = "15 inch LED LCD proyeksiyalı Kapasitiv panel",
+                        ["multiTouch"] = "10 barmaq",
+                        ["processor"] = "Intel BayTrail J1900 2.0 GHZ",
+                        ["memory"] = "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)",
+                        ["storage"] = "120GB SSD HDD 2.5\" /MSATA - 240GB SSD artırma imkanı",
+                        ["operatingSystem"] = "Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7",
+                        ["graphics"] = "Intel HD Graphics 4000",
+                        ["network"] = "10/100/1000 Mbps Ethernet, Wi-Fi 802.11 b/g/n",
+                        ["ports"] = "4x USB 2.0, 2x USB 3.0, 1x HDMI, 1x VGA, 1x RJ45",
+                        ["power"] = "12V DC, 65W Power Adapter",
+                        ["dimensions"] = "400 x 300 x 80 mm (W x D x H)",
+                        ["weight"] = "2.5 kg"
+                    }
+                },
+                new {
+                    Name = "saPosClass TX-1500S",
+                    Version = "J-1900",
+                    Core = "İntel Core I5",
+                    Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal. İnteqrasiya olunmuş kart və RFID oxuyucu ilə təhlükəsiz ödəniş imkanı yaradır.",
+                    Img = "/assets/equipment1.png",
+                    Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["model"] = "J-1900",
+                        ["screenSize"] = "15 inch LED LCD proyeksiyalı Kapasitiv panel",
+                        ["multiTouch"] = "10 barmaq",
+                        ["processor"] = "Intel BayTrail J1900 2.0 GHZ",
+                        ["memory"] = "4GB DDR3 SODIMM - 8GB (1333/1666 MHz)"
+                    }
+                },
+                new {
+                    Name = "PosClass TX-1500S",
+                    Version = "J-1900",
+                    Core = "İntel Core I5",
+                    Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal. İnteqrasiya olunmuş kart və RFID oxuyucu ilə təhlükəsiz ödəniş imkanı yaradır.",
+                    Img = "/assets/equipment1.png",
+                    Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
+                    Specs = new Dictionary<string,string?>()
                 }
             };
 
-            await _context.Equipment.AddRangeAsync(equipment);
+            foreach (var d in eqDefs)
+            {
+                var e = new Equipment
+                {
+                    Name = d.Name,
+                    Version = d.Version,
+                    Core = d.Core,
+                    Description = d.Description,
+                    ImageUrl = d.Img
+                };
+                _context.Equipment.Add(e);
+                await _context.SaveChangesAsync();
+
+                var order = 0;
+                foreach (var f in d.Features)
+                {
+                    _context.EquipmentFeatures.Add(new EquipmentFeature
+                    {
+                        EquipmentId = e.Id,
+                        Feature = f,
+                        OrderIndex = order++
+                    });
+                }
+
+                order = 0;
+                foreach (var kv in d.Specs)
+                {
+                    _context.EquipmentSpecifications.Add(new EquipmentSpecification
+                    {
+                        EquipmentId = e.Id,
+                        Key = kv.Key,
+                        Value = kv.Value,
+                        OrderIndex = order++
+                    });
+                }
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeedReferencesAsync()
+        {
+            if (_context.References.Any()) return;
+            // Based on webonly/src/data/logoData.js (subset or all)
+            var refs = new List<Reference>();
+            for (int i = 1; i <= 25; i++)
+            {
+                refs.Add(new Reference
+                {
+                    Name = $"Logo {i}",
+                    ImageUrl = $"/assets/logo{i}.png",
+                    Alt = $"Company Logo {i}"
+                });
+            }
+            await _context.References.AddRangeAsync(refs);
+        }
+
+        private async Task SeedEmployeesAsync()
+        {
+            if (_context.Employees.Any()) return;
+            // Based on webonly/src/data/teamData.js
+            var emps = new[]
+            {
+                new { Name = "Name Surname", Position = "Baş proqram tərtibatçısı", Image = "/assets/employee.png", Phone = "+994 50 123 45 67", Email = "developer@company.com", LinkedIn = "linkedin.com/in/developer" },
+                new { Name = "Name Surname", Position = "Layihə koordinatoru", Image = "/assets/employee.png", Phone = "+994 50 123 45 68", Email = "coordinator@company.com", LinkedIn = "linkedin.com/in/coordinator" },
+                new { Name = "Name Surname", Position = "Baş proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 69", Email = "programmer@company.com", LinkedIn = "linkedin.com/in/programmer" },
+                new { Name = "Name Surname", Position = "IT mütəxəssisi", Image = "/assets/employee.png", Phone = "+994 50 123 45 70", Email = "specialist@company.com", LinkedIn = "linkedin.com/in/specialist" },
+                new { Name = "Name Surname", Position = "Layihələr üzrə şöbə rəhbəri", Image = "/assets/employee.png", Phone = "+994 50 123 45 71", Email = "manager@company.com", LinkedIn = "linkedin.com/in/manager" },
+                new { Name = "Name Surname", Position = "Layihə meneceri", Image = "/assets/employee.png", Phone = "+994 50 123 45 72", Email = "project-manager@company.com", LinkedIn = "linkedin.com/in/project-manager" },
+                new { Name = "Name Surname", Position = "SQL Server üzrə proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 73", Email = "sql-developer@company.com", LinkedIn = "linkedin.com/in/sql-developer" },
+            };
+            foreach (var e in emps)
+            {
+                _context.Employees.Add(new Employee
+                {
+                    Name = e.Name,
+                    Position = e.Position,
+                    Phone = e.Phone,
+                    Email = e.Email,
+                    LinkedIn = e.LinkedIn,
+                    ImageUrl = e.Image
+                });
+            }
+            await _context.SaveChangesAsync();
         }
 
         private async Task SeedSlidersAsync()
         {
             if (_context.Sliders.Any()) return;
-
-            var sliders = new List<Slider>
+            var sliders = new List<Slider>();
+            for (var i = 1; i <= 6; i++)
             {
-                new Slider { Id = 1, Name = "slider1", ImageUrl = "/assets/slider1.png", OrderIndex = 1, IsActive = true },
-                new Slider { Id = 2, Name = "slider2", ImageUrl = "/assets/slider2.png", OrderIndex = 2, IsActive = true },
-                new Slider { Id = 3, Name = "slider3", ImageUrl = "/assets/slider3.png", OrderIndex = 3, IsActive = true },
-                new Slider { Id = 4, Name = "slider4", ImageUrl = "/assets/slider4.png", OrderIndex = 4, IsActive = true },
-                new Slider { Id = 5, Name = "slider5", ImageUrl = "/assets/slider5.png", OrderIndex = 5, IsActive = true },
-                new Slider { Id = 6, Name = "slider6", ImageUrl = "/assets/slider6.png", OrderIndex = 6, IsActive = true }
-            };
-
+                sliders.Add(new Slider
+                {
+                    Name = $"slider{i}",
+                    ImageUrl = $"/assets/slider{i}.png",
+                    OrderIndex = i,
+                    IsActive = true
+                });
+            }
             await _context.Sliders.AddRangeAsync(sliders);
         }
     }

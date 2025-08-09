@@ -12,8 +12,8 @@ using WebOnlyAPI.Data;
 namespace WebOnlyAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250809055018_DropLegacyEquipmentColumns")]
-    partial class DropLegacyEquipmentColumns
+    [Migration("20250809210053_ProductSectionTitlesAndMoreText")]
+    partial class ProductSectionTitlesAndMoreText
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,6 +197,9 @@ namespace WebOnlyAPI.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<string>("DetailDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Icon")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -218,6 +221,33 @@ namespace WebOnlyAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Section1Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section1MoreText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section1Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section2Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section2MoreText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section2Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section3Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section3MoreText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section3Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Subtext")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -230,7 +260,7 @@ namespace WebOnlyAPI.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("WebOnlyAPI.Models.ProductSection", b =>
+            modelBuilder.Entity("WebOnlyAPI.Models.ProductImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -238,16 +268,14 @@ namespace WebOnlyAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Alt")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("MoreText")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("OrderIndex")
                         .HasColumnType("int");
@@ -255,19 +283,11 @@ namespace WebOnlyAPI.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSections");
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Reference", b =>
@@ -447,10 +467,10 @@ namespace WebOnlyAPI.Migrations
                     b.Navigation("Equipment");
                 });
 
-            modelBuilder.Entity("WebOnlyAPI.Models.ProductSection", b =>
+            modelBuilder.Entity("WebOnlyAPI.Models.ProductImage", b =>
                 {
                     b.HasOne("WebOnlyAPI.Models.Product", "Product")
-                        .WithMany("Sections")
+                        .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -478,7 +498,7 @@ namespace WebOnlyAPI.Migrations
 
             modelBuilder.Entity("WebOnlyAPI.Models.Product", b =>
                 {
-                    b.Navigation("Sections");
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Service", b =>

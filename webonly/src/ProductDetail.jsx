@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { products } from './data/productData.js';
+// Fetch from API instead of static data
 import './ProductDetail.css';
 
 function ProductDetail() {
     const { id } = useParams();
-    const product = products.find(p => p.id === parseInt(id)) || products[0];
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [currentSection, setCurrentSection] = useState(0);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -15,24 +17,48 @@ function ProductDetail() {
     const secondSectionRef = useRef(null);
     const thirdSectionRef = useRef(null);
 
-    // Create dynamic sections based on the number of images
-    const getDynamicSections = () => {
-        const sections = [{ label: 'Start', value: 0 }]; // Always include Start
-
-        // Add sections based on the number of section images
-        if (product.sectionImages && product.sectionImages.length > 0) {
-            product.sectionImages.forEach((_, index) => {
-                sections.push({
-                    label: String(index + 1).padStart(2, '0'), // 01, 02, 03, etc.
-                    value: index + 1
+    // Fetch product detail
+    useEffect(() => {
+        const fetchDetail = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch(`http://localhost:5098/api/products/${id}`);
+                if (!res.ok) throw new Error('Failed to load product');
+                const data = await res.json();
+                // Transform API model to UI model expected by this page
+                const sectionImages = (data.images || []).sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0)).map(i => i.imageUrl);
+                const sections = [];
+                if (data.section1Title || data.section1Description || data.section1MoreText) sections.push({ title: data.section1Title || '', description: data.section1Description || '', moreText: data.section1MoreText || null });
+                if (data.section2Title || data.section2Description || data.section2MoreText) sections.push({ title: data.section2Title || '', description: data.section2Description || '', moreText: data.section2MoreText || null });
+                if (data.section3Title || data.section3Description || data.section3MoreText) sections.push({ title: data.section3Title || '', description: data.section3Description || '', moreText: data.section3MoreText || null });
+                setProduct({
+                    id: data.id,
+                    name: data.name,
+                    description: data.detailDescription || data.description || '',
+                    mainImage: data.mainImage || data.imageUrl,
+                    sections,
+                    sectionImages
                 });
-            });
+            } catch (e) {
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDetail();
+    }, [id]);
+
+    // removed early returns here to avoid breaking hook order
+
+    // Create dynamic sections based on the number of images (stable reference)
+    const sections = React.useMemo(() => {
+        const s = [{ label: 'Start', value: 0 }];
+        const imgs = (product && Array.isArray(product.sectionImages)) ? product.sectionImages : [];
+        for (let i = 0; i < imgs.length; i += 1) {
+            s.push({ label: String(i + 1).padStart(2, '0'), value: i + 1 });
         }
-
-        return sections;
-    };
-
-    const sections = getDynamicSections();
+        return s;
+    }, [product]);
 
     const scrollToSection = (sectionIndex) => {
         setCurrentSection(sectionIndex);
@@ -123,6 +149,7 @@ function ProductDetail() {
 
     // Intersection Observer to detect which section is in view
     useEffect(() => {
+        if (!product) return; // wait until product is loaded
         const observerOptions = {
             threshold: 0.5,
             rootMargin: '-10% 0px -10% 0px'
@@ -141,11 +168,10 @@ function ProductDetail() {
         const sectionRefs = [mainSectionRef.current];
 
         // Add section refs based on the number of images
-        if (product.sectionImages && product.sectionImages.length > 0) {
-            if (product.sectionImages.length >= 1) sectionRefs.push(firstSectionRef.current);
-            if (product.sectionImages.length >= 2) sectionRefs.push(secondSectionRef.current);
-            if (product.sectionImages.length >= 3) sectionRefs.push(thirdSectionRef.current);
-        }
+        const count = product?.sectionImages?.length || 0;
+        if (count >= 1) sectionRefs.push(firstSectionRef.current);
+        if (count >= 2) sectionRefs.push(secondSectionRef.current);
+        if (count >= 3) sectionRefs.push(thirdSectionRef.current);
 
         sectionRefs.forEach((section, index) => {
             if (section) {
@@ -155,7 +181,15 @@ function ProductDetail() {
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [product]);
+
+    // Safe early returns AFTER all hooks have been called
+    if (loading) {
+        return <div className="product-detail-container"><div className="product-detail-content">Loading...</div></div>;
+    }
+    if (error || !product) {
+        return <div className="product-detail-container"><div className="product-detail-content">{error || 'Not found'}</div></div>;
+    }
 
     return (
         <div className="product-detail-container">
@@ -248,6 +282,13 @@ function ProductDetail() {
                                 <div className="second-content-description">
                                     <p className="block leading-[1.2]">{product.sections[1].description}</p>
                                 </div>
+                                {product.sections[1].moreText && (
+                                    <div className="second-more-container" data-name="More">
+                                        <div className="second-more-text">
+                                            <p className="block mb-0">{product.sections[1].moreText}</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -268,7 +309,7 @@ function ProductDetail() {
                                 {product.sections[2].moreText && (
                                     <div className="third-more-container" data-name="More">
                                         <div className="third-more-text">
-                                            <p>{product.sections[2].moreText}</p>
+                                            <p className="block mb-0">{product.sections[2].moreText}</p>
                                         </div>
                                     </div>
                                 )}

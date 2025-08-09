@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { equipmentList } from './data/equipmentData';
 import Spline from '@splinetool/react-spline';
 import './Equipment.css';
 
@@ -14,16 +13,17 @@ function Equipment() {
     const [touchStartY, setTouchStartY] = useState(null);
     const [lastScrollTime, setLastScrollTime] = useState(0);
     const [splineError, setSplineError] = useState(false);
+    const [equipmentList, setEquipmentList] = useState([]);
     const timeoutRef = useRef(null);
 
     const slideDuration = 300;
 
-    const currentItem = equipmentList[currentIndex];
-    const hasMultipleImages = currentItem.images && currentItem.images.length > 1;
-    const currentImage = hasMultipleImages ? currentItem.images[currentImageIndex] : currentItem.img;
+    const currentItem = equipmentList[currentIndex] || {};
+    const hasMultipleImages = false;
+    const currentImage = currentItem.imageUrl;
 
     const handleMoreClick = () => {
-        navigate(`/equipment/${currentItem.id}`);
+        if (currentItem?.id) navigate(`/equipment/${currentItem.id}`);
     };
 
     const startSlide = (direction) => {
@@ -33,6 +33,7 @@ function Equipment() {
 
         timeoutRef.current = setTimeout(() => {
             setCurrentIndex((prev) => {
+                if (!equipmentList.length) return 0;
                 if (direction === 'left') {
                     return prev === equipmentList.length - 1 ? 0 : prev + 1;
                 } else {
@@ -62,7 +63,6 @@ function Equipment() {
         e.preventDefault();
         e.stopPropagation();
         if (!hasMultipleImages) return;
-
         const touch = e.touches[0];
         setTouchStartY(touch.clientY);
     };
@@ -70,27 +70,7 @@ function Equipment() {
     const handleScrollerTouchMove = (e) => {
         e.preventDefault();
         e.stopPropagation();
-
         if (!hasMultipleImages || !touchStartY) return;
-
-        const touch = e.touches[0];
-        const deltaY = touchStartY - touch.clientY;
-        const threshold = 80;
-
-        if (Math.abs(deltaY) > threshold) {
-            const now = Date.now();
-            const timeDiff = now - lastScrollTime;
-
-            if (timeDiff < 400) return;
-
-            const direction = deltaY > 0 ? -1 : 1;
-            setCurrentImageIndex(prevIndex => {
-                const newIndex = prevIndex + direction;
-                return Math.max(0, Math.min(newIndex, currentItem.images.length - 1));
-            });
-            setTouchStartY(null);
-            setLastScrollTime(now);
-        }
     };
 
     const handleScrollerTouchEnd = (e) => {
@@ -103,33 +83,20 @@ function Equipment() {
         setCurrentImageIndex(0);
     }, [currentIndex]);
 
-    // Custom non-passive wheel listener to prevent page scroll
+    // Fetch equipment from API
     useEffect(() => {
-        const square = document.querySelector('.equipment-square');
-        if (!square || !hasMultipleImages) return;
-
-        const handleWheel = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const now = Date.now();
-            const timeDiff = now - lastScrollTime;
-            if (timeDiff < 300) return;
-
-            const delta = e.deltaY;
-            const direction = delta > 0 ? 1 : -1;
-
-            setCurrentImageIndex(prevIndex => {
-                const newIndex = prevIndex + direction;
-                return Math.max(0, Math.min(newIndex, currentItem.images.length - 1));
-            });
-
-            setLastScrollTime(now);
+        const fetchEquipment = async () => {
+            try {
+                const res = await fetch('http://localhost:5098/api/equipment');
+                if (!res.ok) throw new Error('Failed to load equipment');
+                const data = await res.json();
+                setEquipmentList(data);
+            } catch (e) {
+                console.error(e);
+            }
         };
-
-        square.addEventListener('wheel', handleWheel, { passive: false });
-        return () => square.removeEventListener('wheel', handleWheel);
-    }, [currentItem, lastScrollTime]);
+        fetchEquipment();
+    }, []);
 
     return (
         <div className="equipment-container">
@@ -161,21 +128,13 @@ function Equipment() {
                     <div className="equipment-square" style={slideDirection ? getSlideStyle() : resetSlideStyle()} onTouchStart={handleScrollerTouchStart} onTouchMove={handleScrollerTouchMove} onTouchEnd={handleScrollerTouchEnd}>
                         <div className="equipment-square-content">
                             <div className="equipment-product-title">
-                                {currentItem.name.split(' ').slice(0, -1).join(' ')}<br />
-                                {currentItem.name.split(' ').slice(-1)}
+                                {(currentItem.name || '').split(' ').slice(0, -1).join(' ')}<br />
+                                {(currentItem.name || '').split(' ').slice(-1)}
                             </div>
                             <div className="equipment-product-model blue">{currentItem.version}</div>
                             <div className="equipment-product-cpu">{currentItem.core}</div>
                             <button className="equipment-more-btn" onClick={handleMoreClick}>Daha çox</button>
                         </div>
-
-                        {hasMultipleImages && (
-                            <div className="equipment-image-scroller">
-                                <div className="equipment-scroller-track">
-                                    <div className="equipment-scroller-thumb" style={{ height: `${100 / currentItem.images.length}%`, top: `${(currentImageIndex / (currentItem.images.length - 1)) * (100 - (100 / currentItem.images.length))}%` }}></div>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
 
@@ -186,7 +145,7 @@ function Equipment() {
                             {currentItem.name}
                         </div>
                         <button className="equipment-nav-btn prev-btn" onClick={() => startSlide('right')}>&#60;</button>
-                        <img src={currentImage} alt={currentItem.name} className="equipment-main-img" onClick={() => setShowModal(true)} />
+                        {currentImage && <img src={currentImage} alt={currentItem.name} className="equipment-main-img" onClick={() => setShowModal(true)} />}
                         <button className="equipment-nav-btn next-btn" onClick={() => startSlide('left')}>&#62;</button>
                     </div>
 
@@ -197,7 +156,7 @@ function Equipment() {
                 </div>
             </div>
 
-            {showModal && (
+            {showModal && currentImage && (
                 <div className="equipment-modal" onClick={() => setShowModal(false)}>
                     <img src={currentImage} alt={currentItem.name} className="equipment-modal-img" />
                 </div>

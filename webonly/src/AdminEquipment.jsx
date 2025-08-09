@@ -1,29 +1,121 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AdminEquipment.css';
 import './AdminAbout.css';
 
-export default function AdminEquipment() {
-    const [showModal, setShowModal] = useState(false);
-    const [newEquipment, setNewEquipment] = useState({
-        name: '',
-        features: '',
-        title: '',
-        specs: ''
-    });
+const API = 'http://localhost:5098/api';
 
-    const handleAddEquipment = () => {
+export default function AdminEquipment() {
+    const [equipments, setEquipments] = useState([]);
+    const [originalById, setOriginalById] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [showModal, setShowModal] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+    const [form, setForm] = useState({ name: '', version: '', core: '', description: '', imageUrl: '' });
+
+    const resetForm = () => setForm({ name: '', version: '', core: '', description: '', imageUrl: '' });
+
+    const loadEquipments = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch(`${API}/equipment/full`);
+            if (!res.ok) throw new Error('Failed to load equipment');
+            const data = await res.json();
+            setEquipments(data);
+            const map = {};
+            data.forEach(it => { map[it.id] = { ...it }; });
+            setOriginalById(map);
+        } catch (e) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadEquipments();
+    }, []);
+
+    const openCreate = () => {
+        setEditingId(null);
+        resetForm();
         setShowModal(true);
     };
 
-    const handleCloseModal = () => {
+    const closeModal = () => {
         setShowModal(false);
-        setNewEquipment({ name: '', features: '', title: '', specs: '' });
+        setEditingId(null);
+        resetForm();
     };
 
-    const handleSaveEquipment = () => {
-        // Here you would typically save to API
-        console.log('Saving new equipment:', newEquipment);
-        handleCloseModal();
+    const submitForm = async () => {
+        try {
+            const method = editingId ? 'PUT' : 'POST';
+            const url = editingId ? `${API}/equipment/${editingId}` : `${API}/equipment`;
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form)
+            });
+            if (!res.ok) throw new Error('Save failed');
+            closeModal();
+            await loadEquipments();
+        } catch (e) {
+            alert(e.message);
+        }
+    };
+
+    const submitFormForId = async (id) => {
+        const item = equipments.find(x => x.id === id);
+        if (!item) return;
+        try {
+            const res = await fetch(`${API}/equipment/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: item.name || '',
+                    version: item.version || '',
+                    core: item.core || '',
+                    description: item.description || '',
+                    imageUrl: item.imageUrl || ''
+                })
+            });
+            if (!res.ok) throw new Error('Save failed');
+            const saved = await res.json();
+            setOriginalById(prev => ({ ...prev, [id]: { ...saved } }));
+        } catch (e) {
+            alert(e.message);
+        }
+    };
+
+    const undoChanges = (id) => {
+        const orig = originalById[id];
+        if (!orig) return;
+        setEquipments(prev => prev.map(x => x.id === id ? { ...orig } : x));
+    };
+
+    const hasChanges = (e) => {
+        const o = originalById[e.id];
+        if (!o) return false;
+        return (
+            (e.name || '') !== (o.name || '') ||
+            (e.version || '') !== (o.version || '') ||
+            (e.core || '') !== (o.core || '') ||
+            (e.description || '') !== (o.description || '') ||
+            (e.imageUrl || '') !== (o.imageUrl || '')
+        );
+    };
+
+    const remove = async (id) => {
+        if (!confirm('Silinsin?')) return;
+        try {
+            const res = await fetch(`${API}/equipment/${id}`, { method: 'DELETE' });
+            if (res.status !== 204) throw new Error('Delete failed');
+            await loadEquipments();
+        } catch (e) {
+            alert(e.message);
+        }
     };
 
     return (
@@ -31,364 +123,107 @@ export default function AdminEquipment() {
             <div className="admin-equipment-header d-flex justify-content-between align-items-center mb-3 pt-3" style={{ padding: '0 15px' }}>
                 <h2 className="m-0">Avadanlıqlar</h2>
                 <div className="d-flex gap-3 align-items-center" style={{ minWidth: 'fit-content' }}>
-                    <span role="button" aria-label="Notifications" title="Bildirişlər" style={{ cursor: 'pointer', display: 'inline-flex' }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Zm6-6V11a6 6 0 0 0-5-5.91V4a1 1 0 1 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2Z" />
-                        </svg>
-                    </span>
-                    <div className="dropdown">
-                        <button className="btn dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ background: 'transparent', border: 'none', color: 'white' }}>
-                            <img src="/assets/globe.png" alt="Language" width="20" height="20" />
-                        </button>
-                        <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="#">Aze</a></li>
-                            <li><a className="dropdown-item" href="#">Eng</a></li>
-                            <li><a className="dropdown-item" href="#">Rus</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            {/* Search and Add section */}
-            <div className="d-flex justify-content-between align-items-center mb-3 ">
-                <div></div>
-                <div className="d-flex gap-3 align-items-center p-2">
-                    <div className="position-relative">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Axtar..."
-                            style={{ paddingLeft: '40px' }}
-                        />
-                        <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#ffffff"
-                            strokeWidth="2"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}
-                        >
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.35-4.35" />
-                        </svg>
-                    </div>
-                    <button className="add-btn btn d-flex align-items-center gap-2" onClick={handleAddEquipment}>
+                    <button className="add-btn btn d-flex align-items-center gap-2" onClick={openCreate}>
                         <span style={{ fontSize: '16px' }}>+</span>
                         Əlavə et
                     </button>
                 </div>
             </div>
 
-            {/* Equipment Content */}
-            <div className="admin-about-card p-3 mb-4">
-                <div className="row g-3 align-items-start">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="text-white m-0">Slide 1</h5>
-                        </div>
-                        {/* Slide 1 Section */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Name</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="PosClass TX-1500S"
-                                    defaultValue="PosClass TX-1500S"
-                                />
-                            </div>
-                        </div>
+            {error && <div className="text-danger">{error}</div>}
+            {loading && <div>Yüklənir...</div>}
 
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Features</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={4}
-                                    placeholder="Türkiyə İstehsalı Keyfiyyət&#10;1 İl Rəsmi Zəmanət&#10;Wi-Fi Adapter Artırma İmkanı&#10;10.1&quot; Arxa Ekran Əlavə İmkanı"
-                                    defaultValue="Türkiyə İstehsalı Keyfiyyət&#10;1 İl Rəsmi Zəmanət&#10;Wi-Fi Adapter Artırma İmkanı&#10;10.1&quot; Arxa Ekran Əlavə İmkanı"
-                                />
-                            </div>
-                        </div>
-
-                        {/* J-1900 Section */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Title</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="J-1900"
-                                    defaultValue="J-1900"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Ekran ölçüsü</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="15 inch LED LCD proyeksiyalı Kapasitiv panel"
-                                    defaultValue="15 inch LED LCD proyeksiyalı Kapasitiv panel"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Multi-Touch Sensor Ekran</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="10 barmaq"
-                                    defaultValue="10 barmaq"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Prosessor</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Intel BayTrail J1900 2.0 GHZ"
-                                    defaultValue="Intel BayTrail J1900 2.0 GHZ"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Yaddaş RAM</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="4GB DDR3 SODIMM - 8GB (1333/1666 MHz)"
-                                    defaultValue="4GB DDR3 SODIMM - 8GB (1333/1666 MHz)"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Flash Disk</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="120GB SSD HDD 2.5&quot; /MSATA - 240GB SSD artırma imkanı"
-                                    defaultValue="120GB SSD HDD 2.5&quot; /MSATA - 240GB SSD artırma imkanı"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Uyğun əməliyyat sistemi</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
-                                    defaultValue="Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Intel Core i5 Section */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Title</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Intel Core i5"
-                                    defaultValue="Intel Core i5"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Ekran ölçüsü</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="15 inch LED LCD proyeksiyalı Kapasitiv panel"
-                                    defaultValue="15 inch LED LCD proyeksiyalı Kapasitiv panel"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Multi-Touch Sensor Ekran</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="10 barmaq"
-                                    defaultValue="10 barmaq"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Prosessor</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Intel Celeron/Pentium/CoreTM i3/i5/i7"
-                                    defaultValue="Intel Celeron/Pentium/CoreTM i3/i5/i7"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Yaddaş RAM</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="4GB DDR3 SODIMM - 8GB (1333/1666 MHz)"
-                                    defaultValue="4GB DDR3 SODIMM - 8GB (1333/1666 MHz)"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Flash Disk</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="120GB SSD HDD 2.5&quot; /MSATA - 240GB SSD artırma imkanı"
-                                    defaultValue="120GB SSD HDD 2.5&quot; /MSATA - 240GB SSD artırma imkanı"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Uyğun əməliyyat sistemi</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
-                                    defaultValue="Microsoft Windows 7, Windows 8.1, Windows 10, Windows 11, Posready 7"
-                                />
-                            </div>
+            {equipments.map((e, idx) => (
+                <div key={e.id} className="admin-about-card p-3 mb-4">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <div className="slide-indicator">Slide {idx + 1}</div>
+                        <div className="top-actions d-flex gap-2">
+                            <button className="btn btn-outline-light" onClick={() => remove(e.id)} aria-label="Delete">Sil</button>
                         </div>
                     </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
+
+                    <div className="row g-3 align-items-start">
+                        <div className="col-12 col-lg-8 d-flex flex-column gap-3">
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Name</label>
+                                <div className="col-sm-9">
+                                    <input className="form-control" value={e.name || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, name: ev.target.value } : x))} />
                                 </div>
                             </div>
-                            <div className="image-info">
-                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Version</label>
+                                <div className="col-sm-9">
+                                    <input className="form-control" value={e.version || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, version: ev.target.value } : x))} />
+                                </div>
+                            </div>
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Core</label>
+                                <div className="col-sm-9">
+                                    <input className="form-control" value={e.core || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, core: ev.target.value } : x))} />
+                                </div>
+                            </div>
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Description</label>
+                                <div className="col-sm-9">
+                                    <textarea className="form-control" rows={4} value={e.description || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, description: ev.target.value } : x))} />
+                                </div>
+                            </div>
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Image URL</label>
+                                <div className="col-sm-9">
+                                    <input className="form-control" value={e.imageUrl || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: ev.target.value } : x))} />
+                                </div>
+                            </div>
+                            <div className="d-flex gap-2">
+                                <button className="btn btn-primary" disabled={!hasChanges(e)} onClick={() => submitFormForId(e.id)}>Yadda saxla</button>
+                                <button className="btn btn-outline-light" disabled={!hasChanges(e)} onClick={() => undoChanges(e.id)}>Undo</button>
+                            </div>
+                        </div>
+                        <div className="col-12 col-lg-4">
+                            <div className="image-upload-container d-flex flex-column gap-2">
+                                <div className="image-placeholder position-relative" style={{ minHeight: 300 }}>
+                                    {e.imageUrl && <img src={e.imageUrl} alt={e.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />}
+                                    <div className="image-actions position-absolute" style={{ left: '-52px', bottom: '30px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                        <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: '' } : x))}>
+                                            <img src="/assets/admin-trash.png" alt="Delete" />
+                                        </button>
+                                        <button className="action-btn refresh-img" aria-label="Refresh image" onClick={() => undoChanges(e.id)}>
+                                            <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            ))}
 
-            {/* Add Equipment Modal */}
+            {/* Modal for create only */}
             {showModal && (
-                <div className="modal-overlay" onClick={handleCloseModal}>
+                <div className="modal-overlay" onClick={closeModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
                             <h3 className="modal-title">Yeni Avadanlıq Əlavə Et</h3>
-                            <button className="modal-close" onClick={handleCloseModal}>
+                            <button className="modal-close" onClick={closeModal}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
                             </button>
                         </div>
-
                         <div className="modal-body">
-                            <div className="form-group mb-3">
-                                <label className="form-label">Avadanlıq Adı</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Avadanlıq adını daxil edin"
-                                    value={newEquipment.name}
-                                    onChange={(e) => setNewEquipment({ ...newEquipment, name: e.target.value })}
-                                />
+                            <div className="form-group mb-3"><label className="form-label">Ad</label><input className="form-control" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+                            <div className="row g-3">
+                                <div className="col-md-6"><label className="form-label">Versiya</label><input className="form-control" value={form.version} onChange={(e) => setForm({ ...form, version: e.target.value })} /></div>
+                                <div className="col-md-6"><label className="form-label">Core</label><input className="form-control" value={form.core} onChange={(e) => setForm({ ...form, core: e.target.value })} /></div>
                             </div>
-
-                            <div className="form-group mb-3">
-                                <label className="form-label">Xüsusiyyətlər</label>
-                                <textarea
-                                    className="form-control"
-                                    rows="4"
-                                    placeholder="Avadanlıq xüsusiyyətlərini daxil edin"
-                                    value={newEquipment.features}
-                                    onChange={(e) => setNewEquipment({ ...newEquipment, features: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="form-group mb-3">
-                                <label className="form-label">Başlıq</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Başlığı daxil edin"
-                                    value={newEquipment.title}
-                                    onChange={(e) => setNewEquipment({ ...newEquipment, title: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="form-group mb-3">
-                                <label className="form-label">Spesifikasiyalar</label>
-                                <textarea
-                                    className="form-control"
-                                    rows="4"
-                                    placeholder="Spesifikasiyaları daxil edin"
-                                    value={newEquipment.specs}
-                                    onChange={(e) => setNewEquipment({ ...newEquipment, specs: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="form-group mb-3">
-                                <label className="form-label">Şəkil</label>
-                                <div className="image-upload-container">
-                                    <div className="image-placeholder position-relative">
-                                        <div className="image-actions position-absolute">
-                                            <button className="action-btn delete-img" aria-label="Delete image">
-                                                <img src="/assets/admin-trash.png" alt="Delete" />
-                                            </button>
-                                            <button className="action-btn refresh-img" aria-label="Refresh image">
-                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="image-info">
-                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                                    </div>
-                                </div>
-                            </div>
+                            <div className="form-group mb-3 mt-3"><label className="form-label">Təsvir</label><textarea className="form-control" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+                            <div className="form-group mb-3"><label className="form-label">Şəkil URL</label><input className="form-control" value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} /></div>
                         </div>
-
                         <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={handleCloseModal}>
-                                Ləğv et
-                            </button>
-                            <button className="btn btn-primary" onClick={handleSaveEquipment}>
-                                Əlavə et
-                            </button>
+                            <button className="btn btn-secondary" onClick={closeModal}>Ləğv et</button>
+                            <button className="btn btn-primary" onClick={submitForm}>Əlavə et</button>
                         </div>
                     </div>
                 </div>

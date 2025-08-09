@@ -1,20 +1,35 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace WebOnlyAPI.DTOs
 {
     public class CreateEquipmentDto
     {
+        [Required]
+        [StringLength(100)]
         public string Name { get; set; } = string.Empty;
-        public string? Features { get; set; }
-        public string? Title { get; set; }
-        public string? Specs { get; set; }
+        [StringLength(100)]
+        public string? Version { get; set; }
+        [StringLength(100)]
+        public string? Core { get; set; }
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        [StringLength(500)]
         public string? ImageUrl { get; set; }
     }
 
     public class UpdateEquipmentDto
     {
+        [Required]
+        [StringLength(100)]
         public string Name { get; set; } = string.Empty;
-        public string? Features { get; set; }
-        public string? Title { get; set; }
-        public string? Specs { get; set; }
+        [StringLength(100)]
+        public string? Version { get; set; }
+        [StringLength(100)]
+        public string? Core { get; set; }
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        [StringLength(500)]
         public string? ImageUrl { get; set; }
     }
 
@@ -22,9 +37,9 @@ namespace WebOnlyAPI.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string? Features { get; set; }
-        public string? Title { get; set; }
-        public string? Specs { get; set; }
+        public string? Version { get; set; }
+        public string? Core { get; set; }
+        public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

@@ -1,105 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AdminAbout.css';
 
-export default function AdminAbout() {
-    const [employees, setEmployees] = useState([
-        {
-            id: 1,
-            heading: "Nigar Zairova",
-            jobName: "Lahiyə koordinatoru",
-            telefon: "0124444444",
-            mail: "namesurname@mail.ru",
-            linkedin: "0124444444"
-        }
-    ]);
+const API = 'http://localhost:5098/api';
 
-    // References state (images will be fetched later)
+export default function AdminAbout() {
+    const [employees, setEmployees] = useState([]);
     const [references, setReferences] = useState([]);
 
-    // Modal states
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(''); // 'employee' or 'reference'
-    const [newEmployee, setNewEmployee] = useState({
-        heading: '',
-        jobName: '',
-        telefon: '',
-        mail: '',
-        linkedin: ''
-    });
+    const [newEmployee, setNewEmployee] = useState({ name: '', position: '', phone: '', email: '', linkedin: '' });
+    const [newReference, setNewReference] = useState({ name: '', imageUrl: '', alt: '' });
 
-    const addEmployee = () => {
-        const newEmployee = {
-            id: Date.now(),
-            heading: "",
-            jobName: "",
-            telefon: "",
-            mail: "",
-            linkedin: ""
-        };
-        setEmployees([...employees, newEmployee]);
+    const loadEmployees = async () => {
+        try {
+            const res = await fetch(`${API}/employees`);
+            if (res.ok) setEmployees(await res.json());
+        } catch { }
     };
 
-    const removeEmployee = (id) => {
-        setEmployees(employees.filter(emp => emp.id !== id));
+    const loadReferences = async () => {
+        try {
+            const res = await fetch(`${API}/references`);
+            if (res.ok) setReferences(await res.json());
+        } catch { }
     };
 
-    const updateEmployee = (id, field, value) => {
-        setEmployees(employees.map(emp =>
-            emp.id === id ? { ...emp, [field]: value } : emp
-        ));
+    useEffect(() => {
+        loadEmployees();
+        loadReferences();
+    }, []);
+
+    const removeEmployee = async (id) => {
+        if (!confirm('Silinsin?')) return;
+        const res = await fetch(`${API}/employees/${id}`, { method: 'DELETE' });
+        if (res.status === 204) loadEmployees();
     };
 
-    // Reference handlers (no actual fetch/upload yet)
-    const removeReference = (id) => {
-        setReferences(prev => prev.filter(r => r.id !== id));
+    const removeReference = async (id) => {
+        if (!confirm('Silinsin?')) return;
+        const res = await fetch(`${API}/references/${id}`, { method: 'DELETE' });
+        if (res.status === 204) loadReferences();
     };
 
-    const refreshReference = (id) => {
-        // placeholder: will refetch by id later
-        setReferences(prev => [...prev]);
-    };
+    const handleAddEmployee = () => { setModalType('employee'); setShowModal(true); };
+    const handleAddReference = () => { setModalType('reference'); setShowModal(true); };
+    const handleCloseModal = () => { setShowModal(false); setModalType(''); setNewEmployee({ name: '', position: '', phone: '', email: '', linkedin: '' }); setNewReference({ name: '', imageUrl: '', alt: '' }); };
 
-    const handleReferenceUpload = (e) => {
-        // placeholder: will upload and append new reference later
-        e.target.value = '';
-    };
-
-    // Modal handlers
-    const handleAddEmployee = () => {
-        setModalType('employee');
-        setShowModal(true);
-    };
-
-    const handleAddReference = () => {
-        setModalType('reference');
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setModalType('');
-        setNewEmployee({
-            heading: '',
-            jobName: '',
-            telefon: '',
-            mail: '',
-            linkedin: ''
-        });
-    };
-
-    const handleSaveEmployee = () => {
-        const employeeToAdd = {
-            id: Date.now(),
-            ...newEmployee
-        };
-        setEmployees([...employees, employeeToAdd]);
-        handleCloseModal();
-    };
-
-    const handleSaveReference = () => {
-        // Here you would typically save to API
-        console.log('Saving new reference');
-        handleCloseModal();
+    const handleSave = async () => {
+        try {
+            if (modalType === 'employee') {
+                const res = await fetch(`${API}/employees`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newEmployee) });
+                if (!res.ok) throw new Error('Employee save failed');
+                await loadEmployees();
+            } else {
+                const res = await fetch(`${API}/references`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newReference) });
+                if (!res.ok) throw new Error('Reference save failed');
+                await loadReferences();
+            }
+            handleCloseModal();
+        } catch (e) {
+            alert(e.message);
+        }
     };
 
     return (
@@ -186,13 +148,12 @@ export default function AdminAbout() {
                     {/* Reference items (images will be shown when fetched) */}
                     {references.map(ref => (
                         <div key={ref.id} className="reference-item">
-                            <div className="reference-canvas" />
+                            <div className="reference-canvas">
+                                {ref.imageUrl && <img src={ref.imageUrl} alt={ref.alt || ref.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                            </div>
                             <div className="reference-actions">
                                 <button className="action-btn delete-img" aria-label="Delete reference" onClick={() => removeReference(ref.id)}>
                                     <img src="/assets/admin-trash.png" alt="Delete" />
-                                </button>
-                                <button className="action-btn refresh-img" aria-label="Refresh reference" onClick={() => refreshReference(ref.id)}>
-                                    <img src="/assets/admin-refresh.png" alt="Refresh" />
                                 </button>
                             </div>
                         </div>
@@ -341,90 +302,17 @@ export default function AdminAbout() {
                                         <div className="form-group row g-3 align-items-start">
                                             <label className="col-sm-3 col-form-label">Heading</label>
                                             <div className="col-sm-9">
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    placeholder="Ad Soyad"
-                                                    value={employee.heading}
-                                                    onChange={(e) => updateEmployee(employee.id, 'heading', e.target.value)}
-                                                />
+                                                <input className="form-control" type="text" value={employee.name} readOnly />
                                             </div>
                                         </div>
                                     </div>
-
                                     <div className="col-12">
                                         <div className="form-group row g-3 align-items-start">
                                             <label className="col-sm-3 col-form-label">Job name</label>
                                             <div className="col-sm-9">
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    placeholder="Vəzifə"
-                                                    value={employee.jobName}
-                                                    onChange={(e) => updateEmployee(employee.id, 'jobName', e.target.value)}
-                                                />
+                                                <input className="form-control" type="text" value={employee.position} readOnly />
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div className="col-12">
-                                        <div className="row g-3">
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label className="form-label">Telefon</label>
-                                                    <input
-                                                        className="form-control"
-                                                        type="tel"
-                                                        placeholder="0124444444"
-                                                        value={employee.telefon}
-                                                        onChange={(e) => updateEmployee(employee.id, 'telefon', e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label className="form-label">Mail</label>
-                                                    <input
-                                                        className="form-control"
-                                                        type="email"
-                                                        placeholder="namesurname@mail.ru"
-                                                        value={employee.mail}
-                                                        onChange={(e) => updateEmployee(employee.id, 'mail', e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-4">
-                                                <div className="form-group">
-                                                    <label className="form-label">Linkedin</label>
-                                                    <input
-                                                        className="form-control"
-                                                        type="text"
-                                                        placeholder="0124444444"
-                                                        value={employee.linkedin}
-                                                        onChange={(e) => updateEmployee(employee.id, 'linkedin', e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Right Side - Image Upload */}
-                            <div className="col-12 col-lg-4">
-                                <div className="image-upload-container d-flex flex-column gap-2">
-                                    <div className="image-placeholder position-relative">
-                                        <div className="image-actions position-absolute">
-                                            <button className="action-btn delete-img" aria-label="Delete image">
-                                                <img src="/assets/admin-trash.png" alt="Delete" />
-                                            </button>
-                                            <button className="action-btn refresh-img" aria-label="Refresh image">
-                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="image-info">
-                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
                                     </div>
                                 </div>
                             </div>
@@ -454,124 +342,30 @@ export default function AdminAbout() {
                                 <>
                                     <div className="form-group mb-3">
                                         <label className="form-label">Ad Soyad</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="İşçi adını daxil edin"
-                                            value={newEmployee.heading}
-                                            onChange={(e) => setNewEmployee({ ...newEmployee, heading: e.target.value })}
-                                        />
+                                        <input className="form-control" placeholder="İşçi adını daxil edin" value={newEmployee.name} onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })} />
                                     </div>
-
                                     <div className="form-group mb-3">
                                         <label className="form-label">Vəzifə</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="İşçi vəzifəsini daxil edin"
-                                            value={newEmployee.jobName}
-                                            onChange={(e) => setNewEmployee({ ...newEmployee, jobName: e.target.value })}
-                                        />
+                                        <input className="form-control" placeholder="İşçi vəzifəsini daxil edin" value={newEmployee.position} onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })} />
                                     </div>
-
                                     <div className="row g-3">
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label className="form-label">Telefon</label>
-                                                <input
-                                                    type="tel"
-                                                    className="form-control"
-                                                    placeholder="0124444444"
-                                                    value={newEmployee.telefon}
-                                                    onChange={(e) => setNewEmployee({ ...newEmployee, telefon: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label className="form-label">Mail</label>
-                                                <input
-                                                    type="email"
-                                                    className="form-control"
-                                                    placeholder="namesurname@mail.ru"
-                                                    value={newEmployee.mail}
-                                                    onChange={(e) => setNewEmployee({ ...newEmployee, mail: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label className="form-label">LinkedIn</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    placeholder="LinkedIn linki"
-                                                    value={newEmployee.linkedin}
-                                                    onChange={(e) => setNewEmployee({ ...newEmployee, linkedin: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group mb-3 mt-3">
-                                        <label className="form-label">Şəkil</label>
-                                        <div className="image-upload-container">
-                                            <div className="image-placeholder position-relative">
-                                                <div className="image-actions position-absolute">
-                                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                                    </button>
-                                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className="image-info">
-                                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                                            </div>
-                                        </div>
+                                        <div className="col-md-4"><label className="form-label">Telefon</label><input className="form-control" value={newEmployee.phone} onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })} /></div>
+                                        <div className="col-md-4"><label className="form-label">Mail</label><input className="form-control" value={newEmployee.email} onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })} /></div>
+                                        <div className="col-md-4"><label className="form-label">LinkedIn</label><input className="form-control" value={newEmployee.linkedin} onChange={(e) => setNewEmployee({ ...newEmployee, linkedin: e.target.value })} /></div>
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    <div className="form-group mb-3">
-                                        <label className="form-label">Referans Adı</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Referans adını daxil edin"
-                                        />
-                                    </div>
-
-                                    <div className="form-group mb-3">
-                                        <label className="form-label">Şəkil</label>
-                                        <div className="image-upload-container">
-                                            <div className="image-placeholder position-relative">
-                                                <div className="image-actions position-absolute">
-                                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                                    </button>
-                                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className="image-info">
-                                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div className="form-group mb-3"><label className="form-label">Referans Adı</label><input className="form-control" value={newReference.name} onChange={(e) => setNewReference({ ...newReference, name: e.target.value })} /></div>
+                                    <div className="form-group mb-3"><label className="form-label">Şəkil URL</label><input className="form-control" value={newReference.imageUrl} onChange={(e) => setNewReference({ ...newReference, imageUrl: e.target.value })} /></div>
+                                    <div className="form-group mb-3"><label className="form-label">Alt</label><input className="form-control" value={newReference.alt} onChange={(e) => setNewReference({ ...newReference, alt: e.target.value })} /></div>
                                 </>
                             )}
                         </div>
 
                         <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={handleCloseModal}>
-                                Ləğv et
-                            </button>
-                            <button className="btn btn-primary" onClick={modalType === 'employee' ? handleSaveEmployee : handleSaveReference}>
-                                Əlavə et
-                            </button>
+                            <button className="btn btn-secondary" onClick={handleCloseModal}>Ləğv et</button>
+                            <button className="btn btn-primary" onClick={handleSave}>Əlavə et</button>
                         </div>
                     </div>
                 </div>

@@ -82,5 +82,51 @@ namespace WebOnlyAPI.Controllers
 
             return NoContent();
         }
+
+        // Nested images endpoints
+        // GET: api/products/{productId}/images
+        [HttpGet("{productId}/images")]
+        public async Task<ActionResult<IEnumerable<ProductImageDto>>> GetImages(int productId)
+        {
+            var images = await _productService.GetImagesAsync(productId);
+            return Ok(images);
+        }
+
+        // POST: api/products/{productId}/images
+        [HttpPost("{productId}/images")]
+        public async Task<ActionResult<ProductImageDto>> AddImage(int productId, ProductImageDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var created = await _productService.AddImageAsync(productId, dto);
+            return CreatedAtAction(nameof(GetImages), new { productId }, created);
+        }
+
+        // DELETE: api/products/{productId}/images/{imageId}
+        [HttpDelete("{productId}/images/{imageId}")]
+        public async Task<IActionResult> DeleteImage(int productId, int imageId)
+        {
+            var ok = await _productService.DeleteImageAsync(productId, imageId);
+            if (!ok) return NotFound();
+            return NoContent();
+        }
+
+        // PUT: api/products/{productId}/images/{imageId}
+        [HttpPut("{productId}/images/{imageId}")]
+        public async Task<ActionResult<ProductImageDto>> UpdateImage(int productId, int imageId, ProductImageDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var updated = await _productService.UpdateImageAsync(productId, imageId, dto);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
+
+        // PUT: api/products/{productId}/images/{imageId}/set-main
+        [HttpPut("{productId}/images/{imageId}/set-main")]
+        public async Task<IActionResult> SetMainImage(int productId, int imageId)
+        {
+            var ok = await _productService.SetMainImageAsync(productId, imageId);
+            if (!ok) return NotFound();
+            return NoContent();
+        }
     }
 }

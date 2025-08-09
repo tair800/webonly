@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809131324726_market3.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809131324726_market3.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809132554378_logo12.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809132554378_logo12.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809132605067_market4.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809132605067_market4.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809132628949_director.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809132628949_director.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809132641251_market3.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809132641251_market3.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809132839038_employee.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809132839038_employee.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\2\\20250809132955771_logo6.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\2\\20250809132955771_logo6.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\3\\20250809133001481_director.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\3\\20250809133001481_director.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\products\\5\\20250809133009568_equipment1.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\5\\20250809133009568_equipment1.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WebOnlyAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.WebOnlyAPI.props",
+      "PackagePath": "build\\WebOnlyAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WebOnlyAPI.props",
+      "PackagePath": "buildMultiTargeting\\WebOnlyAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.WebOnlyAPI.props",
+      "PackagePath": "buildTransitive\\WebOnlyAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

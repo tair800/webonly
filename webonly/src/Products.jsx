@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
-import { products } from './data/productData';
+import React, { useEffect, useState } from 'react';
 import ProductCard3D from './components/ProductCard3D';
 import Spline from '@splinetool/react-spline';
 import './Products.css';
 
 function Products() {
-    const [productsState] = useState(products);
+    const [productsState, setProductsState] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [splineError, setSplineError] = useState(false);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setLoading(true);
+                const API = 'http://localhost:5098/api';
+                const res = await fetch(`${API}/products`);
+                if (!res.ok) throw new Error('Failed to load products');
+                const data = await res.json();
+                // Normalize for card: ensure icon is present
+                const normalized = (Array.isArray(data) ? data : []).map(p => ({
+                    ...p,
+                    icon: p.icon || p.imageUrl || '/assets/market-icon.png'
+                }));
+                setProductsState(normalized);
+            } catch (e) {
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
 
     return (
         <div className="products-container">
@@ -42,6 +66,8 @@ function Products() {
                 </div>
             </div>
 
+            {error && <div className="products-center"><div>Error: {error}</div></div>}
+            {loading && <div className="products-center"><div>Loading...</div></div>}
             <div className="products-grid-3d">
                 {productsState.map((product) => (
                     <div key={product.id} className="product-card-3d-wrapper">

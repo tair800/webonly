@@ -34,7 +34,21 @@ namespace WebOnlyAPI.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         
+        // Detail text fields (Unicode)
+        public string? DetailDescription { get; set; }
+        public string? Section1Title { get; set; }
+        public string? Section1Description { get; set; }
+        public string? Section1MoreText { get; set; }
+
+        public string? Section2Title { get; set; }
+        public string? Section2Description { get; set; }
+        public string? Section2MoreText { get; set; }
+
+        public string? Section3Title { get; set; }
+        public string? Section3Description { get; set; }
+        public string? Section3MoreText { get; set; }
+
         // Navigation properties
-        public ICollection<ProductSection> Sections { get; set; } = new List<ProductSection>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

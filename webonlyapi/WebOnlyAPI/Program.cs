@@ -30,8 +30,30 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
+builder.Services.AddScoped<IReferenceService, ReferenceService>();
+builder.Services.AddScoped<DataSeederService>();
 
 var app = builder.Build();
+
+// Apply pending EF Core migrations on startup (dev-friendly)
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        db.Database.Migrate();
+        // Ensure Unicode NVARCHAR columns store Azerbaijani correctly (database default collation is fine; data comes via EF)
+        // Seed data after migrations
+        var seeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
+        await seeder.SeedAllDataAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Startup] Migration failed: {ex.Message}");
+        // Continue startup so the app can still run and expose diagnostics
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -46,6 +68,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseCors("AllowAll");
 

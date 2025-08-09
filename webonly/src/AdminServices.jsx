@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AdminServices.css';
 import './AdminAbout.css';
 
+const API = 'http://localhost:5098/api';
+
 export default function AdminServices() {
+    const [services, setServices] = useState([]);
+    const [originalById, setOriginalById] = useState({});
     const [showModal, setShowModal] = useState(false);
-    const [newService, setNewService] = useState({
-        name: '',
-        subtext: ''
-    });
+    const [newService, setNewService] = useState({ name: '', subtitle: '', description: '', icon: '', detailImage: '', imageUrl: '' });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const loadServices = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch(`${API}/services`);
+            if (!res.ok) throw new Error('Failed to load services');
+            const data = await res.json();
+            setServices(data);
+            const map = {}; data.forEach(s => map[s.id] = { ...s });
+            setOriginalById(map);
+        } catch (e) { setError(e.message); } finally { setLoading(false); }
+    };
+
+    useEffect(() => { loadServices(); }, []);
 
     const handleAddService = () => {
         setShowModal(true);
@@ -18,10 +35,43 @@ export default function AdminServices() {
         setNewService({ name: '', subtext: '' });
     };
 
-    const handleSaveService = () => {
-        // Here you would typically save to API
-        console.log('Saving new service:', newService);
-        handleCloseModal();
+    const createService = async () => {
+        try {
+            const res = await fetch(`${API}/services`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newService.name, subtitle: newService.subtitle, description: newService.description, icon: newService.icon, detailImage: newService.detailImage, imageUrl: newService.imageUrl }) });
+            if (!res.ok) throw new Error('Create failed');
+            handleCloseModal();
+            await loadServices();
+        } catch (e) { alert(e.message); }
+    };
+
+    const hasChanges = (s) => {
+        const o = originalById[s.id];
+        if (!o) return false;
+        return (
+            (s.name || '') !== (o.name || '') ||
+            (s.subtitle || '') !== (o.subtitle || '') ||
+            (s.description || '') !== (o.description || '') ||
+            (s.icon || '') !== (o.icon || '') ||
+            (s.detailImage || '') !== (o.detailImage || '') ||
+            (s.imageUrl || '') !== (o.imageUrl || '')
+        );
+    };
+
+    const saveService = async (id) => {
+        const s = services.find(x => x.id === id);
+        if (!s) return;
+        try {
+            const res = await fetch(`${API}/services/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: s.name, subtitle: s.subtitle, description: s.description, icon: s.icon, detailImage: s.detailImage, imageUrl: s.imageUrl }) });
+            if (!res.ok) throw new Error('Save failed');
+            const saved = await res.json();
+            setOriginalById(prev => ({ ...prev, [id]: { ...saved } }));
+        } catch (e) { alert(e.message); }
+    };
+
+    const undoService = (id) => {
+        const o = originalById[id];
+        if (!o) return;
+        setServices(prev => prev.map(x => x.id === id ? { ...o } : x));
     };
 
     return (
@@ -79,69 +129,51 @@ export default function AdminServices() {
                 </div>
             </div>
 
-            {/* Services Content */}
-            <div className="admin-about-card p-3 mb-4">
-                <div className="row g-3 align-items-start">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="text-white m-0">Service 01</h5>
+            {error && <div className="text-danger">{error}</div>}
+            {loading && <div>Yüklənir...</div>}
+            {services.map((s, idx) => (
+                <div key={s.id} className="admin-about-card p-3 mb-4">
+                    <div className="row g-3 align-items-start">
+                        <div className="col-12 col-lg-8 d-flex flex-column gap-3">
+                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                <h5 className="text-white m-0">Service {String(s.id).padStart(2, '0')}</h5>
+                            </div>
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Name</label>
+                                <div className="col-sm-9"><input className="form-control" value={s.name || ''} onChange={(e) => setServices(prev => prev.map(x => x.id === s.id ? { ...x, name: e.target.value } : x))} /></div>
+                            </div>
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Subtitle</label>
+                                <div className="col-sm-9"><input className="form-control" value={s.subtitle || ''} onChange={(e) => setServices(prev => prev.map(x => x.id === s.id ? { ...x, subtitle: e.target.value } : x))} /></div>
+                            </div>
+                            <div className="form-group row g-3 align-items-start">
+                                <label className="col-sm-3 col-form-label">Description</label>
+                                <div className="col-sm-9"><textarea className="form-control" rows={6} value={s.description || ''} onChange={(e) => setServices(prev => prev.map(x => x.id === s.id ? { ...x, description: e.target.value } : x))} /></div>
+                            </div>
+                            <div className="d-flex gap-2">
+                                <button className="btn btn-primary" disabled={!hasChanges(s)} onClick={() => saveService(s.id)}>Yadda saxla</button>
+                                <button className="btn btn-outline-light" disabled={!hasChanges(s)} onClick={() => undoService(s.id)}>Undo</button>
+                            </div>
                         </div>
-
-                        {/* Service ID (Fancy Badge) */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">ID</label>
-                            <div className="col-sm-9">
-                                <div className="service-id-badge">
-                                    <span className="id-number">01</span>
+                        <div className="col-12 col-lg-4">
+                            <div className="image-upload-container d-flex flex-column gap-2">
+                                <div className="image-placeholder position-relative">
+                                    {s.detailImage && <img src={s.detailImage} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />}
+                                    <div className="image-actions position-absolute">
+                                        <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setServices(prev => prev.map(x => x.id === s.id ? { ...x, detailImage: '' } : x))}>
+                                            <img src="/assets/admin-trash.png" alt="Delete" />
+                                        </button>
+                                        <button className="action-btn refresh-img" aria-label="Refresh image" onClick={() => undoService(s.id)}>
+                                            <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        {/* Service Name */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Name</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Bazanın arxivləməsi"
-                                    defaultValue="Bazanın arxivləməsi"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Service Subtext */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={6}
-                                    placeholder="Mətn..."
-                                    defaultValue="Bazanın arxivləməsi təhlükəsizlik, davamlılıq və məlumatların qorunması üçün vacibdir. Avtomatik və manual arxivləmə imkanları mövcuddur. Arxivlənmiş məlumatların bərpası, effektiv yaddaş istifadəsi, məlumat itkisinin qarşısının alınması və performansın artırılması üçün xidmət göstərilir."
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="image-info">
-                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            ))}
 
             {/* Second Service */}
             <div className="admin-about-card p-3 mb-4">
@@ -332,7 +364,7 @@ export default function AdminServices() {
                             <button className="btn btn-secondary" onClick={handleCloseModal}>
                                 Ləğv et
                             </button>
-                            <button className="btn btn-primary" onClick={handleSaveService}>
+                            <button className="btn btn-primary" onClick={createService}>
                                 Əlavə et
                             </button>
                         </div>

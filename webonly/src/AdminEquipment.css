@@ -1,24 +1,42 @@
-/* Admin Equipment Page Styles */
+/* Admin Equipment Page Styles - aligned with AdminAbout */
+
+.admin-equipment-container {
+    padding: 20px 40px;
+}
 
 .admin-equipment-header h2 {
     color: #ffffff;
+    margin: 0;
 }
 
-/* Reuse About card sizing for consistent widths/heights */
+/* Buttons */
+.add-btn {
+    background: linear-gradient(90deg, #5c67ff 0%, #ad51ff 100%);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+/* Card container */
 .admin-equipment-container .admin-about-card {
     background: linear-gradient(265.98deg, rgba(70, 126, 254, 0.2) -8.44%, rgba(24, 24, 24, 0.2) 94.15%);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
 }
 
-/* Ensure form controls match About page styling */
-.admin-equipment-container .form-control {
+/* Inputs */
+.admin-equipment-container .form-control,
+.admin-equipment-container .form-select,
+.admin-equipment-container textarea {
     background: rgba(255, 255, 255, 0.06) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #ffffff !important;
 }
 
-.admin-equipment-container .form-control:focus {
+.admin-equipment-container .form-control:focus,
+.admin-equipment-container .form-select:focus,
+.admin-equipment-container textarea:focus {
     background: rgba(255, 255, 255, 0.1) !important;
     border-color: #467EFE !important;
     box-shadow: 0 0 0 0.2rem rgba(70, 126, 254, 0.25) !important;
@@ -27,4 +45,42 @@
 
 .admin-equipment-container .form-control::placeholder {
     color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Table */
+.table-dark.table-striped {
+    --bs-table-bg: rgba(17, 18, 20, 0.6);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.05);
+    --bs-table-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table-dark.table-striped img {
+    border-radius: 6px;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 95%;
+    max-width: 720px;
+    background: linear-gradient(265.98deg, rgba(70, 126, 254, 0.15) -8.44%, rgba(24, 24, 24, 0.9) 94.15%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #fff;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: rgba(255, 255, 255, 0.1);
 }

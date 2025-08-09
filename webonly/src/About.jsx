@@ -1,13 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { teamMembers } from './data/teamData';
-import { logos } from './data/logoData';
+// import { teamMembers } from './data/teamData';
+// import { logos } from './data/logoData';
 import Spline from '@splinetool/react-spline';
 import './About.css';
 
 function About() {
-    const [teamMembersState] = useState(teamMembers);
-    const [logosState] = useState(logos);
+    const [teamMembersState, setTeamMembersState] = useState([]);
+    const [logosState, setLogosState] = useState([]);
     const [splineError, setSplineError] = useState(false);
+
+    // Fetch data from API
+    useEffect(() => {
+        const fetchAll = async () => {
+            try {
+                const [empRes, refRes] = await Promise.all([
+                    fetch('http://localhost:5098/api/employees'),
+                    fetch('http://localhost:5098/api/references')
+                ]);
+                if (empRes.ok) setTeamMembersState(await empRes.json());
+                if (refRes.ok) setLogosState(await refRes.json());
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        fetchAll();
+    }, []);
 
     // Update CSS custom properties for dynamic animation
     useEffect(() => {

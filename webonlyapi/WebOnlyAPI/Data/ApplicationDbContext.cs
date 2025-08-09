@@ -13,7 +13,8 @@ namespace WebOnlyAPI.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Reference> References { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductSection> ProductSections { get; set; }
+        // Removed ProductSections
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<EquipmentFeature> EquipmentFeatures { get; set; }
         public DbSet<EquipmentSpecification> EquipmentSpecifications { get; set; }
@@ -58,6 +59,32 @@ namespace WebOnlyAPI.Data
                 entity.Property(e => e.MainImage).HasMaxLength(500);
                 entity.Property(e => e.Description).HasMaxLength(2000);
                 entity.Property(e => e.ImageUrl).HasMaxLength(500);
+                entity.Property(e => e.DetailDescription).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section1Title).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section1Description).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section1MoreText).HasColumnType("nvarchar(max)");
+
+                entity.Property(e => e.Section2Title).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section2Description).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section2MoreText).HasColumnType("nvarchar(max)");
+
+                entity.Property(e => e.Section3Title).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section3Description).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section3MoreText).HasColumnType("nvarchar(max)");
+                entity.HasMany(p => p.Images)
+                    .WithOne(pi => pi.Product!)
+                    .HasForeignKey(pi => pi.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configure ProductImage entity
+            modelBuilder.Entity<ProductImage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ProductId).IsRequired();
+                entity.Property(e => e.ImageUrl).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.Alt).HasMaxLength(100);
+                entity.Property(e => e.OrderIndex).IsRequired();
             });
 
             // Configure Equipment entity
@@ -85,21 +112,7 @@ namespace WebOnlyAPI.Data
                 entity.Property(e => e.ImageUrl).HasMaxLength(500);
             });
 
-            // Configure ProductSection entity
-            modelBuilder.Entity<ProductSection>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ProductId).IsRequired();
-                entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.Description).HasMaxLength(2000);
-                entity.Property(e => e.MoreText).HasMaxLength(1000);
-                entity.Property(e => e.OrderIndex).IsRequired();
-                
-                entity.HasOne(ps => ps.Product)
-                    .WithMany(p => p.Sections)
-                    .HasForeignKey(ps => ps.ProductId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+            // Removed ProductSection entity
 
             // Configure EquipmentFeature entity
             modelBuilder.Entity<EquipmentFeature>(entity =>
