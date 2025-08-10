@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebOnlyAPI.DTOs;
 using WebOnlyAPI.Services;
+using System.IO;
 
 namespace WebOnlyAPI.Controllers
 {
@@ -37,15 +38,59 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EquipmentResponseDto>> Create(CreateEquipmentDto dto)
+        public async Task<ActionResult<EquipmentResponseDto>> Create([FromForm] CreateEquipmentDto dto, IFormFile? imageFile)
         {
+            // Handle image file if provided
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}_{imageFile.FileName}";
+                var uploadPath = Path.Combine("wwwroot", "uploads", "equipment");
+                
+                // Create directory if it doesn't exist
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                
+                var filePath = Path.Combine(uploadPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                
+                // Set the image URL to the uploaded file path
+                dto.ImageUrl = $"/uploads/equipment/{fileName}";
+            }
+            
             var created = await _equipmentService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<EquipmentResponseDto>> Update(int id, UpdateEquipmentDto dto)
+        public async Task<ActionResult<EquipmentResponseDto>> Update(int id, [FromForm] UpdateEquipmentDto dto, IFormFile? imageFile)
         {
+            // Handle image file if provided
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}_{imageFile.FileName}";
+                var uploadPath = Path.Combine("wwwroot", "uploads", "equipment");
+                
+                // Create directory if it doesn't exist
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                
+                var filePath = Path.Combine(uploadPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                
+                // Set the image URL to the uploaded file path
+                dto.ImageUrl = $"/uploads/equipment/{fileName}";
+            }
+            
             var updated = await _equipmentService.UpdateAsync(id, dto);
             if (updated == null) return NotFound();
             return Ok(updated);

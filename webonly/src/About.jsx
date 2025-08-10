@@ -8,17 +8,41 @@ function About() {
     const [teamMembersState, setTeamMembersState] = useState([]);
     const [logosState, setLogosState] = useState([]);
     const [splineError, setSplineError] = useState(false);
+    const [director, setDirector] = useState(null);
+    const [aboutLogo, setAboutLogo] = useState(null);
+
+
 
     // Fetch data from API
     useEffect(() => {
         const fetchAll = async () => {
             try {
-                const [empRes, refRes] = await Promise.all([
+                const [empRes, refRes, aboutLogoRes] = await Promise.all([
                     fetch('http://localhost:5098/api/employees'),
-                    fetch('http://localhost:5098/api/references')
+                    fetch('http://localhost:5098/api/references'),
+                    fetch('http://localhost:5098/api/AboutLogo')
                 ]);
-                if (empRes.ok) setTeamMembersState(await empRes.json());
+                if (empRes.ok) {
+                    const employees = await empRes.json();
+                    // Find the director from the API response
+                    const directorEmployee = employees.find(emp =>
+                        emp.position.toLowerCase().includes('direktor') ||
+                        emp.position.toLowerCase().includes('director')
+                    );
+                    setDirector(directorEmployee);
+
+                    // Filter out the director from the team members list
+                    const otherEmployees = employees.filter(emp => emp.id !== directorEmployee?.id);
+                    setTeamMembersState(otherEmployees);
+                }
                 if (refRes.ok) setLogosState(await refRes.json());
+                if (aboutLogoRes.ok) {
+                    const aboutLogos = await aboutLogoRes.json();
+                    // Get the first (and should be only) AboutLogo record
+                    if (aboutLogos.length > 0) {
+                        setAboutLogo(aboutLogos[0]);
+                    }
+                }
             } catch (e) {
                 console.error(e);
             }
@@ -61,9 +85,9 @@ function About() {
             </div>
 
             <div className="about-logo">
-                <img src="/assets/logo-only.png" alt="Logo" />
-                <p className="about-logo-text">Texnologiya ilə Gələcəyə Doğru</p>
-                <p className="about-logo-description">10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.</p>
+                <img src={aboutLogo?.imageUrl || "/assets/logo-only.png"} alt="Logo" />
+                <p className="about-logo-text">{aboutLogo?.heading || "Texnologiya ilə Gələcəyə Doğru"}</p>
+                <p className="about-logo-description">{aboutLogo?.subtext || "10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir."}</p>
             </div>
 
             <div className="about-team-header">
@@ -77,11 +101,11 @@ function About() {
             </div>
 
             <div className="about-description-section">
-                <img src="/assets/director.png" alt="Director" className="about-director-img" />
-                <div className="about-name">Name Surname</div>
-                <div className="about-position">director</div>
+                <img src={director?.imageUrl || "/assets/director.png"} alt="Director" className="about-director-img" />
+                <div className="about-name">{director?.name || "Name Surname"}</div>
+                <div className="about-position">{director?.position || "director"}</div>
                 <div>
-                    <p className="about-description-text">10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.</p>
+                    <p className="about-description-text">{director?.description || "10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir."}</p>
                     <img src="/assets/comma.png" alt="Comma" className="about-comma" />
                 </div>
             </div>
@@ -90,7 +114,7 @@ function About() {
                 {teamMembersState.map((member) => (
                     <div key={member.id} className="team-card">
                         <div className="card-image">
-                            <img src={member.image} alt={member.name} />
+                            <img src={member.imageUrl} alt={member.name} />
                         </div>
                         <div className="card-content">
                             <div className="card-name">{member.name}</div>
@@ -132,12 +156,12 @@ function About() {
                     <div className="logo-carousel-track">
                         {logosState.map((logo) => (
                             <div key={`first-${logo.id}`} className="logo-item">
-                                <img src={logo.image} alt={logo.alt} />
+                                <img src={logo.imageUrl} alt={logo.name} />
                             </div>
                         ))}
                         {logosState.map((logo) => (
                             <div key={`second-${logo.id}`} className="logo-item">
-                                <img src={logo.image} alt={logo.alt} />
+                                <img src={logo.imageUrl} alt={logo.name} />
                             </div>
                         ))}
                     </div>

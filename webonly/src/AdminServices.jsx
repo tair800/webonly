@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './AdminServices.css';
 import './AdminAbout.css';
+import Swal from 'sweetalert2';
 
 const API = 'http://localhost:5098/api';
 
@@ -8,9 +9,17 @@ export default function AdminServices() {
     const [services, setServices] = useState([]);
     const [originalById, setOriginalById] = useState({});
     const [showModal, setShowModal] = useState(false);
-    const [newService, setNewService] = useState({ name: '', subtitle: '', description: '', icon: '', detailImage: '', imageUrl: '' });
+    const [newService, setNewService] = useState({ name: '', subtitle: '', description: '', icon: '', detailImage: '', imageUrl: '', imageFile: null });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(3);
+
+    // File input refs for browse functionality
+    const imageFileRefs = useRef({});
 
     const loadServices = async () => {
         try {
@@ -21,7 +30,33 @@ export default function AdminServices() {
             setServices(data);
             const map = {}; data.forEach(s => map[s.id] = { ...s });
             setOriginalById(map);
+            setCurrentPage(1); // Reset to first page when loading new data
         } catch (e) { setError(e.message); } finally { setLoading(false); }
+    };
+
+    // Pagination functions
+    const totalPages = Math.max(1, Math.ceil(services.length / itemsPerPage));
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentServices = services.slice(startIndex, endIndex);
+
+    const goToPage = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const goToPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     useEffect(() => { loadServices(); }, []);
@@ -32,16 +67,73 @@ export default function AdminServices() {
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setNewService({ name: '', subtext: '' });
+        setNewService({ name: '', subtitle: '', description: '', icon: '', detailImage: '', imageUrl: '', imageFile: null });
     };
 
     const createService = async () => {
+        // Validate required fields
+        if (!newService.name?.trim() || !newService.subtitle?.trim() || !newService.description?.trim()) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Xəbərdarlıq',
+                text: 'Zəhmət olmasa bütün məcburi sahələri doldurun',
+                confirmButtonText: 'Tamam'
+            });
+            return;
+        }
+
+        setSubmitting(true);
         try {
-            const res = await fetch(`${API}/services`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: newService.name, subtitle: newService.subtitle, description: newService.description, icon: newService.icon, detailImage: newService.detailImage, imageUrl: newService.imageUrl }) });
+            let res;
+            if (newService.imageFile) {
+                const formData = new FormData();
+                formData.append('name', newService.name);
+                formData.append('subtitle', newService.subtitle);
+                formData.append('description', newService.description);
+                formData.append('icon', newService.icon);
+                formData.append('detailImage', newService.detailImage);
+                formData.append('imageFile', newService.imageFile);
+
+                res = await fetch(`${API}/services`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                res = await fetch(`${API}/services`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: newService.name,
+                        subtitle: newService.subtitle,
+                        description: newService.description,
+                        icon: newService.icon,
+                        detailImage: newService.detailImage,
+                        imageUrl: newService.imageUrl
+                    })
+                });
+            }
+
             if (!res.ok) throw new Error('Create failed');
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Uğurlu',
+                text: 'Xidmət uğurla əlavə edildi',
+                confirmButtonText: 'Tamam'
+            });
+
             handleCloseModal();
             await loadServices();
-        } catch (e) { alert(e.message); }
+        } catch (e) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Xəta',
+                text: e.message,
+                confirmButtonText: 'Tamam'
+            });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const hasChanges = (s) => {
@@ -53,25 +145,118 @@ export default function AdminServices() {
             (s.description || '') !== (o.description || '') ||
             (s.icon || '') !== (o.icon || '') ||
             (s.detailImage || '') !== (o.detailImage || '') ||
-            (s.imageUrl || '') !== (o.imageUrl || '')
+            (s.imageUrl || '') !== (o.imageUrl || '') ||
+            s.imageFile !== undefined
         );
     };
 
     const saveService = async (id) => {
         const s = services.find(x => x.id === id);
         if (!s) return;
+
+        // Validate required fields
+        if (!s.name?.trim() || !s.subtitle?.trim() || !s.description?.trim()) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Xəbərdarlıq',
+                text: 'Zəhmət olmasa bütün məcburi sahələri doldurun',
+                confirmButtonText: 'Tamam'
+            });
+            return;
+        }
+
+        setSubmitting(true);
         try {
-            const res = await fetch(`${API}/services/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: s.name, subtitle: s.subtitle, description: s.description, icon: s.icon, detailImage: s.detailImage, imageUrl: s.imageUrl }) });
+            let res;
+            if (s.imageFile) {
+                const formData = new FormData();
+                formData.append('name', s.name);
+                formData.append('subtitle', s.subtitle);
+                formData.append('description', s.description);
+                formData.append('icon', s.icon);
+                formData.append('detailImage', s.detailImage);
+                formData.append('imageFile', s.imageFile);
+
+                res = await fetch(`${API}/services/${id}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+            } else {
+                res = await fetch(`${API}/services/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: s.name,
+                        subtitle: s.subtitle,
+                        description: s.description,
+                        icon: s.icon,
+                        detailImage: s.detailImage,
+                        imageUrl: s.imageUrl
+                    })
+                });
+            }
+
             if (!res.ok) throw new Error('Save failed');
             const saved = await res.json();
             setOriginalById(prev => ({ ...prev, [id]: { ...saved } }));
-        } catch (e) { alert(e.message); }
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Uğurlu',
+                text: 'Xidmət uğurla yeniləndi',
+                confirmButtonText: 'Tamam'
+            });
+        } catch (e) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Xəta',
+                text: e.message,
+                confirmButtonText: 'Tamam'
+            });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const undoService = (id) => {
         const o = originalById[id];
         if (!o) return;
         setServices(prev => prev.map(x => x.id === id ? { ...o } : x));
+    };
+
+    const removeService = async (id) => {
+        const result = await Swal.fire({
+            icon: 'warning',
+            title: 'Xidməti sil',
+            text: 'Bu xidməti silmək istədiyinizə əminsiniz?',
+            showCancelButton: true,
+            confirmButtonText: 'Bəli, sil',
+            cancelButtonText: 'Ləğv et',
+            confirmButtonColor: '#dc3545'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(`${API}/services/${id}`, { method: 'DELETE' });
+                if (!res.ok) throw new Error('Delete failed');
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Uğurlu',
+                    text: 'Xidmət uğurla silindi',
+                    confirmButtonText: 'Tamam'
+                });
+
+                await loadServices();
+            } catch (e) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Xəta',
+                    text: e.message,
+                    confirmButtonText: 'Tamam'
+                });
+            }
+        }
     };
 
     return (
@@ -131,27 +316,32 @@ export default function AdminServices() {
 
             {error && <div className="text-danger">{error}</div>}
             {loading && <div>Yüklənir...</div>}
-            {services.map((s, idx) => (
+            {currentServices.map((s, idx) => (
                 <div key={s.id} className="admin-about-card p-3 mb-4">
                     <div className="row g-3 align-items-start">
                         <div className="col-12 col-lg-8 d-flex flex-column gap-3">
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                <h5 className="text-white m-0">Service {String(s.id).padStart(2, '0')}</h5>
+                                <h5 className="text-white m-0">Service {String(startIndex + idx + 1).padStart(2, '0')}</h5>
+                                <button className="btn btn-danger btn-sm" onClick={() => removeService(s.id)} disabled={submitting}>
+                                    {submitting ? 'Silinir...' : 'Sil'}
+                                </button>
                             </div>
                             <div className="form-group row g-3 align-items-start">
-                                <label className="col-sm-3 col-form-label">Name</label>
+                                <label className="col-sm-3 col-form-label">Name *</label>
                                 <div className="col-sm-9"><input className="form-control" value={s.name || ''} onChange={(e) => setServices(prev => prev.map(x => x.id === s.id ? { ...x, name: e.target.value } : x))} /></div>
                             </div>
                             <div className="form-group row g-3 align-items-start">
-                                <label className="col-sm-3 col-form-label">Subtitle</label>
+                                <label className="col-sm-3 col-form-label">Subtitle *</label>
                                 <div className="col-sm-9"><input className="form-control" value={s.subtitle || ''} onChange={(e) => setServices(prev => prev.map(x => x.id === s.id ? { ...x, subtitle: e.target.value } : x))} /></div>
                             </div>
                             <div className="form-group row g-3 align-items-start">
-                                <label className="col-sm-3 col-form-label">Description</label>
+                                <label className="col-sm-3 col-form-label">Description *</label>
                                 <div className="col-sm-9"><textarea className="form-control" rows={6} value={s.description || ''} onChange={(e) => setServices(prev => prev.map(x => x.id === s.id ? { ...x, description: e.target.value } : x))} /></div>
                             </div>
                             <div className="d-flex gap-2">
-                                <button className="btn btn-primary" disabled={!hasChanges(s)} onClick={() => saveService(s.id)}>Yadda saxla</button>
+                                <button className="btn btn-primary" disabled={!hasChanges(s) || submitting} onClick={() => saveService(s.id)}>
+                                    {submitting ? 'Yadda saxlanır...' : 'Yadda saxla'}
+                                </button>
                                 <button className="btn btn-outline-light" disabled={!hasChanges(s)} onClick={() => undoService(s.id)}>Undo</button>
                             </div>
                         </div>
@@ -160,147 +350,55 @@ export default function AdminServices() {
                                 <div className="image-placeholder position-relative">
                                     {s.detailImage && <img src={s.detailImage} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />}
                                     <div className="image-actions position-absolute">
-                                        <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setServices(prev => prev.map(x => x.id === s.id ? { ...x, detailImage: '' } : x))}>
+                                        <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setServices(prev => prev.map(x => x.id === s.id ? { ...x, detailImage: '', imageFile: null } : x))}>
                                             <img src="/assets/admin-trash.png" alt="Delete" />
                                         </button>
-                                        <button className="action-btn refresh-img" aria-label="Refresh image" onClick={() => undoService(s.id)}>
-                                            <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                        <button className="action-btn refresh-img" aria-label="Browse image" onClick={() => document.getElementById(`service-image-${s.id}`).click()}>
+                                            <img src="/assets/admin-refresh.png" alt="Browse" />
                                         </button>
                                     </div>
                                 </div>
-                                <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır</div>
+                                <input
+                                    id={`service-image-${s.id}`}
+                                    type="file"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={(ev) => {
+                                        const file = ev.target.files?.[0];
+                                        if (file) {
+                                            const imageUrl = URL.createObjectURL(file);
+                                            setServices(prev => prev.map(x => x.id === s.id ? { ...x, detailImage: imageUrl, imageFile: file } : x));
+                                        }
+                                    }}
+                                />
+                                <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır. Yeniləmə düyməsi şəkil seçmək üçündür.</div>
                             </div>
                         </div>
                     </div>
                 </div>
             ))}
 
-            {/* Second Service */}
-            <div className="admin-about-card p-3 mb-4">
-                <div className="row g-3 align-items-start">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="text-white m-0">Service 02</h5>
-                        </div>
-
-                        {/* Service ID (Fancy Badge) */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">ID</label>
-                            <div className="col-sm-9">
-                                <div className="service-id-badge">
-                                    <span className="id-number">02</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Service Name */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Name</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Satış və Kassa idarəetməsi"
-                                    defaultValue="Satış və Kassa idarəetməsi"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Service Subtext */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={6}
-                                    placeholder="Mətn..."
-                                    defaultValue="Satış nöqtəsinin idarə olunması, satış tempinə nəzarət və müxtəlif mal qruplarına görə çeşidləmə imkanı mövcuddur."
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="image-info">
-                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Third Service */}
-            <div className="admin-about-card p-3 mb-4">
-                <div className="row g-3 align-items-start">
-                    <div className="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="text-white m-0">Service 03</h5>
-                        </div>
-
-                        {/* Service ID (Fancy Badge) */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">ID</label>
-                            <div className="col-sm-9">
-                                <div className="service-id-badge">
-                                    <span className="id-number">03</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Service Name */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Name</label>
-                            <div className="col-sm-9">
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Müştəri və CRM idarəetməsi"
-                                    defaultValue="Müştəri və CRM idarəetməsi"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Service Subtext */}
-                        <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
-                            <div className="col-sm-9">
-                                <textarea
-                                    className="form-control"
-                                    rows={6}
-                                    placeholder="Mətn..."
-                                    defaultValue="Müştəri məlumatları (təhsil, peşə və s.) sistemə daxil edilə bilər."
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="image-upload-container d-flex flex-column gap-2">
-                            <div className="image-placeholder position-relative">
-                                <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
-                                        <img src="/assets/admin-trash.png" alt="Delete" />
-                                    </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="image-info">
-                                *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {/* Pagination */}
+            <div className="d-flex justify-content-center mt-4">
+                <nav aria-label="Page navigation">
+                    <ul className="pagination">
+                        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => goToPreviousPage()} aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </button>
+                        </li>
+                        {Array.from({ length: totalPages }, (_, i) => (
+                            <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => goToPage(i + 1)}>{i + 1}</button>
+                            </li>
+                        ))}
+                        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => goToNextPage()} aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
             {/* Add Service Modal */}
@@ -319,7 +417,7 @@ export default function AdminServices() {
 
                         <div className="modal-body">
                             <div className="form-group mb-3">
-                                <label className="form-label">Xidmət Adı</label>
+                                <label className="form-label">Xidmət Adı *</label>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -330,13 +428,24 @@ export default function AdminServices() {
                             </div>
 
                             <div className="form-group mb-3">
-                                <label className="form-label">Xidmət Təsviri</label>
+                                <label className="form-label">Xidmət Alt Başlığı *</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Xidmət alt başlığını daxil edin"
+                                    value={newService.subtitle}
+                                    onChange={(e) => setNewService({ ...newService, subtitle: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="form-group mb-3">
+                                <label className="form-label">Xidmət Təsviri *</label>
                                 <textarea
                                     className="form-control"
                                     rows="4"
                                     placeholder="Xidmət təsvirini daxil edin"
-                                    value={newService.subtext}
-                                    onChange={(e) => setNewService({ ...newService, subtext: e.target.value })}
+                                    value={newService.description}
+                                    onChange={(e) => setNewService({ ...newService, description: e.target.value })}
                                 />
                             </div>
 
@@ -344,28 +453,40 @@ export default function AdminServices() {
                                 <label className="form-label">Şəkil</label>
                                 <div className="image-upload-container">
                                     <div className="image-placeholder position-relative">
+                                        {newService.detailImage && <img src={newService.detailImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />}
                                         <div className="image-actions position-absolute">
-                                            <button className="action-btn delete-img" aria-label="Delete image">
+                                            <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setNewService({ ...newService, detailImage: '', imageFile: null })}>
                                                 <img src="/assets/admin-trash.png" alt="Delete" />
                                             </button>
-                                            <button className="action-btn refresh-img" aria-label="Refresh image">
-                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                            <button className="action-btn refresh-img" aria-label="Browse image" onClick={() => document.getElementById('modal-service-image').click()}>
+                                                <img src="/assets/admin-refresh.png" alt="Browse" />
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="image-info">
-                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                                    </div>
+                                    <input
+                                        id="modal-service-image"
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={(ev) => {
+                                            const file = ev.target.files?.[0];
+                                            if (file) {
+                                                const imageUrl = URL.createObjectURL(file);
+                                                setNewService({ ...newService, detailImage: imageUrl, imageFile: file });
+                                            }
+                                        }}
+                                    />
+                                    <div className="image-info">*Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır. Yeniləmə düyməsi şəkil seçmək üçündür.</div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={handleCloseModal}>
+                            <button className="btn btn-secondary" onClick={handleCloseModal} disabled={submitting}>
                                 Ləğv et
                             </button>
-                            <button className="btn btn-primary" onClick={createService}>
-                                Əlavə et
+                            <button className="btn btn-primary" onClick={createService} disabled={submitting}>
+                                {submitting ? 'Əlavə edilir...' : 'Əlavə et'}
                             </button>
                         </div>
                     </div>

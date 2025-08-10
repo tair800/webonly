@@ -16,6 +16,9 @@ namespace WebOnlyAPI.Models
         [StringLength(100)]
         public string Position { get; set; } = string.Empty;
 
+        [StringLength(2000)]
+        public string? Description { get; set; }
+
         [StringLength(20)]
         public string? Phone { get; set; }
 

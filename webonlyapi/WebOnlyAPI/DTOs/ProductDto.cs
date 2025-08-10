@@ -10,12 +10,15 @@ namespace WebOnlyAPI.DTOs
         public string? Section1Title { get; set; }
         public string? Section1Description { get; set; }
         public string? Section1MoreText { get; set; }
+        public string? Section1Image { get; set; }
         public string? Section2Title { get; set; }
         public string? Section2Description { get; set; }
         public string? Section2MoreText { get; set; }
+        public string? Section2Image { get; set; }
         public string? Section3Title { get; set; }
         public string? Section3Description { get; set; }
         public string? Section3MoreText { get; set; }
+        public string? Section3Image { get; set; }
     }
 
     public class UpdateProductDto
@@ -28,12 +31,15 @@ namespace WebOnlyAPI.DTOs
         public string? Section1Title { get; set; }
         public string? Section1Description { get; set; }
         public string? Section1MoreText { get; set; }
+        public string? Section1Image { get; set; }
         public string? Section2Title { get; set; }
         public string? Section2Description { get; set; }
         public string? Section2MoreText { get; set; }
+        public string? Section2Image { get; set; }
         public string? Section3Title { get; set; }
         public string? Section3Description { get; set; }
         public string? Section3MoreText { get; set; }
+        public string? Section3Image { get; set; }
     }
 
     public class ProductResponseDto
@@ -50,12 +56,15 @@ namespace WebOnlyAPI.DTOs
         public string? Section1Title { get; set; }
         public string? Section1Description { get; set; }
         public string? Section1MoreText { get; set; }
+        public string? Section1Image { get; set; }
         public string? Section2Title { get; set; }
         public string? Section2Description { get; set; }
         public string? Section2MoreText { get; set; }
+        public string? Section2Image { get; set; }
         public string? Section3Title { get; set; }
         public string? Section3Description { get; set; }
         public string? Section3MoreText { get; set; }
+        public string? Section3Image { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public List<ProductImageDto> Images { get; set; } = new();

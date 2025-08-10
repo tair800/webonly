@@ -35,6 +35,7 @@ namespace WebOnlyAPI.Services
             {
                 Name = createDto.Name,
                 Position = createDto.Position,
+                Description = createDto.Description,
                 Phone = createDto.Phone,
                 Email = createDto.Email,
                 LinkedIn = createDto.LinkedIn,
@@ -56,6 +57,7 @@ namespace WebOnlyAPI.Services
 
             employee.Name = updateDto.Name;
             employee.Position = updateDto.Position;
+            employee.Description = updateDto.Description;
             employee.Phone = updateDto.Phone;
             employee.Email = updateDto.Email;
             employee.LinkedIn = updateDto.LinkedIn;
@@ -86,6 +88,7 @@ namespace WebOnlyAPI.Services
                 Id = employee.Id,
                 Name = employee.Name,
                 Position = employee.Position,
+                Description = employee.Description,
                 Phone = employee.Phone,
                 Email = employee.Email,
                 LinkedIn = employee.LinkedIn,

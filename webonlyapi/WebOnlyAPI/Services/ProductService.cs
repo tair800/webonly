@@ -39,6 +39,20 @@ namespace WebOnlyAPI.Services
                 Name = createDto.Name,
                 Subtext = createDto.Subtext,
                 ImageUrl = createDto.ImageUrl,
+                Icon = createDto.Icon,
+                DetailDescription = createDto.DetailDescription,
+                Section1Title = createDto.Section1Title,
+                Section1Description = createDto.Section1Description,
+                Section1MoreText = createDto.Section1MoreText,
+                Section1Image = createDto.Section1Image,
+                Section2Title = createDto.Section2Title,
+                Section2Description = createDto.Section2Description,
+                Section2MoreText = createDto.Section2MoreText,
+                Section2Image = createDto.Section2Image,
+                Section3Title = createDto.Section3Title,
+                Section3Description = createDto.Section3Description,
+                Section3MoreText = createDto.Section3MoreText,
+                Section3Image = createDto.Section3Image,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -62,12 +76,15 @@ namespace WebOnlyAPI.Services
             product.Section1Title = updateDto.Section1Title;
             product.Section1Description = updateDto.Section1Description;
             product.Section1MoreText = updateDto.Section1MoreText;
+            product.Section1Image = updateDto.Section1Image;
             product.Section2Title = updateDto.Section2Title;
             product.Section2Description = updateDto.Section2Description;
             product.Section2MoreText = updateDto.Section2MoreText;
+            product.Section2Image = updateDto.Section2Image;
             product.Section3Title = updateDto.Section3Title;
             product.Section3Description = updateDto.Section3Description;
             product.Section3MoreText = updateDto.Section3MoreText;
+            product.Section3Image = updateDto.Section3Image;
             product.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
@@ -105,12 +122,15 @@ namespace WebOnlyAPI.Services
                 Section1Title = product.Section1Title,
                 Section1Description = product.Section1Description,
                 Section1MoreText = product.Section1MoreText,
+                Section1Image = product.Section1Image,
                 Section2Title = product.Section2Title,
                 Section2Description = product.Section2Description,
                 Section2MoreText = product.Section2MoreText,
+                Section2Image = product.Section2Image,
                 Section3Title = product.Section3Title,
                 Section3Description = product.Section3Description,
                 Section3MoreText = product.Section3MoreText,
+                Section3Image = product.Section3Image,
                 Images = product.Images?.OrderBy(i => i.OrderIndex).Select(i => new ProductImageDto
                 {
                     Id = i.Id,

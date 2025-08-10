@@ -43,5 +43,22 @@ namespace WebOnlyAPI.DTOs
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public List<EquipmentFeatureDto> Features { get; set; } = new List<EquipmentFeatureDto>();
+        public List<EquipmentSpecificationDto> Specifications { get; set; } = new List<EquipmentSpecificationDto>();
+    }
+
+    public class EquipmentFeatureDto
+    {
+        public int Id { get; set; }
+        public string Feature { get; set; } = string.Empty;
+        public int OrderIndex { get; set; }
+    }
+
+    public class EquipmentSpecificationDto
+    {
+        public int Id { get; set; }
+        public string Key { get; set; } = string.Empty;
+        public string? Value { get; set; }
+        public int OrderIndex { get; set; }
     }
 }

@@ -18,9 +18,17 @@ function Equipment() {
 
     const slideDuration = 300;
 
+    const resolveUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/uploads/') || url.startsWith('/assets/')) {
+            return `http://localhost:5098${url}`;
+        }
+        return url;
+    };
+
     const currentItem = equipmentList[currentIndex] || {};
     const hasMultipleImages = false;
-    const currentImage = currentItem.imageUrl;
+    const currentImage = resolveUrl(currentItem.imageUrl);
 
     const handleMoreClick = () => {
         if (currentItem?.id) navigate(`/equipment/${currentItem.id}`);

@@ -11,69 +11,82 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 });
 
-// Register Services
+// Add DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add JWT Authentication
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "WebOnlyAPI",
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "WebOnlyClient",
+            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                System.Text.Encoding.ASCII.GetBytes(
+                    builder.Configuration["Jwt:Secret"] ?? "your-super-secret-key-with-at-least-32-characters"
+                )
+            )
+        };
+    });
+
+// Add Authorization
+builder.Services.AddAuthorization();
+
+// Register services
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
-builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IReferenceService, ReferenceService>();
 builder.Services.AddScoped<DataSeederService>();
 
 var app = builder.Build();
 
-// Apply pending EF Core migrations on startup (dev-friendly)
-using (var scope = app.Services.CreateScope())
-{
-    try
-    {
-        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        db.Database.Migrate();
-        // Ensure Unicode NVARCHAR columns store Azerbaijani correctly (database default collation is fine; data comes via EF)
-        // Seed data after migrations
-        var seeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
-        await seeder.SeedAllDataAsync();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"[Startup] Migration failed: {ex.Message}");
-        // Continue startup so the app can still run and expose diagnostics
-    }
-}
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebOnlyAPI v1");
-        // Serve Swagger UI at application root so https://localhost:7233/ opens it directly
-        options.RoutePrefix = string.Empty;
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+// Enable static file serving from wwwroot folder
 app.UseStaticFiles();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+        // Seed data
+        using (var scope = app.Services.CreateScope())
+        {
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
+            await dataSeeder.SeedAllDataAsync();
+        }
+
+        app.Run();

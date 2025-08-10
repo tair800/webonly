@@ -22,6 +22,39 @@ namespace WebOnlyAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WebOnlyAPI.Models.AboutLogo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Subtext")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutLogos");
+                });
+
             modelBuilder.Entity("WebOnlyAPI.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -32,6 +65,10 @@ namespace WebOnlyAPI.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
@@ -221,6 +258,10 @@ namespace WebOnlyAPI.Migrations
                     b.Property<string>("Section1Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Section1Image")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("Section1MoreText")
                         .HasColumnType("nvarchar(max)");
 
@@ -230,6 +271,10 @@ namespace WebOnlyAPI.Migrations
                     b.Property<string>("Section2Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Section2Image")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("Section2MoreText")
                         .HasColumnType("nvarchar(max)");
 
@@ -238,6 +283,10 @@ namespace WebOnlyAPI.Migrations
 
                     b.Property<string>("Section3Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section3Image")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Section3MoreText")
                         .HasColumnType("nvarchar(max)");

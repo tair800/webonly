@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import './AdminAbout.css';
 
 const API = 'http://localhost:5098/api';
@@ -6,62 +7,666 @@ const API = 'http://localhost:5098/api';
 export default function AdminAbout() {
     const [employees, setEmployees] = useState([]);
     const [references, setReferences] = useState([]);
+    const [director, setDirector] = useState(null);
+    const [originalDirector, setOriginalDirector] = useState(null);
+    const [originalEmployees, setOriginalEmployees] = useState([]);
+
+    // Add state for main content (Slide 1) - now fetched from API
+    const [mainContent, setMainContent] = useState({
+        heading: '',
+        subtext: '',
+        imageUrl: ''
+    });
+    const [originalMainContent, setOriginalMainContent] = useState({
+        heading: '',
+        subtext: '',
+        imageUrl: ''
+    });
 
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(''); // 'employee' or 'reference'
-    const [newEmployee, setNewEmployee] = useState({ name: '', position: '', phone: '', email: '', linkedin: '' });
+    const [newEmployee, setNewEmployee] = useState({
+        name: '',
+        position: '',
+        phone: '',
+        email: '',
+        linkedin: '',
+        description: '',
+        imageUrl: ''
+    });
     const [newReference, setNewReference] = useState({ name: '', imageUrl: '', alt: '' });
 
     const loadEmployees = async () => {
         try {
             const res = await fetch(`${API}/employees`);
-            if (res.ok) setEmployees(await res.json());
-        } catch { }
+            if (res.ok) {
+                const allEmployees = await res.json();
+                // Find director and separate from other employees
+                const directorEmployee = allEmployees.find(emp =>
+                    emp.position.toLowerCase().includes('direktor') ||
+                    emp.position.toLowerCase().includes('director')
+                );
+                setDirector(directorEmployee);
+                setOriginalDirector(directorEmployee);
+
+                // Filter out director from employees list
+                const otherEmployees = allEmployees.filter(emp => emp.id !== directorEmployee?.id);
+                setEmployees(otherEmployees);
+                setOriginalEmployees(otherEmployees);
+            }
+        } catch (error) {
+            console.error('Error loading employees:', error);
+        }
     };
 
     const loadReferences = async () => {
         try {
             const res = await fetch(`${API}/references`);
             if (res.ok) setReferences(await res.json());
-        } catch { }
+        } catch (error) {
+            console.error('Error loading references:', error);
+        }
+    };
+
+    const loadAboutLogo = async () => {
+        try {
+            const res = await fetch(`${API}/AboutLogo`);
+            if (res.ok) {
+                const aboutLogos = await res.json();
+                if (aboutLogos.length > 0) {
+                    const aboutLogo = aboutLogos[0];
+                    setMainContent({
+                        heading: aboutLogo.heading,
+                        subtext: aboutLogo.subtext,
+                        imageUrl: aboutLogo.imageUrl || ''
+                    });
+                    setOriginalMainContent({
+                        heading: aboutLogo.heading,
+                        subtext: aboutLogo.subtext,
+                        imageUrl: aboutLogo.imageUrl || ''
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading about logo:', error);
+        }
     };
 
     useEffect(() => {
         loadEmployees();
         loadReferences();
+        loadAboutLogo();
     }, []);
 
     const removeEmployee = async (id) => {
-        if (!confirm('Silinsin?')) return;
-        const res = await fetch(`${API}/employees/${id}`, { method: 'DELETE' });
-        if (res.status === 204) loadEmployees();
+        const result = await Swal.fire({
+            title: 'Əminsiniz?',
+            text: 'Bu işçi silinəcək!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Bəli, sil!',
+            cancelButtonText: 'Ləğv et'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(`${API}/employees/${id}`, { method: 'DELETE' });
+                if (res.status === 204) {
+                    await loadEmployees();
+                    Swal.fire(
+                        'Silindi!',
+                        'İşçi uğurla silindi.',
+                        'success'
+                    );
+                }
+            } catch (error) {
+                console.error('Error removing employee:', error);
+                Swal.fire(
+                    'Xəta!',
+                    'İşçi silinərkən xəta baş verdi',
+                    'error'
+                );
+            }
+        }
     };
 
     const removeReference = async (id) => {
-        if (!confirm('Silinsin?')) return;
-        const res = await fetch(`${API}/references/${id}`, { method: 'DELETE' });
-        if (res.status === 204) loadReferences();
+        const result = await Swal.fire({
+            title: 'Əminsiniz?',
+            text: 'Bu referans silinəcək!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Bəli, sil!',
+            cancelButtonText: 'Ləğv et'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(`${API}/references/${id}`, { method: 'DELETE' });
+                if (res.status === 204) {
+                    await loadReferences();
+                    Swal.fire(
+                        'Silindi!',
+                        'Referans uğurla silindi.',
+                        'success'
+                    );
+                }
+            } catch (error) {
+                console.error('Error removing reference:', error);
+                Swal.fire(
+                    'Xəta!',
+                    'Referans silinərkən xəta baş verdi',
+                    'error'
+                );
+            }
+        }
     };
 
-    const handleAddEmployee = () => { setModalType('employee'); setShowModal(true); };
-    const handleAddReference = () => { setModalType('reference'); setShowModal(true); };
-    const handleCloseModal = () => { setShowModal(false); setModalType(''); setNewEmployee({ name: '', position: '', phone: '', email: '', linkedin: '' }); setNewReference({ name: '', imageUrl: '', alt: '' }); };
+    const updateDirector = async (updatedData) => {
+        if (!director) return;
 
-    const handleSave = async () => {
+        // Validate required fields
+        if (!updatedData.name || !updatedData.name.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Direktor adı məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.position || !updatedData.position.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Direktor vəzifəsi məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.phone || !updatedData.phone.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Telefon nömrəsi məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.email || !updatedData.email.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Email ünvanı məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.linkedin || !updatedData.linkedin.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'LinkedIn linki məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.imageUrl) {
+            Swal.fire(
+                'Xəta!',
+                'Şəkil məcburidir',
+                'error'
+            );
+            return;
+        }
+
         try {
-            if (modalType === 'employee') {
-                const res = await fetch(`${API}/employees`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newEmployee) });
-                if (!res.ok) throw new Error('Employee save failed');
+            const res = await fetch(`${API}/employees/${director.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            });
+            if (res.ok) {
                 await loadEmployees();
             } else {
-                const res = await fetch(`${API}/references`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newReference) });
+                throw new Error('Director update failed');
+            }
+        } catch (error) {
+            console.error('Error updating director:', error);
+            Swal.fire(
+                'Xəta!',
+                'Direktor məlumatları yenilənərkən xəta baş verdi',
+                'error'
+            );
+        }
+    };
+
+    const updateEmployee = async (id, updatedData) => {
+        // Validate required fields
+        if (!updatedData.name || !updatedData.name.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'İşçi adı məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.position || !updatedData.position.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'İşçi vəzifəsi məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.phone || !updatedData.phone.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Telefon nömrəsi məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.email || !updatedData.email.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Email ünvanı məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.linkedin || !updatedData.linkedin.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'LinkedIn linki məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!updatedData.imageUrl) {
+            Swal.fire(
+                'Xəta!',
+                'Şəkil məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API}/employees/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            });
+            if (res.ok) {
+                await loadEmployees();
+            } else {
+                throw new Error('Employee update failed');
+            }
+        } catch (error) {
+            console.error('Error updating employee:', error);
+            Swal.fire(
+                'Xəta!',
+                'İşçi məlumatları yenilənərkən xəta baş verdi',
+                'error'
+            );
+        }
+    };
+
+    const handleAddEmployee = () => {
+        setModalType('employee');
+        setShowModal(true);
+    };
+
+    const handleAddReference = () => {
+        setModalType('reference');
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setModalType('');
+        setNewEmployee({
+            name: '',
+            position: '',
+            phone: '',
+            email: '',
+            linkedin: '',
+            description: '',
+            imageUrl: ''
+        });
+        setNewReference({ name: '', imageUrl: '', alt: '' });
+    };
+
+    const handleSave = async () => {
+        if (modalType === 'employee') {
+            // Validate required fields for employee
+            if (!newEmployee.name || !newEmployee.name.trim()) {
+                Swal.fire(
+                    'Xəta!',
+                    'İşçi adı məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            if (!newEmployee.position || !newEmployee.position.trim()) {
+                Swal.fire(
+                    'Xəta!',
+                    'İşçi vəzifəsi məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            if (!newEmployee.phone || !newEmployee.phone.trim()) {
+                Swal.fire(
+                    'Xəta!',
+                    'Telefon nömrəsi məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            if (!newEmployee.email || !newEmployee.email.trim()) {
+                Swal.fire(
+                    'Xəta!',
+                    'Email ünvanı məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            if (!newEmployee.linkedin || !newEmployee.linkedin.trim()) {
+                Swal.fire(
+                    'Xəta!',
+                    'LinkedIn linki məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            if (!newEmployee.imageUrl) {
+                Swal.fire(
+                    'Xəta!',
+                    'Şəkil məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/employees`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newEmployee)
+                });
+                if (!res.ok) throw new Error('Employee save failed');
+                await loadEmployees();
+                handleCloseModal();
+                Swal.fire(
+                    'Uğurlu!',
+                    'İşçi uğurla əlavə edildi',
+                    'success'
+                );
+            } catch (e) {
+                Swal.fire(
+                    'Xəta!',
+                    'İşçi əlavə edilərkən xəta baş verdi',
+                    'error'
+                );
+            }
+        } else {
+            // Validate required fields for reference
+            if (!newReference.name || !newReference.name.trim()) {
+                Swal.fire(
+                    'Xəta!',
+                    'Referans adı məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            if (!newReference.imageUrl) {
+                Swal.fire(
+                    'Xəta!',
+                    'Şəkil məcburidir',
+                    'error'
+                );
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/references`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newReference)
+                });
                 if (!res.ok) throw new Error('Reference save failed');
                 await loadReferences();
+                handleCloseModal();
+                Swal.fire(
+                    'Uğurlu!',
+                    'Referans uğurla əlavə edildi',
+                    'success'
+                );
+            } catch (e) {
+                Swal.fire(
+                    'Xəta!',
+                    'Referans əlavə edilərkən xəta baş verdi',
+                    'error'
+                );
             }
-            handleCloseModal();
-        } catch (e) {
-            alert(e.message);
         }
+    };
+
+    const handleDirectorChange = (field, value) => {
+        if (director) {
+            const updatedDirector = { ...director, [field]: value };
+            setDirector(updatedDirector);
+        }
+    };
+
+    const handleEmployeeChange = (id, field, value) => {
+        const updatedEmployees = employees.map(emp =>
+            emp.id === id ? { ...emp, [field]: value } : emp
+        );
+        setEmployees(updatedEmployees);
+    };
+
+    const handleDirectorSave = async () => {
+        if (director) {
+            try {
+                await updateDirector(director);
+                setOriginalDirector(director);
+                Swal.fire(
+                    'Uğurlu!',
+                    'Direktor məlumatları uğurla yadda saxlanıldı',
+                    'success'
+                );
+            } catch (error) {
+                // Error is already handled in updateDirector function
+            }
+        }
+    };
+
+    const handleDirectorUndo = () => {
+        if (originalDirector) {
+            setDirector(originalDirector);
+        }
+    };
+
+    const handleEmployeeSave = async (id) => {
+        const employee = employees.find(emp => emp.id === id);
+        if (employee) {
+            try {
+                await updateEmployee(id, employee);
+                // Update original employees after successful save
+                const updatedOriginalEmployees = originalEmployees.map(emp =>
+                    emp.id === id ? employee : emp
+                );
+                setOriginalEmployees(updatedOriginalEmployees);
+                Swal.fire(
+                    'Uğurlu!',
+                    'İşçi məlumatları uğurla yadda saxlanıldı',
+                    'success'
+                );
+            } catch (error) {
+                // Error is already handled in updateEmployee function
+            }
+        }
+    };
+
+    const handleEmployeeUndo = (id) => {
+        const originalEmployee = originalEmployees.find(emp => emp.id === id);
+        if (originalEmployee) {
+            const updatedEmployees = employees.map(emp =>
+                emp.id === id ? originalEmployee : emp
+            );
+            setEmployees(updatedEmployees);
+        }
+    };
+
+    const hasDirectorChanges = () => {
+        if (!director || !originalDirector) return false;
+        return JSON.stringify(director) !== JSON.stringify(originalDirector);
+    };
+
+    const hasEmployeeChanges = (id) => {
+        const employee = employees.find(emp => emp.id === id);
+        const originalEmployee = originalEmployees.find(emp => emp.id === id);
+        if (!employee || !originalEmployee) return false;
+        return JSON.stringify(employee) !== JSON.stringify(originalEmployee);
+    };
+
+    // Add change tracking and save/undo functions for main content
+    const hasMainContentChanges = () => {
+        return JSON.stringify(mainContent) !== JSON.stringify(originalMainContent);
+    };
+
+    const handleMainContentChange = (field, value) => {
+        setMainContent(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleMainContentSave = async () => {
+        // Validate required fields
+        if (!mainContent.heading || !mainContent.heading.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Başlıq məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        if (!mainContent.subtext || !mainContent.subtext.trim()) {
+            Swal.fire(
+                'Xəta!',
+                'Alt mətn məcburidir',
+                'error'
+            );
+            return;
+        }
+
+        try {
+            // Since we only have one AboutLogo record, we'll update it
+            const res = await fetch(`${API}/AboutLogo/1`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: 1,
+                    heading: mainContent.heading,
+                    subtext: mainContent.subtext,
+                    imageUrl: mainContent.imageUrl
+                })
+            });
+
+            if (res.ok) {
+                setOriginalMainContent(mainContent);
+                Swal.fire(
+                    'Uğurlu!',
+                    'Məlumatlar uğurla yadda saxlanıldı',
+                    'success'
+                );
+            } else {
+                throw new Error('Failed to save main content');
+            }
+        } catch (error) {
+            console.error('Error saving main content:', error);
+            Swal.fire(
+                'Xəta!',
+                'Məlumatları yadda saxlayarkən xəta baş verdi',
+                'error'
+            );
+        }
+    };
+
+    const handleMainContentUndo = () => {
+        setMainContent(originalMainContent);
+    };
+
+    const handleBrowseImage = () => {
+        // Create a file input element
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // For now, we'll use a placeholder URL
+                // In a real app, you'd upload the file to a server
+                const imageUrl = URL.createObjectURL(file);
+                handleMainContentChange('imageUrl', imageUrl);
+            }
+        };
+        input.click();
+    };
+
+    const handleDeleteImage = () => {
+        handleMainContentChange('imageUrl', '');
+    };
+
+    const handleBrowseReferenceImage = () => {
+        // Create a file input element for references
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // For now, we'll use a placeholder URL
+                // In a real app, you'd upload the file to a server
+                const imageUrl = URL.createObjectURL(file);
+                setNewReference({ ...newReference, imageUrl: imageUrl });
+            }
+        };
+        input.click();
+    };
+
+    const handleBrowseEmployeeImage = () => {
+        // Create a file input element for employees
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // For now, we'll use a placeholder URL
+                // In a real app, you'd upload the file to a server
+                const imageUrl = URL.createObjectURL(file);
+                setNewEmployee({ ...newEmployee, imageUrl: imageUrl });
+            }
+        };
+        input.click();
     };
 
     return (
@@ -72,7 +677,6 @@ export default function AdminAbout() {
                 <div className="admin-about-topbar d-flex justify-content-between align-items-center mb-3">
                     <div className="slide-indicator">Slide 1</div>
                     <div className="top-actions d-flex gap-2">
-                        <button className="add-btn btn" onClick={handleAddEmployee}>+ Əlavə et</button>
                         <button className="delete-btn btn" aria-label="Delete">
                             <img src="/assets/admin-trash.png" alt="Delete" />
                         </button>
@@ -84,25 +688,41 @@ export default function AdminAbout() {
                     {/* Left Side - Text Fields */}
                     <div className="content-left col-12 col-lg-8 d-flex flex-column gap-3">
                         <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Heading</label>
+                            <label className="col-sm-3 col-form-label">Heading <span style={{ color: '#ff4d4f' }}>*</span></label>
                             <div className="col-sm-9">
                                 <input
                                     className="form-control"
                                     type="text"
                                     placeholder="Texnologiya ilə Gələcəyə Doğru"
-                                    defaultValue="Texnologiya ilə Gələcəyə Doğru"
+                                    value={mainContent.heading}
+                                    onChange={(e) => handleMainContentChange('heading', e.target.value)}
                                 />
                             </div>
                         </div>
 
                         <div className="form-group row g-3 align-items-start">
-                            <label className="col-sm-3 col-form-label">Subtext</label>
+                            <label className="col-sm-3 col-form-label">Subtext <span style={{ color: '#ff4d4f' }}>*</span></label>
                             <div className="col-sm-9">
                                 <textarea
                                     className="form-control"
                                     placeholder="Şirkət haqqında məlumat..."
-                                    defaultValue="Softech-A şirkəti 10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir."
+                                    value={mainContent.subtext}
+                                    onChange={(e) => handleMainContentChange('subtext', e.target.value)}
                                     rows={6}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group row g-3 align-items-start">
+                            <label className="col-sm-3 col-form-label">Image URL</label>
+                            <div className="col-sm-9">
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    placeholder="Şəkil linki..."
+                                    value={mainContent.imageUrl}
+                                    onChange={(e) => handleMainContentChange('imageUrl', e.target.value)}
+                                    disabled
                                 />
                             </div>
                         </div>
@@ -112,12 +732,19 @@ export default function AdminAbout() {
                     <div className="content-right col-12 col-lg-4">
                         <div className="image-upload-container d-flex flex-column gap-2">
                             <div className="image-placeholder position-relative">
+                                {mainContent.imageUrl && (
+                                    <img
+                                        src={mainContent.imageUrl}
+                                        alt="Main content"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                )}
                                 <div className="image-actions position-absolute">
-                                    <button className="action-btn delete-img" aria-label="Delete image">
+                                    <button className="action-btn delete-img" aria-label="Delete image" onClick={handleDeleteImage}>
                                         <img src="/assets/admin-trash.png" alt="Delete" />
                                     </button>
-                                    <button className="action-btn refresh-img" aria-label="Refresh image">
-                                        <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                    <button className="action-btn refresh-img" aria-label="Browse image" onClick={handleBrowseImage}>
+                                        <img src="/assets/admin-refresh.png" alt="Browse" />
                                     </button>
                                 </div>
                             </div>
@@ -126,6 +753,12 @@ export default function AdminAbout() {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Save/Undo buttons at bottom - always visible */}
+                <div className="d-flex gap-2 mt-3">
+                    <button className="btn btn-primary" disabled={!hasMainContentChanges()} onClick={handleMainContentSave}>Yadda saxla</button>
+                    <button className="btn btn-outline-light" disabled={!hasMainContentChanges()} onClick={handleMainContentUndo}>Undo</button>
                 </div>
             </div>
 
@@ -172,126 +805,13 @@ export default function AdminAbout() {
                 </div>
 
                 {/* Director Section - Always Present */}
-                <div className="team-member-section mb-4">
-
-                    <div className="row g-3 align-items-start">
-                        {/* Left Side - Form Fields */}
-                        <div className="col-12 col-lg-8">
-                            <div className="row g-3">
-                                <div className="col-12">
-                                    <div className="form-group row g-3 align-items-start">
-                                        <label className="col-sm-3 col-form-label">Heading</label>
-                                        <div className="col-sm-9">
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Cavid Nəbiyev"
-                                                defaultValue="Cavid Nəbiyev"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12">
-                                    <div className="form-group row g-3 align-items-start">
-                                        <label className="col-sm-3 col-form-label">Job name</label>
-                                        <div className="col-sm-9">
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Direktor"
-                                                defaultValue="Direktor"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12">
-                                    <div className="form-group row g-3 align-items-start">
-                                        <label className="col-sm-3 col-form-label">Subtext</label>
-                                        <div className="col-sm-9">
-                                            <textarea
-                                                className="form-control"
-                                                placeholder="Təsvir..."
-                                                defaultValue="Texnologiya sahəsində 15 ilə yaxın təcrübəyə malik olan Cavid Nəbiyev, Softech-A şirkətinin qurucusu və direktorudur. Onun rəhbərliyi ilə şirkət yüzlərlə ERP layihəsini uğurla həyata keçirmiş, həm kiçik, həm də böyük müəssisələrin rəqəmsallaşmasına töhfə vermişdir. Cavid bəyin əsas məqsədi - yerli bazarda beynəlxalq standartlara uyğun texnoloji həllər təqdim etmək və müştəri məmnuniyyətini daim ön planda tutmaqdır."
-                                                rows={4}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12">
-                                    <div className="row g-3">
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label className="form-label">Telefon</label>
-                                                <input
-                                                    className="form-control"
-                                                    type="tel"
-                                                    placeholder="0124444444"
-                                                    defaultValue="0124444444"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label className="form-label">Mail</label>
-                                                <input
-                                                    className="form-control"
-                                                    type="email"
-                                                    placeholder="namesurname@mail.ru"
-                                                    defaultValue="namesurname@mail.ru"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <div className="form-group">
-                                                <label className="form-label">Linkedin</label>
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    placeholder="0124444444"
-                                                    defaultValue="0124444444"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Side - Image Upload */}
-                        <div className="col-12 col-lg-4">
-                            <div className="image-upload-container d-flex flex-column gap-2">
-                                <div className="image-placeholder position-relative">
-                                    <div className="image-actions position-absolute">
-                                        <button className="action-btn delete-img" aria-label="Delete image">
-                                            <img src="/assets/admin-trash.png" alt="Delete" />
-                                        </button>
-                                        <button className="action-btn refresh-img" aria-label="Refresh image">
-                                            <img src="/assets/admin-refresh.png" alt="Refresh" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="image-info">
-                                    *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Employee Sections - Dynamic */}
-                {employees.map((employee) => (
-                    <div key={employee.id} className="team-member-section mb-4">
+                {director && (
+                    <div className="team-member-section mb-4">
+                        {/* Director Action Buttons */}
                         <div className="d-flex justify-content-end mb-3">
-                            <button
-                                className="delete-btn btn"
-                                onClick={() => removeEmployee(employee.id)}
-                                aria-label="Delete employee"
-                            >
-                                <img src="/assets/admin-trash.png" alt="Delete" />
-                            </button>
+                            <div className="d-flex gap-2">
+                                {/* Save/Undo buttons moved to bottom */}
+                            </div>
                         </div>
 
                         <div className="row g-3 align-items-start">
@@ -302,7 +822,154 @@ export default function AdminAbout() {
                                         <div className="form-group row g-3 align-items-start">
                                             <label className="col-sm-3 col-form-label">Heading</label>
                                             <div className="col-sm-9">
-                                                <input className="form-control" type="text" value={employee.name} readOnly />
+                                                <input
+                                                    className="form-control"
+                                                    type="text"
+                                                    placeholder="Əli Məmmədov"
+                                                    value={director.name || ''}
+                                                    onChange={(e) => handleDirectorChange('name', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <div className="form-group row g-3 align-items-start">
+                                            <label className="col-sm-3 col-form-label">Job name</label>
+                                            <div className="col-sm-9">
+                                                <input
+                                                    className="form-control"
+                                                    type="text"
+                                                    placeholder="Direktor"
+                                                    value={director.position || ''}
+                                                    onChange={(e) => handleDirectorChange('position', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <div className="form-group row g-3 align-items-start">
+                                            <label className="col-sm-3 col-form-label">Subtext</label>
+                                            <div className="col-sm-9">
+                                                <textarea
+                                                    className="form-control"
+                                                    placeholder="Təsvir..."
+                                                    value={director.description || ''}
+                                                    onChange={(e) => handleDirectorChange('description', e.target.value)}
+                                                    rows={4}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <div className="row g-3">
+                                            <div className="col-md-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">Telefon</label>
+                                                    <input
+                                                        className="form-control"
+                                                        type="tel"
+                                                        placeholder="+994 50 123 45 67"
+                                                        value={director.phone || ''}
+                                                        onChange={(e) => handleDirectorChange('phone', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">Mail</label>
+                                                    <input
+                                                        className="form-control"
+                                                        type="email"
+                                                        placeholder="ali.mammadov@webonly.az"
+                                                        value={director.email || ''}
+                                                        onChange={(e) => handleDirectorChange('email', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">LinkedIn</label>
+                                                    <input
+                                                        className="form-control"
+                                                        type="text"
+                                                        placeholder="linkedin.com/in/ali-mammadov"
+                                                        value={director.linkedin || ''}
+                                                        onChange={(e) => handleDirectorChange('linkedin', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Side - Image Upload */}
+                            <div className="col-12 col-lg-4">
+                                <div className="image-upload-container d-flex flex-column gap-2">
+                                    <div className="image-placeholder position-relative">
+                                        {director.imageUrl && (
+                                            <img
+                                                src={director.imageUrl}
+                                                alt={director.name}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
+                                        )}
+                                        <div className="image-actions position-absolute">
+                                            <button className="action-btn delete-img" aria-label="Delete image">
+                                                <img src="/assets/admin-trash.png" alt="Delete" />
+                                            </button>
+                                            <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="image-info">
+                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Save/Undo buttons at bottom - always visible */}
+                        <div className="d-flex gap-2 mt-3">
+                            <button className="btn btn-primary" disabled={!hasDirectorChanges()} onClick={handleDirectorSave}>Yadda saxla</button>
+                            <button className="btn btn-outline-light" disabled={!hasDirectorChanges()} onClick={handleDirectorUndo}>Undo</button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Employee Sections - Dynamic */}
+                {employees.map((employee) => (
+                    <div key={employee.id} className="team-member-section mb-4">
+                        <div className="d-flex justify-content-end mb-3">
+                            <div className="d-flex gap-2">
+                                <button
+                                    className="delete-btn btn btn-sm"
+                                    onClick={() => removeEmployee(employee.id)}
+                                    aria-label="Delete employee"
+                                >
+                                    <img src="/assets/admin-trash.png" alt="Delete" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="row g-3 align-items-start">
+                            {/* Left Side - Form Fields */}
+                            <div className="col-12 col-lg-8">
+                                <div className="row g-3">
+                                    <div className="col-12">
+                                        <div className="form-group row g-3 align-items-start">
+                                            <label className="col-sm-3 col-form-label">Heading</label>
+                                            <div className="col-sm-9">
+                                                <input
+                                                    className="form-control"
+                                                    type="text"
+                                                    value={employee.name || ''}
+                                                    onChange={(e) => handleEmployeeChange(employee.id, 'name', e.target.value)}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -310,12 +977,100 @@ export default function AdminAbout() {
                                         <div className="form-group row g-3 align-items-start">
                                             <label className="col-sm-3 col-form-label">Job name</label>
                                             <div className="col-sm-9">
-                                                <input className="form-control" type="text" value={employee.position} readOnly />
+                                                <input
+                                                    className="form-control"
+                                                    type="text"
+                                                    value={employee.position || ''}
+                                                    onChange={(e) => handleEmployeeChange(employee.id, 'position', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="form-group row g-3 align-items-start">
+                                            <label className="col-sm-3 col-form-label">Description</label>
+                                            <div className="col-sm-9">
+                                                <textarea
+                                                    className="form-control"
+                                                    placeholder="Təsvir..."
+                                                    value={employee.description || ''}
+                                                    onChange={(e) => handleEmployeeChange(employee.id, 'description', e.target.value)}
+                                                    rows={3}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="row g-3">
+                                            <div className="col-md-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">Telefon</label>
+                                                    <input
+                                                        className="form-control"
+                                                        type="tel"
+                                                        value={employee.phone || ''}
+                                                        onChange={(e) => handleEmployeeChange(employee.id, 'phone', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">Mail</label>
+                                                    <input
+                                                        className="form-control"
+                                                        type="email"
+                                                        value={employee.email || ''}
+                                                        onChange={(e) => handleEmployeeChange(employee.id, 'email', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-4">
+                                                <div className="form-group">
+                                                    <label className="form-label">LinkedIn</label>
+                                                    <input
+                                                        className="form-control"
+                                                        type="text"
+                                                        value={employee.linkedin || ''}
+                                                        onChange={(e) => handleEmployeeChange(employee.id, 'linkedin', e.target.value)}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Right Side - Image Display */}
+                            <div className="col-12 col-lg-4">
+                                <div className="image-upload-container d-flex flex-column gap-2">
+                                    <div className="image-placeholder position-relative">
+                                        {employee.imageUrl && (
+                                            <img
+                                                src={employee.imageUrl}
+                                                alt={employee.name}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
+                                        )}
+                                        <div className="image-actions position-absolute">
+                                            <button className="action-btn delete-img" aria-label="Delete image">
+                                                <img src="/assets/admin-trash.png" alt="Delete" />
+                                            </button>
+                                            <button className="action-btn refresh-img" aria-label="Refresh image">
+                                                <img src="/assets/admin-refresh.png" alt="Refresh" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="image-info">
+                                        *Yüklənən şəkil aaa x bbb ölçüsündə olmalıdır
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Save/Undo buttons at bottom - always visible */}
+                        <div className="d-flex gap-2 mt-3">
+                            <button className="btn btn-primary" disabled={!hasEmployeeChanges(employee.id)} onClick={() => handleEmployeeSave(employee.id)}>Yadda saxla</button>
+                            <button className="btn btn-outline-light" disabled={!hasEmployeeChanges(employee.id)} onClick={() => handleEmployeeUndo(employee.id)}>Undo</button>
                         </div>
                     </div>
                 ))}
@@ -341,24 +1096,111 @@ export default function AdminAbout() {
                             {modalType === 'employee' ? (
                                 <>
                                     <div className="form-group mb-3">
-                                        <label className="form-label">Ad Soyad</label>
-                                        <input className="form-control" placeholder="İşçi adını daxil edin" value={newEmployee.name} onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })} />
+                                        <label className="form-label">Ad Soyad <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                        <input
+                                            className="form-control"
+                                            placeholder="İşçi adını daxil edin"
+                                            value={newEmployee.name}
+                                            onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
+                                        />
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label className="form-label">Vəzifə</label>
-                                        <input className="form-control" placeholder="İşçi vəzifəsini daxil edin" value={newEmployee.position} onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })} />
+                                        <label className="form-label">Vəzifə <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                        <input
+                                            className="form-control"
+                                            placeholder="İşçi vəzifəsini daxil edin"
+                                            value={newEmployee.position}
+                                            onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Təsvir</label>
+                                        <textarea
+                                            className="form-control"
+                                            placeholder="İşçi haqqında təsvir..."
+                                            value={newEmployee.description}
+                                            onChange={(e) => setNewEmployee({ ...newEmployee, description: e.target.value })}
+                                            rows={3}
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Şəkil</label>
+                                        <div className="d-flex gap-2">
+                                            <input
+                                                className="form-control"
+                                                placeholder=""
+                                                value={newEmployee.imageUrl ? 'Şəkil seçildi' : ''}
+                                                disabled
+                                            />
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                                onClick={handleBrowseEmployeeImage}
+                                            >
+                                                Browse
+                                            </button>
+                                        </div>
                                     </div>
                                     <div className="row g-3">
-                                        <div className="col-md-4"><label className="form-label">Telefon</label><input className="form-control" value={newEmployee.phone} onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })} /></div>
-                                        <div className="col-md-4"><label className="form-label">Mail</label><input className="form-control" value={newEmployee.email} onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })} /></div>
-                                        <div className="col-md-4"><label className="form-label">LinkedIn</label><input className="form-control" value={newEmployee.linkedin} onChange={(e) => setNewEmployee({ ...newEmployee, linkedin: e.target.value })} /></div>
+                                        <div className="col-md-4">
+                                            <label className="form-label">Telefon <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                            <input
+                                                className="form-control"
+                                                placeholder="+994 50 123 45 67"
+                                                value={newEmployee.phone}
+                                                onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label">Mail <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                            <input
+                                                className="form-control"
+                                                placeholder="email@example.com"
+                                                value={newEmployee.email}
+                                                onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label">LinkedIn <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                            <input
+                                                className="form-control"
+                                                placeholder="linkedin.com/in/username"
+                                                value={newEmployee.linkedin}
+                                                onChange={(e) => setNewEmployee({ ...newEmployee, linkedin: e.target.value })}
+                                            />
+                                        </div>
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    <div className="form-group mb-3"><label className="form-label">Referans Adı</label><input className="form-control" value={newReference.name} onChange={(e) => setNewReference({ ...newReference, name: e.target.value })} /></div>
-                                    <div className="form-group mb-3"><label className="form-label">Şəkil URL</label><input className="form-control" value={newReference.imageUrl} onChange={(e) => setNewReference({ ...newReference, imageUrl: e.target.value })} /></div>
-                                    <div className="form-group mb-3"><label className="form-label">Alt</label><input className="form-control" value={newReference.alt} onChange={(e) => setNewReference({ ...newReference, alt: e.target.value })} /></div>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Referans Adı <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                        <input
+                                            className="form-control"
+                                            placeholder="Referans adını daxil edin"
+                                            value={newReference.name}
+                                            onChange={(e) => setNewReference({ ...newReference, name: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Şəkil <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-primary w-100"
+                                            onClick={handleBrowseReferenceImage}
+                                        >
+                                            Browse
+                                        </button>
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label className="form-label">Alt</label>
+                                        <input
+                                            className="form-control"
+                                            placeholder="Alt mətn..."
+                                            value={newReference.alt}
+                                            onChange={(e) => setNewReference({ ...newReference, alt: e.target.value })}
+                                        />
+                                    </div>
                                 </>
                             )}
                         </div>

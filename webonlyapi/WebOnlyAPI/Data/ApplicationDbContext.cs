@@ -13,6 +13,7 @@ namespace WebOnlyAPI.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Reference> References { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
         // Removed ProductSections
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
@@ -21,6 +22,7 @@ namespace WebOnlyAPI.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceArticle> ServiceArticles { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<AboutLogo> AboutLogos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,24 @@ namespace WebOnlyAPI.Data
                 entity.Property(e => e.Email).HasMaxLength(100);
                 entity.Property(e => e.LinkedIn).HasMaxLength(200);
                 entity.Property(e => e.ImageUrl).HasMaxLength(500);
+            });
+
+            // Configure User entity
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.PasswordHash).IsRequired();
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
+                entity.Property(e => e.Role).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.IsActive).IsRequired();
+                entity.Property(e => e.EmailVerificationToken).HasMaxLength(500);
+                entity.Property(e => e.PasswordResetToken).HasMaxLength(500);
+                
+                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasIndex(e => e.Username).IsUnique();
             });
 
             // Configure Reference entity
@@ -71,6 +91,9 @@ namespace WebOnlyAPI.Data
                 entity.Property(e => e.Section3Title).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.Section3Description).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.Section3MoreText).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.Section1Image).HasMaxLength(500);
+                entity.Property(e => e.Section2Image).HasMaxLength(500);
+                entity.Property(e => e.Section3Image).HasMaxLength(500);
                 entity.HasMany(p => p.Images)
                     .WithOne(pi => pi.Product!)
                     .HasForeignKey(pi => pi.ProductId)
@@ -167,6 +190,15 @@ namespace WebOnlyAPI.Data
                 entity.Property(e => e.ImageUrl).HasMaxLength(500);
                 entity.Property(e => e.OrderIndex).IsRequired();
                 entity.Property(e => e.IsActive).IsRequired();
+            });
+
+            // Configure AboutLogo entity
+            modelBuilder.Entity<AboutLogo>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Heading).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Subtext).IsRequired().HasMaxLength(2000);
+                entity.Property(e => e.ImageUrl).HasMaxLength(500);
             });
         }
     }

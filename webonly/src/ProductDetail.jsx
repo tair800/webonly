@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 // Fetch from API instead of static data
 import './ProductDetail.css';
@@ -17,6 +17,12 @@ function ProductDetail() {
     const secondSectionRef = useRef(null);
     const thirdSectionRef = useRef(null);
 
+    const resolveUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/uploads/')) return `http://localhost:5098${url}`;
+        return url;
+    };
+
     // Fetch product detail
     useEffect(() => {
         const fetchDetail = async () => {
@@ -25,19 +31,26 @@ function ProductDetail() {
                 const res = await fetch(`http://localhost:5098/api/products/${id}`);
                 if (!res.ok) throw new Error('Failed to load product');
                 const data = await res.json();
+
+                console.log('API Response:', data);
+
                 // Transform API model to UI model expected by this page
-                const sectionImages = (data.images || []).sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0)).map(i => i.imageUrl);
                 const sections = [];
-                if (data.section1Title || data.section1Description || data.section1MoreText) sections.push({ title: data.section1Title || '', description: data.section1Description || '', moreText: data.section1MoreText || null });
-                if (data.section2Title || data.section2Description || data.section2MoreText) sections.push({ title: data.section2Title || '', description: data.section2Description || '', moreText: data.section2MoreText || null });
-                if (data.section3Title || data.section3Description || data.section3MoreText) sections.push({ title: data.section3Title || '', description: data.section3Description || '', moreText: data.section3MoreText || null });
+                if (data.section1Title || data.section1Description || data.section1MoreText || data.section1Image) sections.push({ title: data.section1Title || '', description: data.section1Description || '', moreText: data.section1MoreText || null, image: data.section1Image });
+                if (data.section2Title || data.section2Description || data.section2MoreText || data.section2Image) sections.push({ title: data.section2Title || '', description: data.section2Description || '', moreText: data.section2MoreText || null, image: data.section2Image });
+                if (data.section3Title || data.section3Description || data.section3MoreText || data.section3Image) sections.push({ title: data.section3Title || '', description: data.section3Description || '', moreText: data.section3MoreText || null, image: data.section3Image });
+
+                console.log('Transformed sections:', sections);
+                console.log('Section 1 image:', data.section1Image);
+                console.log('Section 2 image:', data.section2Image);
+                console.log('Section 3 image:', data.section3Image);
+
                 setProduct({
                     id: data.id,
                     name: data.name,
                     description: data.detailDescription || data.description || '',
-                    mainImage: data.mainImage || data.imageUrl,
-                    sections,
-                    sectionImages
+                    mainImage: data.imageUrl,
+                    sections
                 });
             } catch (e) {
                 setError(e.message);
@@ -50,11 +63,11 @@ function ProductDetail() {
 
     // removed early returns here to avoid breaking hook order
 
-    // Create dynamic sections based on the number of images (stable reference)
-    const sections = React.useMemo(() => {
+    // Create dynamic sections based on the number of sections (stable reference)
+    const sections = useMemo(() => {
         const s = [{ label: 'Start', value: 0 }];
-        const imgs = (product && Array.isArray(product.sectionImages)) ? product.sectionImages : [];
-        for (let i = 0; i < imgs.length; i += 1) {
+        const sectionCount = (product && Array.isArray(product.sections)) ? product.sections.length : 0;
+        for (let i = 0; i < sectionCount; i += 1) {
             s.push({ label: String(i + 1).padStart(2, '0'), value: i + 1 });
         }
         return s;
@@ -167,8 +180,8 @@ function ProductDetail() {
         // Observe all sections including main section
         const sectionRefs = [mainSectionRef.current];
 
-        // Add section refs based on the number of images
-        const count = product?.sectionImages?.length || 0;
+        // Add section refs based on the number of sections
+        const count = product?.sections?.length || 0;
         if (count >= 1) sectionRefs.push(firstSectionRef.current);
         if (count >= 2) sectionRefs.push(secondSectionRef.current);
         if (count >= 3) sectionRefs.push(thirdSectionRef.current);
@@ -219,7 +232,8 @@ function ProductDetail() {
                                 <div className="scroller-indicator" style={{ top: `${scrollPosition}px` }} onMouseDown={handleMouseDown} />
                             </div>
                         </div>
-                        <img src={product.mainImage} alt="Product" className="product-detail-image" />
+                        <img src={resolveUrl(product.mainImage)} alt="Product" className="product-detail-image" />
+
                     </div>
                     <div className="main-right">
                         <h1 className="product-detail-title">{product.name}</h1>
@@ -232,8 +246,10 @@ function ProductDetail() {
                     </div>
                 </div>
 
+
+
                 {/* Section 1 */}
-                {product.sectionImages?.length >= 1 && (
+                {product.sections?.length >= 1 && (
                     <div className="first-section" ref={firstSectionRef}>
                         <div className="first-left">
                             <div className="first-content-container">
@@ -259,16 +275,16 @@ function ProductDetail() {
                             </div>
                         </div>
                         <div className="first-right">
-                            <img src={product.sectionImages[0]} alt="Section 1" className="product-detail-image" />
+                            {product.sections[0].image && <img src={resolveUrl(product.sections[0].image)} alt="Section 1" className="product-detail-image" />}
                         </div>
                     </div>
                 )}
 
                 {/* Section 2 */}
-                {product.sectionImages?.length >= 2 && (
+                {product.sections?.length >= 2 && (
                     <div className="second-section" ref={secondSectionRef}>
                         <div className="second-left">
-                            <img src={product.sectionImages[1]} alt="Section 2" className="product-detail-image" />
+                            {product.sections[1].image && <img src={resolveUrl(product.sections[1].image)} alt="Section 2" className="product-detail-image" />}
                         </div>
                         <div className="second-right">
                             <div className="second-content-container">
@@ -295,7 +311,7 @@ function ProductDetail() {
                 )}
 
                 {/* Section 3 */}
-                {product.sectionImages?.length >= 3 && (
+                {product.sections?.length >= 3 && (
                     <div className="third-section" ref={thirdSectionRef}>
                         <div className="third-left">
                             <div className="third-content-container">
@@ -320,7 +336,7 @@ function ProductDetail() {
                             </div>
                         </div>
                         <div className="third-right">
-                            <img src={product.sectionImages[2]} alt="Section 3" className="product-detail-image" />
+                            {product.sections[2].image && <img src={resolveUrl(product.sections[2].image)} alt="Section 3" className="product-detail-image" />}
                         </div>
                     </div>
                 )}

@@ -200,11 +200,45 @@
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(-20px) scale(0.95);
+        transform: translateY(-20px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
+}
+
+/* Pagination Styles */
+.pagination {
+    margin: 0;
+    gap: 5px;
+}
+
+.page-link {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(90deg, #5c67ff 0%, #ad51ff 100%);
+    border-color: #5c67ff;
+    color: #ffffff;
+}
+
+.page-item.disabled .page-link {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
 }

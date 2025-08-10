@@ -39,7 +39,10 @@ namespace WebOnlyAPI.Services
 
         public async Task<EquipmentResponseDto?> GetByIdAsync(int id)
         {
-            var e = await _context.Equipment.FindAsync(id);
+            var e = await _context.Equipment
+                .Include(eq => eq.FeaturesList.OrderBy(f => f.OrderIndex))
+                .Include(eq => eq.Specifications.OrderBy(s => s.OrderIndex))
+                .FirstOrDefaultAsync(eq => eq.Id == id);
             return e == null ? null : MapToResponse(e);
         }
 
@@ -94,7 +97,20 @@ namespace WebOnlyAPI.Services
                 Description = e.Description,
                 ImageUrl = e.ImageUrl,
                 CreatedAt = e.CreatedAt,
-                UpdatedAt = e.UpdatedAt
+                UpdatedAt = e.UpdatedAt,
+                Features = e.FeaturesList.Select(f => new EquipmentFeatureDto
+                {
+                    Id = f.Id,
+                    Feature = f.Feature,
+                    OrderIndex = f.OrderIndex
+                }).ToList(),
+                Specifications = e.Specifications.Select(s => new EquipmentSpecificationDto
+                {
+                    Id = s.Id,
+                    Key = s.Key,
+                    Value = s.Value,
+                    OrderIndex = s.OrderIndex
+                }).ToList()
             };
         }
     }

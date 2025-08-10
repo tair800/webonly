@@ -294,7 +294,10 @@
   padding: 4rem 19rem 3rem 8rem;
   background: linear-gradient(83.26deg, rgba(70, 126, 254, 0.1) 23.32%, rgba(23, 219, 252, 0.1) 81.97%);
   position: relative;
-  transform: translateX(-120px);
+  /* Remove negative transform that might hide the section */
+  transform: none;
+  border-radius: 20px;
+  border: 1px solid rgba(23, 219, 252, 0.2);
 }
 
 .about-description-section::before {

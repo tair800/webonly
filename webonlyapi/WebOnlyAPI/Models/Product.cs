@@ -39,14 +39,20 @@ namespace WebOnlyAPI.Models
         public string? Section1Title { get; set; }
         public string? Section1Description { get; set; }
         public string? Section1MoreText { get; set; }
+        [StringLength(500)]
+        public string? Section1Image { get; set; }
 
         public string? Section2Title { get; set; }
         public string? Section2Description { get; set; }
         public string? Section2MoreText { get; set; }
+        [StringLength(500)]
+        public string? Section2Image { get; set; }
 
         public string? Section3Title { get; set; }
         public string? Section3Description { get; set; }
         public string? Section3MoreText { get; set; }
+        [StringLength(500)]
+        public string? Section3Image { get; set; }
 
         // Navigation properties
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();

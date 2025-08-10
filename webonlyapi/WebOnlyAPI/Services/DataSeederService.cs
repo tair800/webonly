@@ -17,9 +17,8 @@ namespace WebOnlyAPI.Services
             await SeedProductsAsync();
             await SeedServicesAsync();
             await SeedEquipmentAsync();
-            await SeedReferencesAsync();
             await SeedEmployeesAsync();
-            await SeedSlidersAsync();
+            await SeedAboutLogosAsync();
             await _context.SaveChangesAsync();
         }
 
@@ -35,8 +34,8 @@ namespace WebOnlyAPI.Services
                     Icon = "/assets/market-icon.png",
                     Alt = "Market",
                     Path = "/market",
-                    MainImage = "/assets/market1.png",
-                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    MainImage = "/uploads/products/1/20250810124244246_market1.png",
+                    SectionImages = new []{ "/uploads/products/1/20250810131655495_market2.png", "/uploads/products/1/20250810131703800_market3.png", "/uploads/products/1/20250810131710713_market4.png" },
                     Description = "Market Modulunuz Mallarınız Anbarınıza Daxil Olduğu Andan Etibarən Satılana Qədər Bütün Hərəkətlərini Təqib Edə, Mal Əsasında Qazanc Və Ya Zərərinizin Hesabatını Hazırlaya Bilər.",
                     Sections = new (string title, string? description, string? moreText)[]
                     {
@@ -51,8 +50,8 @@ namespace WebOnlyAPI.Services
                     Icon = "/assets/textile.png",
                     Alt = "Tekstil",
                     Path = "/textile",
-                    MainImage = "/assets/market1.png",
-                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png" },
+                    MainImage = "/uploads/products/1/20250810124244246_market1.png",
+                    SectionImages = new []{ "/uploads/products/1/20250810131655495_market2.png", "/uploads/products/1/20250810131703800_market3.png" },
                     Description = "Tekstil Modulunuz Pambıqdan Başlayaraq Hazır Məhsula Qədər Bütün İstehsal Proseslərini İdarə Edə, Material Əsasında Xərc Və Qazanc Hesabatlarını Hazırlaya Bilər.",
                     Sections = new (string title, string? description, string? moreText)[]
                     {
@@ -67,8 +66,8 @@ namespace WebOnlyAPI.Services
                     Icon = "/assets/mobile.png",
                     Alt = "Mobil",
                     Path = "/mobile",
-                    MainImage = "/assets/market1.png",
-                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    MainImage = "/uploads/products/1/20250810124244246_market1.png",
+                    SectionImages = new []{ "/uploads/products/1/20250810131655495_market2.png", "/uploads/products/1/20250810131703800_market3.png", "/uploads/products/1/20250810131710713_market4.png" },
                     Description = "Mobil Satış Modulunuz Satıcılarınızın Hər Yerdə Satış Əməliyyatlarını Həyata Keçirməsinə İmkan Verə, Real Vaxtda Mərkəzi Sistemlə Sinkronlaşdıra Bilər.",
                     Sections = new (string title, string? description, string? moreText)[]
                     {
@@ -83,8 +82,8 @@ namespace WebOnlyAPI.Services
                     Icon = "/assets/medicine.png",
                     Alt = "Aptek",
                     Path = "/medicine",
-                    MainImage = "/assets/market1.png",
-                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    MainImage = "/uploads/products/1/20250810124244246_market1.png",
+                    SectionImages = new []{ "/uploads/products/1/20250810131655495_market2.png", "/uploads/products/1/20250810131703800_market3.png", "/uploads/products/1/20250810131710713_market4.png" },
                     Description = "Aptek İdarəetmə Sistemi Dərmanların Satışından Tutmuş Reçetə İdarəetməsinə Qədər Bütün Prosesləri Avtomatlaşdıraraq Təhlükəsiz və Səmərəli İdarəetmə Təmin Edir.",
                     Sections = Array.Empty<(string,string?,string?)>()
                 },
@@ -94,8 +93,8 @@ namespace WebOnlyAPI.Services
                     Icon = "/assets/factory.png",
                     Alt = "Fabrika",
                     Path = "/factory",
-                    MainImage = "/assets/market1.png",
-                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    MainImage = "/uploads/products/1/20250810124244246_market1.png",
+                    SectionImages = new []{ "/uploads/products/1/20250810131655495_market2.png", "/uploads/products/1/20250810131703800_market3.png", "/uploads/products/1/20250810131710713_market4.png" },
                     Description = "Ticarət və Anbar Modulunuz Böyük Həcmdə Mal Dövriyyəsinin İdarə Olunması...",
                     Sections = Array.Empty<(string,string?,string?)>()
                 },
@@ -105,8 +104,8 @@ namespace WebOnlyAPI.Services
                     Icon = "/assets/credit.png",
                     Alt = "Kredit",
                     Path = "/credit",
-                    MainImage = "/assets/market1.png",
-                    SectionImages = new []{ "/assets/market2.png", "/assets/market3.png", "/assets/market4.png" },
+                    MainImage = "/uploads/products/1/20250810124244246_market1.png",
+                    SectionImages = new []{ "/uploads/products/1/20250810131655495_market2.png", "/uploads/products/1/20250810131703800_market3.png", "/uploads/products/1/20250810131710713_market4.png" },
                     Description = "Kredit və Lombard Modulunuz Müxtəlif Növ Kredit Xidmətlərinin Təqdim Edilməsi...",
                     Sections = Array.Empty<(string,string?,string?)>()
                 }
@@ -136,19 +135,7 @@ namespace WebOnlyAPI.Services
                 // Add images as ProductImages with incrementing order
                 var order = 0;
                 var allImages = new List<string>();
-                if (!string.IsNullOrWhiteSpace(d.MainImage)) allImages.Add(d.MainImage);
-                allImages.AddRange(d.SectionImages);
-                foreach (var img in allImages.Distinct())
-                {
-                    _context.ProductImages.Add(new ProductImage
-                    {
-                        ProductId = p.Id,
-                        ImageUrl = img,
-                        Alt = p.Alt,
-                        OrderIndex = order++
-                    });
-                }
-                await _context.SaveChangesAsync();
+                // ProductImages DbSet removed - skipping image seeding
             }
         }
 
@@ -182,19 +169,7 @@ namespace WebOnlyAPI.Services
                 _context.Services.Add(entity);
                 await _context.SaveChangesAsync();
 
-                var order = 0;
-                foreach (var a in s.Articles)
-                {
-                    _context.ServiceArticles.Add(new ServiceArticle
-                    {
-                        ServiceId = entity.Id,
-                        Number = a.num,
-                        Title = a.title,
-                        Description = a.desc,
-                        OrderIndex = order++
-                    });
-                }
-                await _context.SaveChangesAsync();
+                // ServiceArticles DbSet removed - skipping article seeding
             }
         }
 
@@ -209,7 +184,7 @@ namespace WebOnlyAPI.Services
                     Version = "J-1900",
                     Core = "İntel Core I5",
                     Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal. İnteqrasiya olunmuş kart və RFID oxuyucu ilə təhlükəsiz ödəniş imkanı yaradır.",
-                    Img = "/assets/equipment1.png",
+                    Img = "/uploads/equipment/equipment1.png",
                     Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
                     Specs = new Dictionary<string,string?>
                     {
@@ -233,7 +208,7 @@ namespace WebOnlyAPI.Services
                     Version = "J-1900",
                     Core = "İntel Core I5",
                     Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal. İnteqrasiya olunmuş kart və RFID oxuyucu ilə təhlükəsiz ödəniş imkanı yaradır.",
-                    Img = "/assets/equipment1.png",
+                    Img = "/uploads/equipment/equipment1.png",
                     Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
                     Specs = new Dictionary<string,string?>
                     {
@@ -249,7 +224,7 @@ namespace WebOnlyAPI.Services
                     Version = "J-1900",
                     Core = "İntel Core I5",
                     Description = "Satış və xidmət proseslərini sürətləndirən, stabil və etibarlı POS terminal. İnteqrasiya olunmuş kart və RFID oxuyucu ilə təhlükəsiz ödəniş imkanı yaradır.",
-                    Img = "/assets/equipment1.png",
+                    Img = "/uploads/equipment/equipment1.png",
                     Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
                     Specs = new Dictionary<string,string?>()
                 }
@@ -294,36 +269,23 @@ namespace WebOnlyAPI.Services
             }
         }
 
-        private async Task SeedReferencesAsync()
-        {
-            if (_context.References.Any()) return;
-            // Based on webonly/src/data/logoData.js (subset or all)
-            var refs = new List<Reference>();
-            for (int i = 1; i <= 25; i++)
-            {
-                refs.Add(new Reference
-                {
-                    Name = $"Logo {i}",
-                    ImageUrl = $"/assets/logo{i}.png",
-                    Alt = $"Company Logo {i}"
-                });
-            }
-            await _context.References.AddRangeAsync(refs);
-        }
+        // References DbSet removed - skipping reference seeding
 
         private async Task SeedEmployeesAsync()
         {
             if (_context.Employees.Any()) return;
-            // Based on webonly/src/data/teamData.js
+            
+            // Use C# strings with proper Unicode encoding - EF Core will handle the NCHAR conversion
             var emps = new[]
             {
-                new { Name = "Name Surname", Position = "Baş proqram tərtibatçısı", Image = "/assets/employee.png", Phone = "+994 50 123 45 67", Email = "developer@company.com", LinkedIn = "linkedin.com/in/developer" },
-                new { Name = "Name Surname", Position = "Layihə koordinatoru", Image = "/assets/employee.png", Phone = "+994 50 123 45 68", Email = "coordinator@company.com", LinkedIn = "linkedin.com/in/coordinator" },
-                new { Name = "Name Surname", Position = "Baş proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 69", Email = "programmer@company.com", LinkedIn = "linkedin.com/in/programmer" },
-                new { Name = "Name Surname", Position = "IT mütəxəssisi", Image = "/assets/employee.png", Phone = "+994 50 123 45 70", Email = "specialist@company.com", LinkedIn = "linkedin.com/in/specialist" },
-                new { Name = "Name Surname", Position = "Layihələr üzrə şöbə rəhbəri", Image = "/assets/employee.png", Phone = "+994 50 123 45 71", Email = "manager@company.com", LinkedIn = "linkedin.com/in/manager" },
-                new { Name = "Name Surname", Position = "Layihə meneceri", Image = "/assets/employee.png", Phone = "+994 50 123 45 72", Email = "project-manager@company.com", LinkedIn = "linkedin.com/in/project-manager" },
-                new { Name = "Name Surname", Position = "SQL Server üzrə proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 73", Email = "sql-developer@company.com", LinkedIn = "linkedin.com/in/sql-developer" },
+                new { Name = "Əli Məmmədov", Position = "Direktor", Image = "/assets/director.png", Phone = "+994 50 123 45 67", Email = "ali.mammadov@webonly.az", LinkedIn = "linkedin.com/in/ali-mammadov", Description = "10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir." },
+                new { Name = "Name Surname", Position = "Baş proqram tərtibatçısı", Image = "/assets/employee.png", Phone = "+994 50 123 45 68", Email = "developer@company.com", LinkedIn = "linkedin.com/in/developer", Description = (string?)null },
+                new { Name = "Name Surname", Position = "Layihə koordinatoru", Image = "/assets/employee.png", Phone = "+994 50 123 45 69", Email = "coordinator@company.com", LinkedIn = "linkedin.com/in/coordinator", Description = (string?)null },
+                new { Name = "Name Surname", Position = "Baş proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 70", Email = "programmer@company.com", LinkedIn = "linkedin.com/in/programmer", Description = (string?)null },
+                new { Name = "Name Surname", Position = "IT mütəxəssisi", Image = "/assets/employee.png", Phone = "+994 50 123 45 71", Email = "specialist@company.com", LinkedIn = "linkedin.com/in/specialist", Description = (string?)null },
+                new { Name = "Name Surname", Position = "Layihələr üzrə şöbə rəhbəri", Image = "/assets/employee.png", Phone = "+994 50 123 45 72", Email = "manager@company.com", LinkedIn = "linkedin.com/in/manager", Description = (string?)null },
+                new { Name = "Name Surname", Position = "Layihə meneceri", Image = "/assets/employee.png", Phone = "+994 50 123 45 73", Email = "project-manager@company.com", LinkedIn = "linkedin.com/in/project-manager", Description = (string?)null },
+                new { Name = "Name Surname", Position = "SQL Server üzrə proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 74", Email = "sql-developer@company.com", LinkedIn = "linkedin.com/in/sql-developer", Description = (string?)null },
             };
             foreach (var e in emps)
             {
@@ -331,30 +293,30 @@ namespace WebOnlyAPI.Services
                 {
                     Name = e.Name,
                     Position = e.Position,
+                    Description = e.Description,
                     Phone = e.Phone,
                     Email = e.Email,
                     LinkedIn = e.LinkedIn,
-                    ImageUrl = e.Image
+                    ImageUrl = e.Image  // Fixed: Image -> ImageUrl
                 });
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task SeedSlidersAsync()
+        // Sliders DbSet removed - skipping slider seeding
+
+        private async Task SeedAboutLogosAsync()
         {
-            if (_context.Sliders.Any()) return;
-            var sliders = new List<Slider>();
-            for (var i = 1; i <= 6; i++)
+            if (_context.AboutLogos.Any()) return;
+            
+            var aboutLogo = new AboutLogo
             {
-                sliders.Add(new Slider
-                {
-                    Name = $"slider{i}",
-                    ImageUrl = $"/assets/slider{i}.png",
-                    OrderIndex = i,
-                    IsActive = true
-                });
-            }
-            await _context.Sliders.AddRangeAsync(sliders);
+                Heading = "Texnologiya ilə Gələcəyə Doğru",
+                Subtext = "Softech-A şirkəti 10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir.",
+                ImageUrl = "/assets/logo-only.png"
+            };
+            
+            await _context.AboutLogos.AddAsync(aboutLogo);
         }
     }
 }
