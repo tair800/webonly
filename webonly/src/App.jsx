@@ -14,6 +14,11 @@ import Factory from './Factory';
 import ProductDetail from './ProductDetail';
 import TestPage from './TestPage';
 import AdminPanel from './AdminPanel';
+import Login from './Login';
+import Register from './Register';
+import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
+import ProtectedRoute from './components/ProtectedRoute';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -21,8 +26,24 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Admin Panel Routes - No Header/Footer */}
-          <Route path="/admin-panel/*" element={<AdminPanel />} />
+          {/* Admin Panel Routes - Protected, No Header/Footer */}
+          <Route path="/admin-panel/*" element={
+            <ProtectedRoute requireAdmin={false}>
+              <AdminPanel />
+            </ProtectedRoute>
+          } />
+
+          {/* Login Route - No Header/Footer */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Register Route - No Header/Footer */}
+          <Route path="/register" element={<Register />} />
+
+          {/* Forgot Password Route - No Header/Footer */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* Reset Password Route - No Header/Footer */}
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Home Route - With Header Only */}
           <Route path="/" element={

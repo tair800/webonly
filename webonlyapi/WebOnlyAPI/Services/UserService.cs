@@ -11,12 +11,14 @@ namespace WebOnlyAPI.Services
         private readonly ApplicationDbContext _context;
         private readonly JwtService _jwtService;
         private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public UserService(ApplicationDbContext context, JwtService jwtService, EmailService emailService)
+        public UserService(ApplicationDbContext context, JwtService jwtService, EmailService emailService, IConfiguration configuration)
         {
             _context = context;
             _jwtService = jwtService;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<UserResponseDto?> RegisterAsync(RegisterUserDto registerDto)
@@ -54,7 +56,8 @@ namespace WebOnlyAPI.Services
             await _context.SaveChangesAsync();
 
             // Send verification email
-            var verificationUrl = "http://localhost:5173/verify-email"; // Frontend URL
+            var frontendUrl = _configuration["Frontend:BaseUrl"] ?? "http://localhost:5173";
+            var verificationUrl = $"{frontendUrl}/verify-email";
             await _emailService.SendEmailVerificationAsync(user.Email, verificationToken, verificationUrl);
 
             // Generate JWT token
@@ -104,7 +107,8 @@ namespace WebOnlyAPI.Services
             await _context.SaveChangesAsync();
 
             // Send password reset email
-            var resetUrl = "http://localhost:5173/reset-password"; // Frontend URL
+            var frontendUrl = _configuration["Frontend:BaseUrl"] ?? "http://localhost:5173";
+            var resetUrl = $"{frontendUrl}/reset-password";
             return await _emailService.SendPasswordResetEmailAsync(user.Email, resetToken, resetUrl);
         }
 

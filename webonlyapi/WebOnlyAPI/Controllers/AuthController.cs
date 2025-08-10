@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using WebOnlyAPI.DTOs;
 using WebOnlyAPI.Services;
 
@@ -112,6 +114,7 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpPost("change-password")]
+        [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             if (!ModelState.IsValid)
@@ -119,7 +122,6 @@ namespace WebOnlyAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Get user ID from JWT token (you'll need to implement JWT middleware)
             var userId = GetUserIdFromToken();
 
             if (userId == null)
@@ -138,6 +140,7 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpGet("profile")]
+        [Authorize]
         public async Task<IActionResult> GetProfile()
         {
             var userId = GetUserIdFromToken();
@@ -158,6 +161,7 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpPut("profile")]
+        [Authorize]
         public async Task<IActionResult> UpdateProfile([FromBody] UserProfileDto profileDto)
         {
             if (!ModelState.IsValid)
@@ -182,11 +186,45 @@ namespace WebOnlyAPI.Controllers
             return BadRequest(new { message = "Email or username already taken" });
         }
 
+        [HttpPost("logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            // In a stateless JWT system, logout is typically handled on the client side
+            // by removing the token. However, you could implement a token blacklist if needed.
+            return Ok(new { message = "Logout successful" });
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var userId = GetUserIdFromToken();
+
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "User not authenticated" });
+            }
+
+            var profile = await _userService.GetUserProfileAsync(userId.Value);
+
+            if (profile == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            return Ok(profile);
+        }
+
         private int? GetUserIdFromToken()
         {
-            // This is a placeholder - you'll need to implement JWT middleware
-            // to extract the user ID from the JWT token
-            // For now, return null to indicate no authentication
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                return userId;
+            }
+            
             return null;
         }
     }

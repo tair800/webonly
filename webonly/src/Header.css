@@ -87,6 +87,99 @@
     color: #19e6ff;
 }
 
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login-btn {
+    background: linear-gradient(135deg, #17DBFC, #467EFE);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(23, 219, 252, 0.3);
+    color: #ffffff;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.register-btn {
+    background: transparent;
+    color: #17DBFC;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid #17DBFC;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.register-btn:hover {
+    background: #17DBFC;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(23, 219, 252, 0.3);
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-greeting {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+}
+
 .navbar-lang {
     display: flex;
     align-items: center;
@@ -188,6 +281,11 @@
     .navbar-links li a {
         font-size: 0.9rem;
     }
+
+    .login-btn {
+        padding: 0.7rem 1.4rem;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 900px) {
@@ -230,6 +328,17 @@
         align-self: flex-end;
         margin-top: 0.5rem;
     }
+
+    .navbar-right {
+        align-self: flex-end;
+        margin-top: 0.5rem;
+    }
+
+    .login-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        min-width: 70px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -270,6 +379,17 @@
     .navbar-lang {
         align-self: flex-end;
         margin-top: 0.5rem;
+    }
+
+    .navbar-right {
+        align-self: flex-end;
+        margin-top: 0.5rem;
+    }
+
+    .login-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        min-width: 60px;
     }
 }
 

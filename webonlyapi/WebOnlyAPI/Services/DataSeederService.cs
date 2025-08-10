@@ -19,6 +19,7 @@ namespace WebOnlyAPI.Services
             await SeedEquipmentAsync();
             await SeedEmployeesAsync();
             await SeedAboutLogosAsync();
+            await SeedAdminUserAsync();
             await _context.SaveChangesAsync();
         }
 
@@ -317,6 +318,26 @@ namespace WebOnlyAPI.Services
             };
             
             await _context.AboutLogos.AddAsync(aboutLogo);
+        }
+
+        private async Task SeedAdminUserAsync()
+        {
+            if (_context.Users.Any()) return;
+
+            var adminUser = new User
+            {
+                Email = "admin@webonly.com",
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+                FirstName = "Admin",
+                LastName = "User",
+                Role = "Admin",
+                IsEmailVerified = true,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Users.Add(adminUser);
         }
     }
 }
