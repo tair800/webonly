@@ -1,6 +1,7 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
+import AdminDashboard from './AdminDashboard';
 import AdminAbout from './AdminAbout';
 import AdminProducts from './AdminProducts';
 import AdminEquipment from './AdminEquipment';
@@ -8,6 +9,22 @@ import AdminServices from './AdminServices';
 import './AdminPanel.css';
 
 function AdminPanel() {
+    const location = useLocation();
+
+    useEffect(() => {
+        // Add class to body to override conflicting CSS
+        document.body.classList.add('admin-panel-body');
+
+        // Cleanup when component unmounts
+        return () => {
+            document.body.classList.remove('admin-panel-body');
+        };
+    }, []);
+
+    useEffect(() => {
+        // Component logic here
+    }, [location.pathname]);
+
     return (
         <div className="admin-panel-container" style={{ display: 'flex' }}>
             <div style={{ flex: '0 0 280px' }}>
@@ -15,11 +32,12 @@ function AdminPanel() {
             </div>
             <div style={{ flex: 1 }}>
                 <Routes>
-                    <Route path="/" element={<div />} />
+                    <Route path="/" element={<AdminDashboard />} />
                     <Route path="/about" element={<AdminAbout />} />
                     <Route path="/products" element={<AdminProducts />} />
                     <Route path="/equipment" element={<AdminEquipment />} />
                     <Route path="/services" element={<AdminServices />} />
+                    <Route path="/settings" element={<div>Settings Page</div>} />
                     <Route path="/test" element={<div />} />
                 </Routes>
             </div>

@@ -28,5 +28,7 @@ namespace WebOnlyAPI.Models
         // Navigation properties
         public ICollection<EquipmentFeature> FeaturesList { get; set; } = new List<EquipmentFeature>();
         public ICollection<EquipmentSpecification> Specifications { get; set; } = new List<EquipmentSpecification>();
+        public ICollection<EquipmentCategoryMapping> CategoryMappings { get; set; } = new List<EquipmentCategoryMapping>();
+        public ICollection<EquipmentTagMapping> TagMappings { get; set; } = new List<EquipmentTagMapping>();
     }
 }

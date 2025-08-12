@@ -23,6 +23,12 @@ export default function AdminEquipment() {
     // File input refs for browse functionality
     const imageFileRefs = useRef({});
 
+    const resolveUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/uploads/')) return `http://localhost:5098${url}`;
+        return url;
+    };
+
     const resetForm = () => setForm({ name: '', version: '', core: '', description: '', imageUrl: '', imageFile: null });
 
     const loadEquipments = async () => {
@@ -101,22 +107,77 @@ export default function AdminEquipment() {
             const method = editingId ? 'PUT' : 'POST';
             const url = editingId ? `${API}/equipment/${editingId}` : `${API}/equipment`;
 
-            let res;
-            if (form.imageFile) {
-                // If there's a file, use FormData
-                const formData = new FormData();
-                formData.append('name', form.name);
-                formData.append('version', form.version);
-                formData.append('core', form.core);
-                formData.append('description', form.description);
-                formData.append('imageFile', form.imageFile);
+            // Handle image upload if there's a file
+            let finalImageUrl = form.imageUrl;
 
-                res = await fetch(url, {
-                    method,
-                    body: formData
-                });
+            if (form.imageFile) {
+                try {
+                    // Create a temporary equipment to get an ID for upload
+                    const tempRes = await fetch(`${API}/equipment`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: form.name,
+                            version: form.version,
+                            core: form.core,
+                            description: form.description,
+                            imageUrl: ''
+                        })
+                    });
+
+                    if (!tempRes.ok) throw new Error('Failed to create temporary equipment for image upload');
+                    const tempEquipment = await tempRes.json();
+
+                    // Upload image
+                    const uploadForm = new FormData();
+                    uploadForm.append('file', form.imageFile);
+                    const uploadRes = await fetch(`${API}/upload/equipment/${tempEquipment.id}`, {
+                        method: 'POST',
+                        body: uploadForm
+                    });
+
+                    if (uploadRes.ok) {
+                        const { url } = await uploadRes.json();
+                        finalImageUrl = url;
+                    } else {
+                        console.error('Image upload failed:', uploadRes.status, uploadRes.statusText);
+                    }
+
+                    // Now update the equipment with the final image URL
+                    const updateRes = await fetch(`${API}/equipment/${tempEquipment.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: form.name,
+                            version: form.version,
+                            core: form.core,
+                            description: form.description,
+                            imageUrl: finalImageUrl
+                        })
+                    });
+
+                    if (updateRes.ok) {
+                        const created = await updateRes.json();
+
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Uğurlu!',
+                            text: 'Yeni avadanlıq əlavə edildi!',
+                            confirmButtonText: 'Tamam'
+                        });
+
+                        closeModal();
+                        await loadEquipments();
+                        return;
+                    }
+
+                } catch (uploadError) {
+                    console.error('Image upload error:', uploadError);
+                    Swal.fire('Xəta!', 'Şəkil yükləmə zamanı xəta baş verdi', 'error');
+                    return;
+                }
             } else {
-                // If no file, use JSON
+                // No image file, create directly
                 const body = {
                     name: form.name,
                     version: form.version,
@@ -124,24 +185,24 @@ export default function AdminEquipment() {
                     description: form.description,
                     imageUrl: form.imageUrl
                 };
-                res = await fetch(url, {
+                const res = await fetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
                 });
+
+                if (!res.ok) throw new Error('Save failed');
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Uğurlu!',
+                    text: editingId ? 'Avadanlıq yeniləndi!' : 'Yeni avadanlıq əlavə edildi!',
+                    confirmButtonText: 'Tamam'
+                });
+
+                closeModal();
+                await loadEquipments();
             }
-
-            if (!res.ok) throw new Error('Save failed');
-
-            await Swal.fire({
-                icon: 'success',
-                title: 'Uğurlu!',
-                text: editingId ? 'Avadanlıq yeniləndi!' : 'Yeni avadanlıq əlavə edildi!',
-                confirmButtonText: 'Tamam'
-            });
-
-            closeModal();
-            await loadEquipments();
         } catch (e) {
             Swal.fire({
                 icon: 'error',
@@ -171,34 +232,18 @@ export default function AdminEquipment() {
 
         setSubmitting(true);
         try {
-            let res;
-            if (item.imageFile) {
-                // If there's a file, use FormData
-                const formData = new FormData();
-                formData.append('name', item.name || '');
-                formData.append('version', item.version || '');
-                formData.append('core', item.core || '');
-                formData.append('description', item.description || '');
-                formData.append('imageFile', item.imageFile);
-
-                res = await fetch(`${API}/equipment/${id}`, {
-                    method: 'PUT',
-                    body: formData
-                });
-            } else {
-                // If no file, use JSON
-                res = await fetch(`${API}/equipment/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: item.name || '',
-                        version: item.version || '',
-                        core: item.core || '',
-                        description: item.description || '',
-                        imageUrl: item.imageUrl || ''
-                    })
-                });
-            }
+            // Always use JSON for updates
+            const res = await fetch(`${API}/equipment/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: item.name || '',
+                    version: item.version || '',
+                    core: item.core || '',
+                    description: item.description || '',
+                    imageUrl: item.imageUrl || ''
+                })
+            });
 
             if (!res.ok) throw new Error('Save failed');
             const saved = await res.json();
@@ -347,7 +392,23 @@ export default function AdminEquipment() {
                         <div className="col-12 col-lg-4">
                             <div className="image-upload-container d-flex flex-column gap-2">
                                 <div className="image-placeholder position-relative" style={{ minHeight: 300 }}>
-                                    {e.imageUrl && <img src={e.imageUrl} alt={e.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />}
+                                    {e.imageUrl ? (
+                                        <img src={resolveUrl(e.imageUrl)} alt={e.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />
+                                    ) : (
+                                        <div style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            background: '#f8f9fa',
+                                            borderRadius: 12,
+                                            border: '2px dashed #dee2e6',
+                                            color: '#6c757d'
+                                        }}>
+                                            No Image Available
+                                        </div>
+                                    )}
                                     <div className="image-actions position-absolute" style={{ left: '-52px', bottom: '30px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                         <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: '', imageFile: null } : x))}>
                                             <img src="/assets/admin-trash.png" alt="Delete" />

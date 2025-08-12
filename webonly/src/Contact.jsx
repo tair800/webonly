@@ -10,6 +10,7 @@ function Contact() {
         message: ''
     });
     const [splineError, setSplineError] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,9 +19,27 @@ function Contact() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+
+        try {
+            const response = await fetch('http://localhost:5098/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                setFormData({ name: '', email: '', message: '' });
+                setSubmitStatus('success');
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            setSubmitStatus('error');
+        }
     };
 
     return (
@@ -34,7 +53,6 @@ function Contact() {
                         <Spline
                             scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
                             onError={(error) => {
-                                console.log('Spline error:', error);
                                 setSplineError(true);
                             }}
                         />

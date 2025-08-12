@@ -1,27 +1,92 @@
-.test-page-container {
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    overflow-y: auto;
-    touch-action: pan-y;
+.test-container {
+    min-height: 100vh;
+    background: #111214;
+    color: #ffffff;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
 }
 
-.spline-wrapper {
-    width: 100% !important;
-    height: 100% !important;
-    position: relative;
-    pointer-events: none;
+.test-container h1 {
+    color: #17DBFC;
+    margin-bottom: 1rem;
 }
 
-.spline-wrapper>div {
-    width: 100% !important;
-    height: 100% !important;
-    pointer-events: none;
+.test-container h2 {
+    color: #ffffff;
+    margin: 2rem 0 1rem 0;
 }
 
-.spline-wrapper canvas {
-    pointer-events: auto;
-    touch-action: manipulation;
+.test-container h3 {
+    color: #cccccc;
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+.test-container p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+}
+
+.test-card-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.test-card-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.test-info {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.test-info pre {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 12px;
+    color: #00ff00;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.test-controls {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.test-controls button {
+    background: linear-gradient(135deg, #17DBFC 0%, #467EFE 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    transition: all 0.2s ease;
+}
+
+.test-controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(23, 219, 252, 0.4);
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
 }

@@ -23,6 +23,17 @@ namespace WebOnlyAPI.Controllers
             return Ok(products);
         }
 
+        // GET: api/products/search?q={searchTerm}
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ProductResponseDto>>> Search([FromQuery] string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return Ok(new List<ProductResponseDto>());
+
+            var results = await _productService.SearchByNameAsync(q);
+            return Ok(results);
+        }
+
         // GET: api/products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductResponseDto>> GetProduct(int id)

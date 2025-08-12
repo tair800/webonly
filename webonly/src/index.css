@@ -25,10 +25,14 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Override for admin panel routes */
+body.admin-panel-body {
+  display: block;
+  place-items: initial;
 }
 
 h1 {

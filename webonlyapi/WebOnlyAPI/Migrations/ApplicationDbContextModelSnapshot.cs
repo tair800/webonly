@@ -144,6 +144,63 @@ namespace WebOnlyAPI.Migrations
                     b.ToTable("Equipment");
                 });
 
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EquipmentCategories");
+                });
+
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategoryMapping", b =>
+                {
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EquipmentId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("EquipmentCategoryMapping");
+                });
+
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentFeature", b =>
                 {
                     b.Property<int>("Id")
@@ -210,6 +267,59 @@ namespace WebOnlyAPI.Migrations
                     b.HasIndex("EquipmentId");
 
                     b.ToTable("EquipmentSpecifications");
+                });
+
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EquipmentTags");
+                });
+
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentTagMapping", b =>
+                {
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EquipmentId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("EquipmentTagMapping");
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Product", b =>
@@ -491,76 +601,23 @@ namespace WebOnlyAPI.Migrations
                     b.ToTable("Sliders");
                 });
 
-            modelBuilder.Entity("WebOnlyAPI.Models.User", b =>
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategoryMapping", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("WebOnlyAPI.Models.EquipmentCategory", "Category")
+                        .WithMany("EquipmentMappings")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.HasOne("WebOnlyAPI.Models.Equipment", "Equipment")
+                        .WithMany("CategoryMappings")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Navigation("Category");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EmailVerificationToken")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastLoginAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordResetToken")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("PasswordResetTokenExpiry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users");
+                    b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentFeature", b =>
@@ -583,6 +640,25 @@ namespace WebOnlyAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Equipment");
+                });
+
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentTagMapping", b =>
+                {
+                    b.HasOne("WebOnlyAPI.Models.Equipment", "Equipment")
+                        .WithMany("TagMappings")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebOnlyAPI.Models.EquipmentTag", "Tag")
+                        .WithMany("EquipmentMappings")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.ProductImage", b =>
@@ -609,9 +685,23 @@ namespace WebOnlyAPI.Migrations
 
             modelBuilder.Entity("WebOnlyAPI.Models.Equipment", b =>
                 {
+                    b.Navigation("CategoryMappings");
+
                     b.Navigation("FeaturesList");
 
                     b.Navigation("Specifications");
+
+                    b.Navigation("TagMappings");
+                });
+
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategory", b =>
+                {
+                    b.Navigation("EquipmentMappings");
+                });
+
+            modelBuilder.Entity("WebOnlyAPI.Models.EquipmentTag", b =>
+                {
+                    b.Navigation("EquipmentMappings");
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Product", b =>

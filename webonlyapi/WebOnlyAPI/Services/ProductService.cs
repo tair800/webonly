@@ -195,5 +195,16 @@ namespace WebOnlyAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IEnumerable<ProductResponseDto>> SearchByNameAsync(string searchTerm)
+        {
+            var results = await _context.Products
+                .Include(p => p.Images)
+                .Where(p => p.Name.ToLower().StartsWith(searchTerm.ToLower()))
+                .OrderBy(p => p.CreatedAt)
+                .ToListAsync();
+
+            return results.Select(MapToResponseDto);
+        }
     }
 }

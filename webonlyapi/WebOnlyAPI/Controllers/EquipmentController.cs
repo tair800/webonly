@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebOnlyAPI.DTOs;
 using WebOnlyAPI.Services;
-using System.IO;
 
 namespace WebOnlyAPI.Controllers
 {
@@ -38,59 +37,27 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EquipmentResponseDto>> Create([FromForm] CreateEquipmentDto dto, IFormFile? imageFile)
+        public async Task<ActionResult<EquipmentResponseDto>> Create([FromBody] CreateEquipmentDto dto)
         {
-            // Handle image file if provided
-            if (imageFile != null && imageFile.Length > 0)
+            if (!ModelState.IsValid)
             {
-                var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}_{imageFile.FileName}";
-                var uploadPath = Path.Combine("wwwroot", "uploads", "equipment");
-                
-                // Create directory if it doesn't exist
-                if (!Directory.Exists(uploadPath))
-                {
-                    Directory.CreateDirectory(uploadPath);
-                }
-                
-                var filePath = Path.Combine(uploadPath, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
-                
-                // Set the image URL to the uploaded file path
-                dto.ImageUrl = $"/uploads/equipment/{fileName}";
+                return BadRequest(ModelState);
             }
-            
+
             var created = await _equipmentService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<EquipmentResponseDto>> Update(int id, [FromForm] UpdateEquipmentDto dto, IFormFile? imageFile)
+        public async Task<ActionResult<EquipmentResponseDto>> Update(int id, [FromBody] UpdateEquipmentDto dto)
         {
-            // Handle image file if provided
-            if (imageFile != null && imageFile.Length > 0)
+            if (!ModelState.IsValid)
             {
-                var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}_{imageFile.FileName}";
-                var uploadPath = Path.Combine("wwwroot", "uploads", "equipment");
-                
-                // Create directory if it doesn't exist
-                if (!Directory.Exists(uploadPath))
-                {
-                    Directory.CreateDirectory(uploadPath);
-                }
-                
-                var filePath = Path.Combine(uploadPath, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
-                
-                // Set the image URL to the uploaded file path
-                dto.ImageUrl = $"/uploads/equipment/{fileName}";
+                return BadRequest(ModelState);
             }
-            
+
             var updated = await _equipmentService.UpdateAsync(id, dto);
             if (updated == null) return NotFound();
             return Ok(updated);
@@ -102,6 +69,32 @@ namespace WebOnlyAPI.Controllers
             var ok = await _equipmentService.DeleteAsync(id);
             if (!ok) return NotFound();
             return NoContent();
+        }
+
+
+
+        [HttpGet("categories")]
+        public async Task<ActionResult<IEnumerable<object>>> GetCategories()
+        {
+            var categories = await _equipmentService.GetCategoriesAsync();
+            return Ok(categories);
+        }
+
+        [HttpGet("tags")]
+        public async Task<ActionResult<IEnumerable<object>>> GetTags()
+        {
+            var tags = await _equipmentService.GetTagsAsync();
+            return Ok(tags);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<EquipmentResponseDto>>> Search([FromQuery] string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return Ok(new List<EquipmentResponseDto>());
+
+            var results = await _equipmentService.SearchByNameAsync(q);
+            return Ok(results);
         }
     }
 }

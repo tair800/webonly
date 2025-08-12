@@ -25,40 +25,40 @@ function ProductDetail() {
 
     // Fetch product detail
     useEffect(() => {
-        const fetchDetail = async () => {
+        const fetchProduct = async () => {
             try {
-                setLoading(true);
                 const res = await fetch(`http://localhost:5098/api/products/${id}`);
                 if (!res.ok) throw new Error('Failed to load product');
                 const data = await res.json();
 
-                console.log('API Response:', data);
-
-                // Transform API model to UI model expected by this page
-                const sections = [];
-                if (data.section1Title || data.section1Description || data.section1MoreText || data.section1Image) sections.push({ title: data.section1Title || '', description: data.section1Description || '', moreText: data.section1MoreText || null, image: data.section1Image });
-                if (data.section2Title || data.section2Description || data.section2MoreText || data.section2Image) sections.push({ title: data.section2Title || '', description: data.section2Description || '', moreText: data.section2MoreText || null, image: data.section2Image });
-                if (data.section3Title || data.section3Description || data.section3MoreText || data.section3Image) sections.push({ title: data.section3Title || '', description: data.section3Description || '', moreText: data.section3MoreText || null, image: data.section3Image });
-
-                console.log('Transformed sections:', sections);
-                console.log('Section 1 image:', data.section1Image);
-                console.log('Section 2 image:', data.section2Image);
-                console.log('Section 3 image:', data.section3Image);
+                // Transform API data to match the expected structure
+                const sections = [
+                    {
+                        title: data.section1Title || 'Section 1',
+                        content: data.section1Content || 'Content for section 1',
+                        image: data.section1Image ? resolveUrl(data.section1Image) : ''
+                    },
+                    {
+                        title: data.section2Title || 'Section 2',
+                        content: data.section2Content || 'Content for section 2',
+                        image: data.section2Image ? resolveUrl(data.section2Image) : ''
+                    },
+                    {
+                        title: data.section3Title || 'Section 3',
+                        content: data.section3Content || 'Content for section 3',
+                        image: data.section3Image ? resolveUrl(data.section3Image) : ''
+                    }
+                ];
 
                 setProduct({
-                    id: data.id,
-                    name: data.name,
-                    description: data.detailDescription || data.description || '',
-                    mainImage: data.imageUrl,
-                    sections
+                    ...data,
+                    sections: sections
                 });
             } catch (e) {
-                setError(e.message);
-            } finally {
-                setLoading(false);
+                console.error(e);
             }
         };
-        fetchDetail();
+        fetchProduct();
     }, [id]);
 
     // removed early returns here to avoid breaking hook order
@@ -261,7 +261,7 @@ function ProductDetail() {
                                     <p className="block leading-[normal]">{product.sections[0].title}</p>
                                 </div>
                                 <div className="first-content-description">
-                                    <p className="block leading-[1.2]">{product.sections[0].description}</p>
+                                    <p className="block leading-[1.2]">{product.sections[0].content}</p>
                                 </div>
                                 {product.sections[0].moreText && (
                                     <div className="first-more-container" data-name="More">
@@ -296,7 +296,7 @@ function ProductDetail() {
                                     <p className="block leading-[normal]">{product.sections[1].title}</p>
                                 </div>
                                 <div className="second-content-description">
-                                    <p className="block leading-[1.2]">{product.sections[1].description}</p>
+                                    <p className="block leading-[1.2]">{product.sections[1].content}</p>
                                 </div>
                                 {product.sections[1].moreText && (
                                     <div className="second-more-container" data-name="More">
@@ -330,7 +330,7 @@ function ProductDetail() {
                                     </div>
                                 )}
                                 <div className="third-description-text">
-                                    <p>{product.sections[2].description}</p>
+                                    <p>{product.sections[2].content}</p>
                                     <p>&nbsp;</p>
                                 </div>
                             </div>

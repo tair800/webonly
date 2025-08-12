@@ -26,47 +26,32 @@ function EquipmentDetail() {
 
     // Fetch equipment detail
     useEffect(() => {
-        const fetchDetail = async () => {
+        const fetchEquipment = async () => {
             try {
                 setLoading(true);
                 const res = await fetch(`http://localhost:5098/api/equipment/${id}`);
                 if (!res.ok) throw new Error('Failed to load equipment');
                 const data = await res.json();
 
-                console.log('Equipment API Response:', data);
-                console.log('Raw features from API:', data.features);
-                console.log('Raw specifications from API:', data.specifications);
+                // Process features
+                const features = data.features || [];
 
-                // Transform API data to match the expected structure
-                const equipmentData = {
-                    id: data.id,
-                    name: data.name,
-                    version: data.version,
-                    core: data.core,
-                    description: data.description || '',
-                    img: data.imageUrl ? resolveUrl(data.imageUrl) : '',
-                    features: data.features?.map(f => f.feature) || [],
-                    specifications: data.specifications?.reduce((acc, spec) => {
-                        acc[spec.key] = spec.value || '';
-                        return acc;
-                    }, {}) || {}
-                };
+                // Process specifications
+                const specifications = data.specifications || {};
 
-                console.log('Processed Equipment Data:', equipmentData);
-                console.log('Features array:', equipmentData.features);
-                console.log('Features length:', equipmentData.features.length);
-                console.log('Specifications object:', equipmentData.specifications);
-                console.log('Specifications keys:', Object.keys(equipmentData.specifications));
-                console.log('Specifications keys length:', Object.keys(equipmentData.specifications).length);
-
-                setEquipment(equipmentData);
+                setEquipment({
+                    ...data,
+                    features: features,
+                    specifications: specifications
+                });
+                setLoading(false);
             } catch (e) {
+                console.error(e);
                 setError(e.message);
-            } finally {
                 setLoading(false);
             }
         };
-        fetchDetail();
+        fetchEquipment();
     }, [id]);
 
     if (loading) {
@@ -117,10 +102,10 @@ function EquipmentDetail() {
                     <h1 className="equipment-detail-title">{equipment.name}</h1>
                     <p className="equipment-detail-description">{equipment.description}</p>
                     <div className="equipment-detail-features">
-                        {equipment.features.map((feature, index) => (
+                        {equipment.features.map((featureObj, index) => (
                             <div key={index} className="equipment-feature-item">
                                 <div className="feature-checkmark">✓</div>
-                                <span className="feature-text">{feature}</span>
+                                <span className="feature-text">{featureObj.feature}</span>
                             </div>
                         ))}
                     </div>
@@ -155,18 +140,18 @@ function EquipmentDetail() {
                 </div>
 
                 <div className="equipment-specifications-list">
-                    {equipment.specifications && Object.keys(equipment.specifications).length > 0 ? (
-                        Object.entries(equipment.specifications)
-                            .filter(([key, value]) => value && value.trim() !== '' && key !== 'model')
+                    {equipment.specifications && equipment.specifications.length > 0 ? (
+                        equipment.specifications
+                            .filter(spec => spec.key !== 'model' && spec.value && spec.value.trim() !== '')
                             .slice(currentPage * 6, (currentPage * 6) + 6)
-                            .map(([key, value]) => {
-                                const parts = value.split(' - ');
+                            .map((spec) => {
+                                const parts = spec.value.split(' - ');
                                 const topValue = parts[0];
                                 const bottomValue = parts[1] || '';
 
                                 return (
-                                    <div key={key} className="specification-item">
-                                        <div className="spec-label">{key}</div>
+                                    <div key={spec.id} className="specification-item">
+                                        <div className="spec-label">{spec.key}</div>
                                         <div className="spec-line-css"></div>
                                         <div className="spec-value">
                                             <div className="spec-value-top">{topValue}</div>

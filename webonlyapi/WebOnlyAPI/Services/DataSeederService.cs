@@ -19,7 +19,7 @@ namespace WebOnlyAPI.Services
             await SeedEquipmentAsync();
             await SeedEmployeesAsync();
             await SeedAboutLogosAsync();
-            await SeedAdminUserAsync();
+            // Admin user seeding removed
             await _context.SaveChangesAsync();
         }
 
@@ -228,6 +228,129 @@ namespace WebOnlyAPI.Services
                     Img = "/uploads/equipment/equipment1.png",
                     Features = new []{ "Türkiyə İstehsalı Keyfiyyət", "1 İl Rəsmi Zəmanət", "Wi-Fi Adapter Artırma İmkanı", "10.1\" Arxa Ekran Əlavə İmkanı" },
                     Specs = new Dictionary<string,string?>()
+                },
+                new {
+                    Name = "Honeywell Voyager 1200g",
+                    Version = "V1200g",
+                    Core = "Laser Scanner",
+                    Description = "Yüksək keyfiyyətli 1D/2D barkod skaneri. Sürətli və dəqiq oxuma ilə satış proseslərini sürətləndirir. USB və RS232 bağlantı seçimləri mövcuddur.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "1D/2D Barkod Dəstəyi", "Sürətli Oxuma", "USB və RS232 Bağlantı", "Sərt Dizayn" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["type"] = "Laser Scanner",
+                        ["scanRate"] = "100 scans/second",
+                        ["interface"] = "USB, RS232",
+                        ["dimensions"] = "165 x 85 x 65 mm",
+                        ["weight"] = "0.3 kg",
+                        ["power"] = "USB powered"
+                    }
+                },
+                new {
+                    Name = "Epson TM-T88VI",
+                    Version = "TM-T88VI",
+                    Core = "Thermal Printer",
+                    Description = "Etibarlı və sürətli termal qəbz yazıcısı. 58mm kağız genişliyi ilə yüksək keyfiyyətli çap təmin edir. USB və Ethernet bağlantıları dəstəklənir.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "58mm Kağız Genişliyi", "Sürətli Çap", "USB/Ethernet", "Yüksək Keyfiyyət" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["printWidth"] = "58mm",
+                        ["printSpeed"] = "250mm/s",
+                        ["interface"] = "USB, Ethernet",
+                        ["resolution"] = "203 DPI",
+                        ["dimensions"] = "140 x 200 x 140 mm",
+                        ["weight"] = "1.2 kg"
+                    }
+                },
+                new {
+                    Name = "APG Cash Drawer",
+                    Version = "CD-1000",
+                    Core = "Cash Management",
+                    Description = "Təhlükəsiz və etibarlı pul çəkməsi. Sol və ya sağ açılma seçimi ilə müxtəlif POS sistemlərinə uyğunlaşır. Açar ilə idarə olunur.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "Sol/Sağ Açılma", "Təhlükəsiz Kilid", "Açar İdarəetməsi", "Universal Uyğunluq" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["type"] = "Cash Drawer",
+                        ["opening"] = "Left/Right",
+                        ["lock"] = "Key Lock",
+                        ["dimensions"] = "400 x 350 x 100 mm",
+                        ["weight"] = "2.8 kg",
+                        ["material"] = "Steel"
+                    }
+                },
+                new {
+                    Name = "Verifone VX520",
+                    Version = "VX520",
+                    Core = "Payment Terminal",
+                    Description = "Professional ödəniş terminalı. Chip, magnetic stripe və contactless kartları dəstəkləyir. 3G və Wi-Fi bağlantı seçimləri ilə hər yerdə istifadə edilə bilər.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "Chip Kart Dəstəyi", "Contactless Ödəniş", "3G/Wi-Fi", "Təhlükəsizlik" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["type"] = "Payment Terminal",
+                        ["cardSupport"] = "Chip, Magnetic, Contactless",
+                        ["connectivity"] = "3G, Wi-Fi, Ethernet",
+                        ["display"] = "128x64 LCD",
+                        ["dimensions"] = "120 x 80 x 30 mm",
+                        ["weight"] = "0.4 kg"
+                    }
+                },
+                new {
+                    Name = "Datalogic Memor X3",
+                    Version = "Memor X3",
+                    Core = "Mobile Computer",
+                    Description = "Mobil kompüter və barkod skaneri. Windows Embedded Handheld əməliyyat sistemi ilə tam funksional POS həlli təqdim edir. Batareya ömrü uzun və dayanıqlıdır.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "Mobil Kompüter", "Barkod Skeneri", "Windows Embedded", "Uzun Batareya" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["type"] = "Mobile Computer",
+                        ["os"] = "Windows Embedded Handheld",
+                        ["processor"] = "ARM Cortex-A8 800MHz",
+                        ["memory"] = "512MB RAM",
+                        ["storage"] = "4GB Flash",
+                        ["battery"] = "4000mAh Li-Ion",
+                        ["dimensions"] = "160 x 80 x 35 mm",
+                        ["weight"] = "0.5 kg"
+                    }
+                },
+                new {
+                    Name = "Star TSP100",
+                    Version = "TSP100",
+                    Core = "Receipt Printer",
+                    Description = "Kompakt və etibarlı qəbz yazıcısı. 80mm kağız genişliyi ilə restoran və kiçik mağazalar üçün ideal həll. USB və serial bağlantıları dəstəklənir.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "80mm Kağız", "Kompakt Dizayn", "USB/Serial", "Sürətli Çap" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["type"] = "Receipt Printer",
+                        ["printWidth"] = "80mm",
+                        ["printSpeed"] = "200mm/s",
+                        ["interface"] = "USB, Serial",
+                        ["resolution"] = "203 DPI",
+                        ["dimensions"] = "120 x 180 x 120 mm",
+                        ["weight"] = "1.0 kg"
+                    }
+                },
+                new {
+                    Name = "Zebra ZD220",
+                    Version = "ZD220",
+                    Core = "Label Printer",
+                    Description = "Professional etiket yazıcısı. 2 inch genişlikdə etiketləri yüksək keyfiyyətlə çap edir. RFID və barkod etiketləri üçün ideal həll təqdim edir.",
+                    Img = "/uploads/equipment/equipment2.png",
+                    Features = new []{ "RFID Dəstəyi", "2 inch Etiket", "Yüksək Keyfiyyət", "Professional" },
+                    Specs = new Dictionary<string,string?>
+                    {
+                        ["type"] = "Label Printer",
+                        ["printWidth"] = "2 inch (50.8mm)",
+                        ["printSpeed"] = "4 inch/s",
+                        ["interface"] = "USB, Ethernet",
+                        ["resolution"] = "203 DPI",
+                        ["dimensions"] = "200 x 150 x 100 mm",
+                        ["weight"] = "1.5 kg"
+                    }
                 }
             };
 
@@ -320,24 +443,6 @@ namespace WebOnlyAPI.Services
             await _context.AboutLogos.AddAsync(aboutLogo);
         }
 
-        private async Task SeedAdminUserAsync()
-        {
-            if (_context.Users.Any()) return;
-
-            var adminUser = new User
-            {
-                Email = "admin@webonly.com",
-                Username = "admin",
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
-                FirstName = "Admin",
-                LastName = "User",
-                Role = "Admin",
-                IsEmailVerified = true,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Users.Add(adminUser);
-        }
+        // Admin user seeding method removed
     }
 }

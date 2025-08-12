@@ -137,5 +137,3 @@ C:\Users\taira\OneDrive\Desktop\webonly2\webonlyapi\WebOnlyAPI\obj\Debug\net8.0\
 C:\Users\taira\OneDrive\Desktop\webonly2\webonlyapi\WebOnlyAPI\obj\Debug\net8.0\WebOnlyAPI.pdb
 C:\Users\taira\OneDrive\Desktop\webonly2\webonlyapi\WebOnlyAPI\obj\Debug\net8.0\WebOnlyAPI.genruntimeconfig.cache
 C:\Users\taira\OneDrive\Desktop\webonly2\webonlyapi\WebOnlyAPI\obj\Debug\net8.0\ref\WebOnlyAPI.dll
-C:\Users\taira\OneDrive\Desktop\webonly2\webonlyapi\WebOnlyAPI\bin\Debug\net8.0\BCrypt.Net-Next.dll
-C:\Users\taira\OneDrive\Desktop\webonly2\webonlyapi\WebOnlyAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -133,25 +133,23 @@ The API is configured with CORS to allow requests from your React frontend. The 
 
 ## Next Steps
 
-1. **Authentication & Authorization**
-   - Add JWT authentication
-   - Implement role-based access control
-
-2. **File Upload**
+1. **File Upload**
    - Add image upload functionality
    - Configure file storage (local or cloud)
 
-3. **Validation**
+2. **Validation**
    - Add comprehensive input validation
    - Implement custom validation attributes
 
-4. **Logging**
+3. **Logging**
    - Add structured logging
    - Configure log levels
 
-5. **Testing**
+4. **Testing**
    - Add unit tests
    - Add integration tests
+
+
 
 ## Technologies Used
 

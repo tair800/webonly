@@ -13,6 +13,7 @@ function Products() {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
+
                 const API = 'http://localhost:5098/api';
                 const res = await fetch(`${API}/products`);
                 if (!res.ok) throw new Error('Failed to load products');
@@ -43,7 +44,6 @@ function Products() {
                         <Spline
                             scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
                             onError={(error) => {
-                                console.log('Spline error:', error);
                                 setSplineError(true);
                             }}
                         />

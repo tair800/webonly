@@ -16,5 +16,6 @@ namespace WebOnlyAPI.Services
         Task<bool> DeleteImageAsync(int productId, int imageId);
         Task<ProductImageDto?> UpdateImageAsync(int productId, int imageId, ProductImageDto dto);
         Task<bool> SetMainImageAsync(int productId, int imageId);
+        Task<IEnumerable<ProductResponseDto>> SearchByNameAsync(string searchTerm);
     }
 }

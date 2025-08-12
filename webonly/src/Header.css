@@ -282,10 +282,7 @@
         font-size: 0.9rem;
     }
 
-    .login-btn {
-        padding: 0.7rem 1.4rem;
-        font-size: 0.9rem;
-    }
+
 }
 
 @media (max-width: 900px) {

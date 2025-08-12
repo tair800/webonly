@@ -12,13 +12,9 @@ import ServiceDetail from './ServiceDetail';
 import Products from './Products';
 import Factory from './Factory';
 import ProductDetail from './ProductDetail';
-import TestPage from './TestPage';
+import Test from './Test';
 import AdminPanel from './AdminPanel';
-import Login from './Login';
-import Register from './Register';
-import ForgotPassword from './ForgotPassword';
-import ResetPassword from './ResetPassword';
-import ProtectedRoute from './components/ProtectedRoute';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -26,24 +22,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Admin Panel Routes - Protected, No Header/Footer */}
-          <Route path="/admin-panel/*" element={
-            <ProtectedRoute requireAdmin={false}>
-              <AdminPanel />
-            </ProtectedRoute>
-          } />
-
-          {/* Login Route - No Header/Footer */}
-          <Route path="/login" element={<Login />} />
-
-          {/* Register Route - No Header/Footer */}
-          <Route path="/register" element={<Register />} />
-
-          {/* Forgot Password Route - No Header/Footer */}
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-
-          {/* Reset Password Route - No Header/Footer */}
-          <Route path="/reset-password" element={<ResetPassword />} />
+          {/* Admin Panel Routes - No Header/Footer */}
+          <Route path="/admin-panel/*" element={<AdminPanel />} />
 
           {/* Home Route - With Header Only */}
           <Route path="/" element={
@@ -70,7 +50,7 @@ function App() {
                   <Route path="/products" element={<Products />} />
                   <Route path="/product/:id" element={<ProductDetail />} />
                   <Route path="/factory" element={<Factory />} />
-                  <Route path="/test" element={<TestPage />} />
+                  <Route path="/test" element={<Test />} />
                 </Routes>
               </div>
               <Footer />

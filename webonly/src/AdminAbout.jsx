@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Swal from 'sweetalert2';
 import './AdminAbout.css';
 
 const API = 'http://localhost:5098/api';
 
 export default function AdminAbout() {
+    const resolveUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/uploads/')) return `http://localhost:5098${url}`;
+        return url;
+    };
     const [employees, setEmployees] = useState([]);
     const [references, setReferences] = useState([]);
     const [director, setDirector] = useState(null);
@@ -34,7 +39,10 @@ export default function AdminAbout() {
         description: '',
         imageUrl: ''
     });
-    const [newReference, setNewReference] = useState({ name: '', imageUrl: '', alt: '' });
+    const [newReference, setNewReference] = useState({ name: '', images: [], alt: '' });
+
+    // Create a persistent file input ref
+    const fileInputRef = useRef(null);
 
     const loadEmployees = async () => {
         try {
@@ -344,7 +352,12 @@ export default function AdminAbout() {
             description: '',
             imageUrl: ''
         });
-        setNewReference({ name: '', imageUrl: '', alt: '' });
+        setNewReference({ name: '', images: [], alt: '' });
+
+        // Clear the file input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
     };
 
     const handleSave = async () => {
@@ -436,20 +449,30 @@ export default function AdminAbout() {
                 return;
             }
 
-            if (!newReference.imageUrl) {
+            if (!newReference.images || newReference.images.length === 0) {
                 Swal.fire(
                     'Xəta!',
-                    'Şəkil məcburidir',
+                    'Ən azı bir şəkil məcburidir',
                     'error'
                 );
                 return;
             }
 
             try {
+                // For now, we'll create a reference with the first image
+                // In a real app, you'd upload all images and get their URLs
+                const referenceData = {
+                    name: newReference.name,
+                    imageUrl: newReference.images[0]?.url || '', // Use first image for now
+                    alt: newReference.alt,
+                    // You could also store all image URLs in a separate field
+                    allImages: newReference.images.map(img => img.url)
+                };
+
                 const res = await fetch(`${API}/references`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newReference)
+                    body: JSON.stringify(referenceData)
                 });
                 if (!res.ok) throw new Error('Reference save failed');
                 await loadReferences();
@@ -636,20 +659,52 @@ export default function AdminAbout() {
     };
 
     const handleBrowseReferenceImage = () => {
-        // Create a file input element for references
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                // For now, we'll use a placeholder URL
-                // In a real app, you'd upload the file to a server
-                const imageUrl = URL.createObjectURL(file);
-                setNewReference({ ...newReference, imageUrl: imageUrl });
-            }
-        };
-        input.click();
+        // Use the persistent file input ref
+        if (!fileInputRef.current) {
+            // Create the file input if it doesn't exist
+            fileInputRef.current = document.createElement('input');
+            fileInputRef.current.type = 'file';
+            fileInputRef.current.accept = 'image/*';
+            fileInputRef.current.multiple = true;
+            fileInputRef.current.setAttribute('multiple', 'true');
+
+            fileInputRef.current.onchange = (e) => {
+                const files = Array.from(e.target.files);
+
+                if (files.length === 0) return;
+
+                const newImages = files.map((file, index) => ({
+                    id: Date.now() + index,
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    file: file,
+                    url: URL.createObjectURL(file)
+                }));
+
+                setNewReference(prev => ({
+                    ...prev,
+                    images: [...prev.images, ...newImages]
+                }));
+
+                // Reset the file input value to allow selecting the same files again
+                e.target.value = '';
+            };
+        }
+
+        // Trigger the file dialog
+        try {
+            fileInputRef.current.click();
+        } catch (error) {
+            console.error('Error clicking file input:', error);
+        }
+    };
+
+    const removeReferenceImage = (imageId) => {
+        setNewReference(prev => ({
+            ...prev,
+            images: prev.images.filter(img => img.id !== imageId)
+        }));
     };
 
     const handleBrowseEmployeeImage = () => {
@@ -734,7 +789,7 @@ export default function AdminAbout() {
                             <div className="image-placeholder position-relative">
                                 {mainContent.imageUrl && (
                                     <img
-                                        src={mainContent.imageUrl}
+                                        src={resolveUrl(mainContent.imageUrl)}
                                         alt="Main content"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
@@ -782,7 +837,45 @@ export default function AdminAbout() {
                     {references.map(ref => (
                         <div key={ref.id} className="reference-item">
                             <div className="reference-canvas">
-                                {ref.imageUrl && <img src={ref.imageUrl} alt={ref.alt || ref.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                                {/* Show multiple images if available, otherwise fall back to single imageUrl */}
+                                {ref.allImages && ref.allImages.length > 0 ? (
+                                    <div className="reference-images-grid" style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: ref.allImages.length === 1 ? '1fr' :
+                                            ref.allImages.length === 2 ? '1fr 1fr' : '1fr 1fr 1fr',
+                                        gap: '8px',
+                                        width: '100%',
+                                        height: '100%'
+                                    }}>
+                                        {ref.allImages.map((imgUrl, index) => (
+                                            <img
+                                                key={index}
+                                                src={resolveUrl(imgUrl)}
+                                                alt={`${ref.alt || ref.name} - Image ${index + 1}`}
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                    borderRadius: '4px'
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : ref.imageUrl ? (
+                                    <img
+                                        src={resolveUrl(ref.imageUrl)}
+                                        alt={ref.alt || ref.name}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'contain'
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="no-image-placeholder">
+                                        <span>No Image</span>
+                                    </div>
+                                )}
                             </div>
                             <div className="reference-actions">
                                 <button className="action-btn delete-img" aria-label="Delete reference" onClick={() => removeReference(ref.id)}>
@@ -912,7 +1005,7 @@ export default function AdminAbout() {
                                     <div className="image-placeholder position-relative">
                                         {director.imageUrl && (
                                             <img
-                                                src={director.imageUrl}
+                                                src={resolveUrl(director.imageUrl)}
                                                 alt={director.name}
                                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                             />
@@ -1046,7 +1139,7 @@ export default function AdminAbout() {
                                     <div className="image-placeholder position-relative">
                                         {employee.imageUrl && (
                                             <img
-                                                src={employee.imageUrl}
+                                                src={resolveUrl(employee.imageUrl)}
                                                 alt={employee.name}
                                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                             />
@@ -1183,14 +1276,48 @@ export default function AdminAbout() {
                                         />
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label className="form-label">Şəkil <span style={{ color: '#ff4d4f' }}>*</span></label>
+                                        <label className="form-label">Şəkillər <span style={{ color: '#ff4d4f' }}>*</span></label>
                                         <button
                                             type="button"
-                                            className="btn btn-outline-primary w-100"
+                                            className="btn btn-outline-primary w-100 mb-2"
                                             onClick={handleBrowseReferenceImage}
                                         >
-                                            Browse
+                                            Browse Images
                                         </button>
+
+                                        {/* Display selected images */}
+                                        {newReference.images.length > 0 && (
+                                            <div className="selected-images">
+                                                <h6>Seçilən şəkillər ({newReference.images.length}):</h6>
+                                                <div className="row g-2">
+                                                    {newReference.images.map((img, index) => (
+                                                        <div key={img.id} className="col-md-4">
+                                                            <div className="selected-image-item position-relative">
+                                                                <img
+                                                                    src={img.url}
+                                                                    alt={img.name}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        height: '100px',
+                                                                        objectFit: 'cover',
+                                                                        borderRadius: '8px'
+                                                                    }}
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-sm btn-danger position-absolute"
+                                                                    style={{ top: '5px', right: '5px' }}
+                                                                    onClick={() => removeReferenceImage(img.id)}
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                                <small className="d-block mt-1 text-center">{img.name}</small>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="form-group mb-3">
                                         <label className="form-label">Alt</label>

@@ -174,7 +174,6 @@ export default function AdminProducts() {
                     if (up.ok) {
                         const { url } = await up.json();
                         finalImageUrl = url;
-                        console.log('Main image uploaded successfully:', url);
                     } else {
                         console.error('Main image upload failed:', up.status, up.statusText);
                     }
@@ -187,7 +186,6 @@ export default function AdminProducts() {
                         if (upIcon.ok) {
                             const { url: iconUrl } = await upIcon.json();
                             finalIconUrl = iconUrl;
-                            console.log('Icon uploaded successfully:', iconUrl);
                         } else {
                             console.error('Icon upload failed:', upIcon.status, upIcon.statusText);
                         }
@@ -217,7 +215,6 @@ export default function AdminProducts() {
 
                     if (updateRes.ok) {
                         const created = await updateRes.json();
-                        console.log('Product created successfully with images:', created);
 
                         // Add main image to images array
                         if (finalImageUrl) {
@@ -268,11 +265,9 @@ export default function AdminProducts() {
                 try {
                     const formIcon = new FormData();
                     formIcon.append('file', newIconFile);
-                    console.log('Uploading icon file:', newIconFile.name);
                     const upIcon = await fetch(`${API}/upload/product/${created.id}`, { method: 'POST', body: formIcon });
                     if (upIcon.ok) {
                         const { url: iconUrl } = await upIcon.json();
-                        console.log('Icon uploaded successfully:', iconUrl);
                         await fetch(`${API}/products/${created.id}`, {
                             method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
                                 name: created.name || newProduct.name || '',
@@ -293,11 +288,9 @@ export default function AdminProducts() {
                 try {
                     const form = new FormData();
                     form.append('file', newImageFile);
-                    console.log('Uploading main image file:', newImageFile.name);
                     const up = await fetch(`${API}/upload/product/${created.id}`, { method: 'POST', body: form });
                     if (up.ok) {
                         const { url } = await up.json();
-                        console.log('Main image uploaded successfully:', url);
                         await fetch(`${API}/products/${created.id}`, {
                             method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
                                 name: created.name || newProduct.name || '',
@@ -315,7 +308,6 @@ export default function AdminProducts() {
                                 section3MoreText: newProduct.section3MoreText || ''
                             })
                         });
-                        await fetch(`${API}/products/${created.id}/images`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imageUrl: url, alt: created.alt || '' }) });
                     } else {
                         console.error('Main image upload failed:', up.status, up.statusText);
                     }

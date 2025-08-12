@@ -1,19 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logoIcon from '/assets/logo-icon.png';
 import logoText from '/assets/logo-text.png';
 import globeImg from '/assets/globe.png';
 import dropdownIcon from '/assets/dropdown-icon.png';
 import logoWhite from '/assets/logo-white.png';
-import { useAuth } from './contexts/AuthContext';
+
 import './Header.css';
 
 function Header() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const langRef = useRef(null);
     const location = useLocation();
-    const navigate = useNavigate();
-    const { user, isAuthenticated, logout } = useAuth();
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -23,18 +21,11 @@ function Header() {
         }
         if (dropdownOpen) {
             document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [dropdownOpen]);
-
-    const handleLogout = () => {
-        logout();
-        navigate('/');
-    };
 
     return (
         <nav className="navbar">
@@ -52,17 +43,6 @@ function Header() {
                     <li><Link to="/contact" className={location.pathname === "/contact" ? "active" : ""}>Əlaqə</Link></li>
                 </ul>
                 <div className="navbar-right">
-                    {isAuthenticated() ? (
-                        <div className="user-menu">
-                            <span className="user-greeting">Salam, {user.firstName}!</span>
-                            <button onClick={handleLogout} className="logout-btn">Çıxış</button>
-                        </div>
-                    ) : (
-                        <div className="auth-buttons">
-                            <Link to="/login" className="login-btn">Giriş</Link>
-                            <Link to="/register" className="register-btn">Qeydiyyat</Link>
-                        </div>
-                    )}
                     <div className="navbar-lang" ref={langRef} tabIndex={0} onClick={() => setDropdownOpen((open) => !open)}>
                         <img src={globeImg} alt="Language Globe" className="lang-globe" width="19.25" height="19.25" />
                         <img src={dropdownIcon} alt="Dropdown Icon" className="dropdown-icon" width="21" height="21" />
@@ -80,4 +60,4 @@ function Header() {
     );
 }
 
-export default Header; 
+export default Header;

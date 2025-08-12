@@ -1,39 +1,54 @@
-import React, { useState } from 'react';
-import './Test.css';
+import React, { useState, useEffect } from 'react';
+import EquipmentCard from './components/EquipmentCard';
+import './TestPage.css';
 
 function Test() {
-    const [testState, setTestState] = useState('Hello from Test Component!');
+    const [testEquipment, setTestEquipment] = useState(null);
 
-    const handleClick = () => {
-        setTestState('Button clicked! ' + new Date().toLocaleTimeString());
+    useEffect(() => {
+        // Fetch one equipment item for testing
+        const fetchTestEquipment = async () => {
+            try {
+                const res = await fetch('http://localhost:5098/api/equipment/full');
+                if (!res.ok) throw new Error('Failed to load equipment');
+                const data = await res.json();
+                // Use the first equipment item for testing
+                setTestEquipment(data[0]);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        fetchTestEquipment();
+    }, []);
+
+    const handleEquipmentCardClick = (equipmentId) => {
+        // Add your test logic here
     };
+
+    if (!testEquipment) {
+        return (
+            <div className="test-container">
+                <div className="loading">Loading test equipment...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="test-container">
-            <div className="test-header">
-                <h1>Test Component</h1>
-                <p>Use this for experiments and testing</p>
-            </div>
+            <h1>Equipment Card Test Page</h1>
+            <p>This is a test page for experimenting with equipment cards</p>
 
-            <div className="test-content">
-                <div className="test-card">
-                    <h2>Interactive Test</h2>
-                    <p>{testState}</p>
-                    <button className="test-button" onClick={handleClick}>
-                        Click Me!
-                    </button>
-                </div>
-
-                <div className="test-card">
-                    <h2>Sample Elements</h2>
-                    <div className="test-grid">
-                        <div className="test-item">Item 1</div>
-                        <div className="test-item">Item 2</div>
-                        <div className="test-item">Item 3</div>
-                        <div className="test-item">Item 4</div>
-                    </div>
+            <div className="test-card-section">
+                <h2>Test Equipment Card:</h2>
+                <div className="test-card-wrapper">
+                    <EquipmentCard
+                        equipment={testEquipment}
+                        onMoreClick={handleEquipmentCardClick}
+                    />
                 </div>
             </div>
+
+
         </div>
     );
 }

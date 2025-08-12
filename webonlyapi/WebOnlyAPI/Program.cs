@@ -17,9 +17,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:3000")
                    .AllowAnyMethod()
-                   .AllowAnyHeader();
+                   .AllowAnyHeader()
+                   .AllowCredentials();
         });
 });
 
@@ -27,33 +28,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add JWT Authentication
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "WebOnlyAPI",
-            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "WebOnlyClient",
-            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                System.Text.Encoding.ASCII.GetBytes(
-                    builder.Configuration["Jwt:Secret"] ?? "your-super-secret-key-with-at-least-32-characters"
-                )
-            )
-        };
-    });
-
-// Add Authorization
-builder.Services.AddAuthorization();
+// JWT Authentication and Authorization removed
 
 // Register services
-builder.Services.AddScoped<JwtService>();
-builder.Services.AddScoped<EmailService>();
-builder.Services.AddScoped<UserService>();
+// User-related services removed
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -72,13 +50,23 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Enable static file serving from wwwroot folder
-app.UseStaticFiles();
-
+// Apply CORS early in the pipeline
 app.UseCors("AllowAll");
 
-app.UseAuthentication();
-app.UseAuthorization();
+// Redirect root to Swagger using middleware
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+    await next();
+});
+
+// Authentication and Authorization middleware removed
+
+// Static files middleware removed - not needed for API project
 
 app.MapControllers();
 

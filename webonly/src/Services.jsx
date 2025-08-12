@@ -64,7 +64,6 @@ function Services() {
                         <Spline
                             scene="https://prod.spline.design/mP2TljaQ-tsNIzZt/scene.splinecode"
                             onError={(error) => {
-                                console.log('Spline error:', error);
                                 setSplineError(true);
                             }}
                         />

@@ -16,6 +16,8 @@ namespace WebOnlyAPI.DTOs
         public string? Description { get; set; }
         [StringLength(500)]
         public string? ImageUrl { get; set; }
+        public List<int> CategoryIds { get; set; } = new List<int>();
+        public List<int> TagIds { get; set; } = new List<int>();
     }
 
     public class UpdateEquipmentDto
@@ -31,6 +33,8 @@ namespace WebOnlyAPI.DTOs
         public string? Description { get; set; }
         [StringLength(500)]
         public string? ImageUrl { get; set; }
+        public List<int> CategoryIds { get; set; } = new List<int>();
+        public List<int> TagIds { get; set; } = new List<int>();
     }
 
     public class EquipmentResponseDto
@@ -45,6 +49,8 @@ namespace WebOnlyAPI.DTOs
         public DateTime? UpdatedAt { get; set; }
         public List<EquipmentFeatureDto> Features { get; set; } = new List<EquipmentFeatureDto>();
         public List<EquipmentSpecificationDto> Specifications { get; set; } = new List<EquipmentSpecificationDto>();
+        public List<EquipmentCategoryDto> Categories { get; set; } = new List<EquipmentCategoryDto>();
+        public List<EquipmentTagDto> Tags { get; set; } = new List<EquipmentTagDto>();
     }
 
     public class EquipmentFeatureDto
@@ -59,6 +65,25 @@ namespace WebOnlyAPI.DTOs
         public int Id { get; set; }
         public string Key { get; set; } = string.Empty;
         public string? Value { get; set; }
+        public int OrderIndex { get; set; }
+    }
+
+    public class EquipmentCategoryDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Icon { get; set; }
+        public string? Color { get; set; }
+        public int OrderIndex { get; set; }
+    }
+
+    public class EquipmentTagDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Color { get; set; }
         public int OrderIndex { get; set; }
     }
 }

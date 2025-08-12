@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import './AdminDashboard.css';
+
+import './AdminSidebar.css';
 import logoWhite from '/assets/logo-white.png';
 import logoIcon from '/assets/logo-icon.png';
 import footerLogo from '/assets/footer-logo.png';
@@ -8,6 +9,7 @@ import footerLogo from '/assets/footer-logo.png';
 export default function AdminSidebar() {
     const location = useLocation();
     const currentPath = location.pathname;
+
 
     return (
         <div className="admin-sidebar">
@@ -71,15 +73,7 @@ export default function AdminSidebar() {
                 </div>
             </nav>
 
-            <div className="user-profile">
-                <div className="user-avatar">
-                    <img src={logoIcon} alt="User Avatar" />
-                </div>
-                <div className="user-info">
-                    <div className="user-name">Name Surname</div>
-                    <div className="user-title">Director</div>
-                </div>
-            </div>
+            {/* User profile section removed */}
 
             <div className="footer-logo">
                 <img src={footerLogo} alt="Footer Logo" />
