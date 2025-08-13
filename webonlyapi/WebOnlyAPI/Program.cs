@@ -31,7 +31,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // JWT Authentication and Authorization removed
 
 // Register services
-// User-related services removed
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IProductService, ProductService>();

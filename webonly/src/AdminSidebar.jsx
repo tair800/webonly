@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
 
 import './AdminSidebar.css';
 import logoWhite from '/assets/logo-white.png';
@@ -9,6 +10,29 @@ import footerLogo from '/assets/footer-logo.png';
 export default function AdminSidebar() {
     const location = useLocation();
     const currentPath = location.pathname;
+    const navigate = useNavigate();
+    const { logout, user } = useAuth();
+
+    const handleLogout = async () => {
+        try {
+            // Call logout API
+            const token = localStorage.getItem('adminToken');
+            if (token) {
+                await fetch('http://localhost:5098/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Logout API error:', error);
+        } finally {
+            // Always logout locally
+            logout();
+            navigate('/login');
+        }
+    };
 
 
     return (
@@ -73,7 +97,29 @@ export default function AdminSidebar() {
                 </div>
             </nav>
 
-            {/* User profile section removed */}
+            {/* User profile and logout section */}
+            <div className="sidebar-user-section">
+                {user && (
+                    <div className="user-info">
+                        <div className="user-avatar">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3-3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                            </svg>
+                        </div>
+                        <div className="user-details">
+                            <div className="user-name">{user.firstName} {user.lastName}</div>
+                            <div className="user-role">Director</div>
+                        </div>
+                    </div>
+                )}
+
+                <button onClick={handleLogout} className="logout-button">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                    </svg>
+                    <span>Çıxış</span>
+                </button>
+            </div>
 
             <div className="footer-logo">
                 <img src={footerLogo} alt="Footer Logo" />

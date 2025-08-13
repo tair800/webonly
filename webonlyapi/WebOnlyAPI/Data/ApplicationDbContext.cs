@@ -28,6 +28,11 @@ namespace WebOnlyAPI.Data
         public DbSet<ServiceArticle> ServiceArticles { get; set; }
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<VisitorAnalytics> VisitorAnalytics { get; set; }
+        
+        // User system DbSets
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserSession> UserSessions { get; set; }
+        public DbSet<UserLoginHistory> UserLoginHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -81,6 +86,19 @@ namespace WebOnlyAPI.Data
 
             modelBuilder.Entity<EquipmentTagMapping>()
                 .HasKey(etm => new { etm.EquipmentId, etm.TagId });
+
+            // Configure User system relationships
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.UserSessions)
+                .WithOne(s => s.User)
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.LoginHistory)
+                .WithOne(h => h.User)
+                .HasForeignKey(h => h.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Seed some initial data if needed
             SeedData(modelBuilder);
