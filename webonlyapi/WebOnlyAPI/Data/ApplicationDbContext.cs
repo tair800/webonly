@@ -27,6 +27,7 @@ namespace WebOnlyAPI.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceArticle> ServiceArticles { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<VisitorAnalytics> VisitorAnalytics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +50,7 @@ namespace WebOnlyAPI.Data
             modelBuilder.Entity<Service>().ToTable("Services");
             modelBuilder.Entity<ServiceArticle>().ToTable("ServiceArticles");
             modelBuilder.Entity<Slider>().ToTable("Sliders");
+            modelBuilder.Entity<VisitorAnalytics>().ToTable("VisitorAnalytics");
 
             // Configure relationships
             modelBuilder.Entity<Equipment>()

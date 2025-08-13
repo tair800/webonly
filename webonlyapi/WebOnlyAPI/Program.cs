@@ -38,6 +38,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IReferenceService, ReferenceService>();
 builder.Services.AddScoped<DataSeederService>();
+builder.Services.AddScoped<IVisitorAnalyticsService, VisitorAnalyticsService>();
 
 var app = builder.Build();
 
@@ -66,7 +67,8 @@ app.Use(async (context, next) =>
 
 // Authentication and Authorization middleware removed
 
-// Static files middleware removed - not needed for API project
+// Enable static files for serving uploaded images
+app.UseStaticFiles();
 
 app.MapControllers();
 

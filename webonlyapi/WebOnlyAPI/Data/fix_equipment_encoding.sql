@@ -110,3 +110,4 @@ WHERE Description LIKE '%performanslÄ±%';
 
 -- Commit the changes
 COMMIT;
+

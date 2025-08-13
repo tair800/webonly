@@ -112,7 +112,7 @@ function EquipmentDetail() {
                 </div>
                 <div className="equipment-detail-right">
                     <div className="equipment-image-container">
-                        <img src={equipment.img} alt={equipment.name} className="equipment-detail-image" />
+                        <img src={resolveUrl(equipment.imageUrl)} alt={equipment.name} className="equipment-detail-image" />
                     </div>
                 </div>
             </div>

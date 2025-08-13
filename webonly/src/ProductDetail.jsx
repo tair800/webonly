@@ -35,17 +35,17 @@ function ProductDetail() {
                 const sections = [
                     {
                         title: data.section1Title || 'Section 1',
-                        content: data.section1Content || 'Content for section 1',
+                        content: data.section1Description || 'Content for section 1',
                         image: data.section1Image ? resolveUrl(data.section1Image) : ''
                     },
                     {
                         title: data.section2Title || 'Section 2',
-                        content: data.section2Content || 'Content for section 2',
+                        content: data.section2Description || 'Content for section 2',
                         image: data.section2Image ? resolveUrl(data.section2Image) : ''
                     },
                     {
                         title: data.section3Title || 'Section 3',
-                        content: data.section3Content || 'Content for section 3',
+                        content: data.section3Description || 'Content for section 3',
                         image: data.section3Image ? resolveUrl(data.section3Image) : ''
                     }
                 ];
@@ -54,8 +54,11 @@ function ProductDetail() {
                     ...data,
                     sections: sections
                 });
+                setLoading(false);
             } catch (e) {
                 console.error(e);
+                setError(e.message);
+                setLoading(false);
             }
         };
         fetchProduct();

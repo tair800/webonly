@@ -52,7 +52,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutLogos");
+                    b.ToTable("AboutLogos", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Employee", b =>
@@ -101,7 +101,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Equipment", b =>
@@ -141,7 +141,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Equipment");
+                    b.ToTable("Equipment", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategory", b =>
@@ -183,7 +183,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EquipmentCategories");
+                    b.ToTable("EquipmentCategories", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategoryMapping", b =>
@@ -198,7 +198,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("EquipmentCategoryMapping");
+                    b.ToTable("EquipmentCategoryMapping", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentFeature", b =>
@@ -230,7 +230,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("EquipmentFeatures");
+                    b.ToTable("EquipmentFeatures", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentSpecification", b =>
@@ -266,7 +266,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("EquipmentSpecifications");
+                    b.ToTable("EquipmentSpecifications", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentTag", b =>
@@ -304,7 +304,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EquipmentTags");
+                    b.ToTable("EquipmentTags", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentTagMapping", b =>
@@ -319,7 +319,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("EquipmentTagMapping");
+                    b.ToTable("EquipmentTagMapping", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Product", b =>
@@ -413,7 +413,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.ProductImage", b =>
@@ -443,7 +443,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Reference", b =>
@@ -475,7 +475,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("References");
+                    b.ToTable("References", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Service", b =>
@@ -523,7 +523,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.ServiceArticle", b =>
@@ -564,7 +564,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ServiceArticles");
+                    b.ToTable("ServiceArticles", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.Slider", b =>
@@ -598,7 +598,7 @@ namespace WebOnlyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sliders");
+                    b.ToTable("Sliders", (string)null);
                 });
 
             modelBuilder.Entity("WebOnlyAPI.Models.EquipmentCategoryMapping", b =>
