@@ -1,14 +1,75 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { servicesList } from './data/servicesData.js';
 import './ServiceDetail.css';
+
+const API = 'http://localhost:5098/api';
 
 function ServiceDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const services = servicesList;
-    const currentService = services.find(s => s.id === parseInt(id)) || services[0];
+    const [currentService, setCurrentService] = useState({});
+    const [allServices, setAllServices] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    const resolveUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/uploads/')) return `http://localhost:5098${url}`;
+        return url;
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                // Fetch all services for sidebar navigation
+                const servicesRes = await fetch(`${API}/services`);
+                if (!servicesRes.ok) throw new Error('Failed to load services');
+                const servicesData = await servicesRes.json();
+                setAllServices(servicesData);
+
+                // Fetch current service details
+                const serviceRes = await fetch(`${API}/services/${id}`);
+                if (!serviceRes.ok) throw new Error('Failed to load service');
+                const serviceData = await serviceRes.json();
+                setCurrentService(serviceData);
+            } catch (e) {
+                console.error('Error fetching data:', e);
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [id]);
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="service-detail-container">
+                <div className="service-detail-content">
+                    <div className="service-detail-center">
+                        <h2>Yüklənir...</h2>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error || !currentService) {
+        return (
+            <div className="service-detail-container">
+                <div className="service-detail-content">
+                    <div className="service-detail-center">
+                        <h2>Xəta: {error || 'Xidmət tapılmadı'}</h2>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
 
     function Icon({ isActive }) {
@@ -102,7 +163,7 @@ function ServiceDetail() {
     function List() {
         return (
             <div className="list-container" data-name="List">
-                {services.map((service) => {
+                {allServices.map((service) => {
                     const isActive = service.id === parseInt(id);
 
                     if (isActive) {
@@ -123,48 +184,6 @@ function ServiceDetail() {
         );
     }
 
-    // Loglama Article Components
-    function HorizontalBorder({ number }) {
-        return (
-            <div className="horizontal-border-container" data-name="HorizontalBorder">
-                <div aria-hidden="true" className="horizontal-border-line" />
-                <div className="horizontal-border-number">
-                    <p>{number}</p>
-                </div>
-                <div className="horizontal-border-dot" data-name="Background" />
-            </div>
-        );
-    }
-
-    function Article({ number, title, description }) {
-        return (
-            <div className="article-container" data-name="Article">
-                <div className="article-title">
-                    <p>{title}</p>
-                </div>
-                <div className="article-description">
-                    <p>{description}</p>
-                </div>
-                <HorizontalBorder number={number} />
-            </div>
-        );
-    }
-
-    function ArticleRow({ articles }) {
-        return (
-            <div className="article-row">
-                {articles.map((article, index) => (
-                    <Article
-                        key={index}
-                        number={article.number}
-                        title={article.title}
-                        description={article.description}
-                    />
-                ))}
-            </div>
-        );
-    }
-
     return (
         <div className="service-detail-container">
             {/* Circle Background Element */}
@@ -180,7 +199,7 @@ function ServiceDetail() {
                 <div className="service-detail-right">
                     <div className="service-detail-content-area">
                         <img
-                            src={currentService.detailImage}
+                            src={resolveUrl(currentService.detailImage)}
                             alt={currentService.name}
                             className="service-detail-image"
                         />
@@ -188,13 +207,6 @@ function ServiceDetail() {
                     <h1 className="service-detail-title">{currentService.name}</h1>
                     {currentService.description && (
                         <p className="service-detail-description">{currentService.description}</p>
-                    )}
-
-                    {/* Dynamic Article Section */}
-                    {currentService.articles && (
-                        <div className="loglama-article-section">
-                            <ArticleRow articles={currentService.articles} />
-                        </div>
                     )}
                 </div>
             </div>

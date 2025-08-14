@@ -66,15 +66,5 @@ namespace WebOnlyAPI.DTOs
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public List<ServiceArticleDto> Articles { get; set; } = new();
-    }
-
-    public class ServiceArticleDto
-    {
-        public int Id { get; set; }
-        public string Number { get; set; } = string.Empty;
-        public string Title { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public int OrderIndex { get; set; }
     }
 }

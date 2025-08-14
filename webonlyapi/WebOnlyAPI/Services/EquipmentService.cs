@@ -37,29 +37,64 @@ namespace WebOnlyAPI.Services
 
         public async Task<IEnumerable<EquipmentResponseDto>> GetAllFullAsync()
         {
-            var list = await _context.Equipment
-                .Include(e => e.FeaturesList.OrderBy(f => f.OrderIndex))
-                .Include(e => e.Specifications.OrderBy(s => s.OrderIndex))
-                .Include(e => e.CategoryMappings)
-                    .ThenInclude(cm => cm.Category)
-                .Include(e => e.TagMappings)
-                    .ThenInclude(tm => tm.Tag)
-                .OrderBy(e => e.CreatedAt)
-                .ToListAsync();
-            return list.Select(MapToResponse);
+            try
+            {
+                var list = await _context.Equipment
+                    .Include(e => e.FeaturesList.OrderBy(f => f.OrderIndex))
+                    .Include(e => e.Specifications.OrderBy(s => s.OrderIndex))
+                    .Include(e => e.CategoryMappings)
+                        .ThenInclude(cm => cm.Category)
+                    .Include(e => e.TagMappings)
+                        .ThenInclude(tm => tm.Tag)
+                    .OrderBy(e => e.CreatedAt)
+                    .ToListAsync();
+                
+                // Filter out items with null navigation properties to prevent MapToResponse errors
+                var validItems = list.Where(e => 
+                    e.CategoryMappings?.All(cm => cm.Category != null) == true &&
+                    e.TagMappings?.All(tm => tm.Tag != null) == true
+                ).ToList();
+                
+                return validItems.Select(MapToResponse);
+            }
+            catch (Exception ex)
+            {
+                // Log the error and return empty list instead of crashing
+                Console.WriteLine($"Error in GetAllFullAsync: {ex.Message}");
+                return new List<EquipmentResponseDto>();
+            }
         }
 
         public async Task<EquipmentResponseDto?> GetByIdAsync(int id)
         {
-            var e = await _context.Equipment
-                .Include(eq => eq.FeaturesList.OrderBy(f => f.OrderIndex))
-                .Include(eq => eq.Specifications.OrderBy(s => s.OrderIndex))
-                .Include(eq => eq.CategoryMappings)
-                    .ThenInclude(cm => cm.Category)
-                .Include(eq => eq.TagMappings)
-                    .ThenInclude(tm => tm.Tag)
-                .FirstOrDefaultAsync(eq => eq.Id == id);
-            return e == null ? null : MapToResponse(e);
+            try
+            {
+                var e = await _context.Equipment
+                    .Include(eq => eq.FeaturesList.OrderBy(f => f.OrderIndex))
+                    .Include(eq => eq.Specifications.OrderBy(s => s.OrderIndex))
+                    .Include(eq => eq.CategoryMappings)
+                        .ThenInclude(cm => cm.Category)
+                    .Include(eq => eq.TagMappings)
+                        .ThenInclude(tm => tm.Tag)
+                    .FirstOrDefaultAsync(eq => eq.Id == id);
+                
+                if (e == null) return null;
+                
+                // Check if navigation properties are valid
+                if (e.CategoryMappings?.Any(cm => cm.Category == null) == true ||
+                    e.TagMappings?.Any(tm => tm.Tag == null) == true)
+                {
+                    Console.WriteLine($"Equipment {id} has null navigation properties, skipping MapToResponse");
+                    return null;
+                }
+                
+                return MapToResponse(e);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetByIdAsync for equipment {id}: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<EquipmentResponseDto> CreateAsync(CreateEquipmentDto dto)
@@ -71,10 +106,45 @@ namespace WebOnlyAPI.Services
                 Core = dto.Core,
                 Description = dto.Description,
                 ImageUrl = dto.ImageUrl,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
+
             _context.Equipment.Add(e);
             await _context.SaveChangesAsync();
+
+            // Add features
+            if (dto.Features?.Any() == true)
+            {
+                foreach (var featureDto in dto.Features)
+                {
+                    var feature = new EquipmentFeature
+                    {
+                        EquipmentId = e.Id,
+                        Feature = featureDto.Feature,
+                        OrderIndex = featureDto.OrderIndex,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.EquipmentFeatures.Add(feature);
+                }
+            }
+
+            // Add specifications
+            if (dto.Specifications?.Any() == true)
+            {
+                foreach (var specDto in dto.Specifications)
+                {
+                    var spec = new EquipmentSpecification
+                    {
+                        EquipmentId = e.Id,
+                        Key = specDto.Key,
+                        Value = specDto.Value,
+                        OrderIndex = specDto.OrderIndex,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.EquipmentSpecifications.Add(spec);
+                }
+            }
 
             // Add category mappings
             if (dto.CategoryIds?.Any() == true)
@@ -110,58 +180,159 @@ namespace WebOnlyAPI.Services
 
         public async Task<EquipmentResponseDto?> UpdateAsync(int id, UpdateEquipmentDto dto)
         {
-            var e = await _context.Equipment
-                .Include(eq => eq.CategoryMappings)
-                .Include(eq => eq.TagMappings)
-                .FirstOrDefaultAsync(eq => eq.Id == id);
-            
-            if (e == null) return null;
-
-            e.Name = dto.Name;
-            e.Version = dto.Version;
-            e.Core = dto.Core;
-            e.Description = dto.Description;
-            e.ImageUrl = dto.ImageUrl;
-            e.UpdatedAt = DateTime.UtcNow;
-
-            // Update category mappings
-            if (dto.CategoryIds?.Any() == true)
+            try
             {
-                // Remove existing category mappings
-                _context.EquipmentCategoryMapping.RemoveRange(e.CategoryMappings);
+                var e = await _context.Equipment
+                    .Include(eq => eq.CategoryMappings)
+                    .Include(eq => eq.TagMappings)
+                    .Include(eq => eq.FeaturesList)
+                    .Include(eq => eq.Specifications)
+                    .FirstOrDefaultAsync(eq => eq.Id == id);
                 
-                // Add new category mappings
-                foreach (var categoryId in dto.CategoryIds)
-                {
-                    var categoryMapping = new EquipmentCategoryMapping
-                    {
-                        EquipmentId = e.Id,
-                        CategoryId = categoryId
-                    };
-                    _context.EquipmentCategoryMapping.Add(categoryMapping);
-                }
-            }
+                if (e == null) return null;
 
-            // Update tag mappings
-            if (dto.TagIds?.Any() == true)
+                e.Name = dto.Name;
+                e.Version = dto.Version;
+                e.Core = dto.Core;
+                e.Description = dto.Description;
+                e.ImageUrl = dto.ImageUrl;
+                e.UpdatedAt = DateTime.UtcNow;
+
+                // Update features
+                if (dto.Features != null)
+                {
+                    try
+                    {
+                        // Remove existing features from DbSet
+                        var existingFeatures = await _context.EquipmentFeatures
+                            .Where(f => f.EquipmentId == id)
+                            .ToListAsync();
+                        _context.EquipmentFeatures.RemoveRange(existingFeatures);
+                        
+                        // Add new features
+                        foreach (var featureDto in dto.Features)
+                        {
+                            var feature = new EquipmentFeature
+                            {
+                                EquipmentId = e.Id,
+                                Feature = featureDto.Feature,
+                                OrderIndex = featureDto.OrderIndex,
+                                CreatedAt = DateTime.UtcNow
+                            };
+                            _context.EquipmentFeatures.Add(feature);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Error updating features: {ex.Message}", ex);
+                    }
+                }
+
+                // Update specifications
+                if (dto.Specifications != null)
+                {
+                    try
+                    {
+                        // Remove existing specifications from DbSet
+                        var existingSpecs = await _context.EquipmentSpecifications
+                            .Where(s => s.EquipmentId == id)
+                            .ToListAsync();
+                        _context.EquipmentSpecifications.RemoveRange(existingSpecs);
+                        
+                        // Add new specifications
+                        foreach (var specDto in dto.Specifications)
+                        {
+                            var spec = new EquipmentSpecification
+                            {
+                                EquipmentId = e.Id,
+                                Key = specDto.Key,
+                                Value = specDto.Value,
+                                OrderIndex = specDto.OrderIndex,
+                                CreatedAt = DateTime.UtcNow
+                            };
+                            _context.EquipmentSpecifications.Add(spec);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Error updating specifications: {ex.Message}", ex);
+                    }
+                }
+
+                // Update category mappings
+                if (dto.CategoryIds != null)
+                {
+                    try
+                    {
+                        // Remove existing category mappings from DbSet
+                        var existingCategoryMappings = await _context.EquipmentCategoryMapping
+                            .Where(cm => cm.EquipmentId == id)
+                            .ToListAsync();
+                        _context.EquipmentCategoryMapping.RemoveRange(existingCategoryMappings);
+                        
+                        // Add new category mappings
+                        foreach (var categoryId in dto.CategoryIds)
+                        {
+                            var categoryMapping = new EquipmentCategoryMapping
+                            {
+                                EquipmentId = e.Id,
+                                CategoryId = categoryId
+                            };
+                            _context.EquipmentCategoryMapping.Add(categoryMapping);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Error updating category mappings: {ex.Message}", ex);
+                    }
+                }
+
+                // Update tag mappings
+                if (dto.TagIds != null)
+                {
+                    try
+                    {
+                        // Remove existing tag mappings from DbSet
+                        var existingTagMappings = await _context.EquipmentTagMapping
+                            .Where(tm => tm.EquipmentId == id)
+                            .ToListAsync();
+                        _context.EquipmentTagMapping.RemoveRange(existingTagMappings);
+                        
+                        // Add new tag mappings
+                        foreach (var tagId in dto.TagIds)
+                        {
+                            var tagMapping = new EquipmentTagMapping
+                            {
+                                EquipmentId = e.Id,
+                                TagId = tagId
+                            };
+                            _context.EquipmentTagMapping.Add(tagMapping);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Error updating tag mappings: {ex.Message}", ex);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                
+                // Reload the equipment with all navigation properties to avoid null reference in MapToResponse
+                var reloadedEquipment = await _context.Equipment
+                    .Include(eq => eq.FeaturesList.OrderBy(f => f.OrderIndex))
+                    .Include(eq => eq.Specifications.OrderBy(s => s.OrderIndex))
+                    .Include(eq => eq.CategoryMappings)
+                        .ThenInclude(cm => cm.Category)
+                    .Include(eq => eq.TagMappings)
+                        .ThenInclude(tm => tm.Tag)
+                    .FirstOrDefaultAsync(eq => eq.Id == id);
+                
+                return MapToResponse(reloadedEquipment);
+            }
+            catch (Exception ex)
             {
-                // Remove existing tag mappings
-                _context.EquipmentTagMapping.RemoveRange(e.TagMappings);
-                
-                // Add new tag mappings
-                foreach (var tagId in dto.TagIds)
-                {
-                    var tagMapping = new EquipmentTagMapping
-                    {
-                        EquipmentId = e.Id,
-                        TagId = tagId
-                    };
-                    _context.EquipmentTagMapping.Add(tagMapping);
-                }
+                throw new Exception($"Error in UpdateAsync for equipment {id}: {ex.Message}", ex);
             }
-
-            await _context.SaveChangesAsync();
-            return MapToResponse(e);
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -198,7 +369,7 @@ namespace WebOnlyAPI.Services
                     Value = s.Value,
                     OrderIndex = s.OrderIndex
                 }).ToList(),
-                Categories = e.CategoryMappings.Select(cm => new EquipmentCategoryDto
+                Categories = e.CategoryMappings?.Where(cm => cm.Category != null).Select(cm => new EquipmentCategoryDto
                 {
                     Id = cm.Category.Id,
                     Name = cm.Category.Name,
@@ -206,15 +377,15 @@ namespace WebOnlyAPI.Services
                     Icon = cm.Category.Icon,
                     Color = cm.Category.Color,
                     OrderIndex = cm.Category.OrderIndex
-                }).ToList(),
-                Tags = e.TagMappings.Select(tm => new EquipmentTagDto
+                }).ToList() ?? new List<EquipmentCategoryDto>(),
+                Tags = e.TagMappings?.Where(tm => tm.Tag != null).Select(tm => new EquipmentTagDto
                 {
                     Id = tm.Tag.Id,
                     Name = tm.Tag.Name,
                     Description = tm.Tag.Description,
                     Color = tm.Tag.Color,
                     OrderIndex = tm.Tag.OrderIndex
-                }).ToList()
+                }).ToList() ?? new List<EquipmentTagDto>()
             };
         }
 

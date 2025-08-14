@@ -13,10 +13,46 @@ export default function AdminServices() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const resolveUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/uploads/')) return `http://localhost:5098${url}`;
+        return url;
+    };
+
+    // Filter services based on search term
+    const filteredServices = services.filter(service =>
+        service.name?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+        service.subtitle?.toLowerCase().startsWith(searchTerm.toLowerCase())
+    );
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(3);
+    const [itemsPerPage] = useState(1);
+
+    // Calculate pagination for filtered services
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentServices = filteredServices.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
+
+    // Pagination functions
+    const goToPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const goToPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
     // File input refs for browse functionality
     const imageFileRefs = useRef({});
@@ -34,31 +70,6 @@ export default function AdminServices() {
         } catch (e) { setError(e.message); } finally { setLoading(false); }
     };
 
-    // Pagination functions
-    const totalPages = Math.max(1, Math.ceil(services.length / itemsPerPage));
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentServices = services.slice(startIndex, endIndex);
-
-    const goToPage = (page) => {
-        setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    const goToNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    };
-
-    const goToPreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    };
-
     useEffect(() => { loadServices(); }, []);
 
     const handleAddService = () => {
@@ -68,6 +79,11 @@ export default function AdminServices() {
     const handleCloseModal = () => {
         setShowModal(false);
         setNewService({ name: '', subtitle: '', description: '', icon: '', detailImage: '', imageUrl: '', imageFile: null });
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1); // Reset to first page when searching
     };
 
     const createService = async () => {
@@ -292,6 +308,8 @@ export default function AdminServices() {
                             className="form-control"
                             placeholder="Axtar..."
                             style={{ paddingLeft: '40px' }}
+                            value={searchTerm}
+                            onChange={handleSearchChange}
                         />
                         <svg
                             width="16"
@@ -321,7 +339,7 @@ export default function AdminServices() {
                     <div className="row g-3 align-items-start">
                         <div className="col-12 col-lg-8 d-flex flex-column gap-3">
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                <h5 className="text-white m-0">Service {String(startIndex + idx + 1).padStart(2, '0')}</h5>
+                                <h5 className="text-white m-0">Service {String(indexOfFirstItem + idx + 1).padStart(2, '0')}</h5>
                                 <button className="btn btn-danger btn-sm" onClick={() => removeService(s.id)} disabled={submitting}>
                                     {submitting ? 'Silinir...' : 'Sil'}
                                 </button>
@@ -348,7 +366,13 @@ export default function AdminServices() {
                         <div className="col-12 col-lg-4">
                             <div className="image-upload-container d-flex flex-column gap-2">
                                 <div className="image-placeholder position-relative">
-                                    {s.detailImage && <img src={s.detailImage} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }} />}
+                                    {s.detailImage && (
+                                        <img
+                                            src={resolveUrl(s.detailImage)}
+                                            alt={s.name}
+                                            style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 12 }}
+                                        />
+                                    )}
                                     <div className="image-actions position-absolute">
                                         <button className="action-btn delete-img" aria-label="Delete image" onClick={() => setServices(prev => prev.map(x => x.id === s.id ? { ...x, detailImage: '', imageFile: null } : x))}>
                                             <img src="/assets/admin-trash.png" alt="Delete" />

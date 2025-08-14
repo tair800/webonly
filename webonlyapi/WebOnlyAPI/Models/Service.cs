@@ -30,8 +30,5 @@ namespace WebOnlyAPI.Models
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-        
-        // Navigation properties
-        public ICollection<ServiceArticle> Articles { get; set; } = new List<ServiceArticle>();
     }
 }

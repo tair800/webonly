@@ -5,7 +5,7 @@ import { useAuth } from './contexts/AuthContext';
 import './AdminSidebar.css';
 import logoWhite from '/assets/logo-white.png';
 import logoIcon from '/assets/logo-icon.png';
-import footerLogo from '/assets/footer-logo.png';
+import footerLogo from '/assets/admin-footer.png';
 
 export default function AdminSidebar() {
     const location = useLocation();

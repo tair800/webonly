@@ -177,6 +177,22 @@
       "PackagePath": "staticwebassets\\uploads\\products\\8\\20250810134022262_email-icon.png"
     },
     {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\services\\20250814134818440_servicesDetail8.png",
+      "PackagePath": "staticwebassets\\uploads\\services\\20250814134818440_servicesDetail8.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\services\\20250814134839175_servicesDetail1.png",
+      "PackagePath": "staticwebassets\\uploads\\services\\20250814134839175_servicesDetail1.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\services\\20250814135304120_market2.png",
+      "PackagePath": "staticwebassets\\uploads\\services\\20250814135304120_market2.png"
+    },
+    {
+      "Id": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\services\\20250814135857602_servicesDetail1.png",
+      "PackagePath": "staticwebassets\\uploads\\services\\20250814135857602_servicesDetail1.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WebOnlyAPI.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

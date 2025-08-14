@@ -4,6 +4,22 @@
     color: #ffffff;
     padding: 2rem;
     font-family: Arial, sans-serif;
+    position: relative;
+}
+
+.test-footer-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.test-footer-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .test-container h1 {

@@ -11,6 +11,8 @@ export default function AdminEquipment() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +20,18 @@ export default function AdminEquipment() {
 
     const [showModal, setShowModal] = useState(false);
     const [editingId, setEditingId] = useState(null);
-    const [form, setForm] = useState({ name: '', version: '', core: '', description: '', imageUrl: '', imageFile: null });
+    const [form, setForm] = useState({
+        name: '',
+        version: '',
+        core: '',
+        description: '',
+        imageUrl: '',
+        imageFile: null,
+        categoryIds: [],
+        tagIds: [],
+        features: [],
+        specifications: []
+    });
 
     // File input refs for browse functionality
     const imageFileRefs = useRef({});
@@ -29,7 +42,18 @@ export default function AdminEquipment() {
         return url;
     };
 
-    const resetForm = () => setForm({ name: '', version: '', core: '', description: '', imageUrl: '', imageFile: null });
+    const resetForm = () => setForm({
+        name: '',
+        version: '',
+        core: '',
+        description: '',
+        imageUrl: '',
+        imageFile: null,
+        categoryIds: [],
+        tagIds: [],
+        features: [],
+        specifications: []
+    });
 
     const loadEquipments = async () => {
         try {
@@ -46,6 +70,30 @@ export default function AdminEquipment() {
             setError(e.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const loadCategories = async () => {
+        try {
+            const res = await fetch(`${API}/equipment/categories`);
+            if (res.ok) {
+                const data = await res.json();
+                setCategories(data);
+            }
+        } catch (e) {
+            console.error('Failed to load categories:', e);
+        }
+    };
+
+    const loadTags = async () => {
+        try {
+            const res = await fetch(`${API}/equipment/tags`);
+            if (res.ok) {
+                const data = await res.json();
+                setTags(data);
+            }
+        } catch (e) {
+            console.error('Failed to load tags:', e);
         }
     };
 
@@ -76,6 +124,8 @@ export default function AdminEquipment() {
 
     useEffect(() => {
         loadEquipments();
+        loadCategories();
+        loadTags();
     }, []);
 
     const openCreate = () => {
@@ -85,9 +135,118 @@ export default function AdminEquipment() {
     };
 
     const closeModal = () => {
-        setShowModal(false);
         setEditingId(null);
         resetForm();
+    };
+
+    const autoReorder = (items) => {
+        if (!items || items.length === 0) return [];
+
+        return items.map((item, index) => ({
+            ...item,
+            orderIndex: index
+        }));
+    };
+
+    const reorderItems = (equipmentId, type, fromIndex, toIndex) => {
+        setEquipments(prev => prev.map(eq => {
+            if (eq.id !== equipmentId) return eq;
+
+            const items = type === 'features' ? eq.features : eq.specifications;
+            if (!items || items.length === 0) return eq;
+
+            // Create a copy and move the item
+            const newItems = [...items];
+            const [movedItem] = newItems.splice(fromIndex, 1);
+            newItems.splice(toIndex, 0, movedItem);
+
+            // Auto-reorder to ensure sequential orderIndex
+            const reorderedItems = autoReorder(newItems);
+
+            return {
+                ...eq,
+                [type]: reorderedItems
+            };
+        }));
+    };
+
+    const addFeature = (equipmentId) => {
+        setEquipments(prev => prev.map(eq =>
+            eq.id === equipmentId
+                ? {
+                    ...eq,
+                    features: autoReorder([...(eq.features || []), {
+                        id: Date.now(),
+                        feature: '',
+                        orderIndex: 0 // Will be auto-corrected by autoReorder
+                    }])
+                }
+                : eq
+        ));
+    };
+
+    const updateFeature = (equipmentId, featureIndex, field, value) => {
+        setEquipments(prev => prev.map(eq =>
+            eq.id === equipmentId
+                ? {
+                    ...eq,
+                    features: eq.features.map((f, idx) =>
+                        idx === featureIndex ? { ...f, [field]: value } : f
+                    )
+                }
+                : eq
+        ));
+    };
+
+    const removeFeature = (equipmentId, featureIndex) => {
+        setEquipments(prev => prev.map(eq =>
+            eq.id === equipmentId
+                ? {
+                    ...eq,
+                    features: autoReorder(eq.features.filter((_, idx) => idx !== featureIndex))
+                }
+                : eq
+        ));
+    };
+
+    const addSpecification = (equipmentId) => {
+        setEquipments(prev => prev.map(eq =>
+            eq.id === equipmentId
+                ? {
+                    ...eq,
+                    specifications: autoReorder([...(eq.specifications || []), {
+                        id: Date.now(),
+                        key: '',
+                        value: '',
+                        orderIndex: 0 // Will be auto-corrected by autoReorder
+                    }])
+                }
+                : eq
+        ));
+    };
+
+    const updateSpecification = (equipmentId, specIndex, field, value) => {
+        setEquipments(prev => prev.map(eq =>
+            eq.id === equipmentId
+                ? {
+                    ...eq,
+                    specifications: eq.specifications.map((s, idx) =>
+                        idx === specIndex ? { ...s, [field]: value } : s
+                    )
+                }
+                : eq
+        ));
+    };
+
+    const removeSpecification = (equipmentId, specIndex) => {
+        setEquipments(prev => prev.map(eq =>
+            eq.id === equipmentId
+                ? {
+                    ...eq,
+                    specifications: autoReorder(eq.specifications.filter((_, idx) => idx !== specIndex))
+                }
+                : eq
+        ));
     };
 
     const submitForm = async () => {
@@ -121,7 +280,11 @@ export default function AdminEquipment() {
                             version: form.version,
                             core: form.core,
                             description: form.description,
-                            imageUrl: ''
+                            imageUrl: '',
+                            categoryIds: form.categoryIds,
+                            tagIds: form.tagIds,
+                            features: form.features,
+                            specifications: form.specifications
                         })
                     });
 
@@ -152,7 +315,11 @@ export default function AdminEquipment() {
                             version: form.version,
                             core: form.core,
                             description: form.description,
-                            imageUrl: finalImageUrl
+                            imageUrl: finalImageUrl,
+                            categoryIds: form.categoryIds,
+                            tagIds: form.tagIds,
+                            features: form.features,
+                            specifications: form.specifications
                         })
                     });
 
@@ -183,7 +350,11 @@ export default function AdminEquipment() {
                     version: form.version,
                     core: form.core,
                     description: form.description,
-                    imageUrl: form.imageUrl
+                    imageUrl: form.imageUrl,
+                    categoryIds: form.categoryIds,
+                    tagIds: form.tagIds,
+                    features: form.features,
+                    specifications: form.specifications
                 };
                 const res = await fetch(url, {
                     method,
@@ -232,7 +403,23 @@ export default function AdminEquipment() {
 
         setSubmitting(true);
         try {
-            // Always use JSON for updates
+            // Extract category and tag IDs from the current item
+            const categoryIds = (item.categories || []).map(c => c.id);
+            const tagIds = (item.tags || []).map(t => t.id);
+
+            // Prepare features and specifications for the API
+            const features = autoReorder(item.features || []).map(f => ({
+                feature: f.feature,
+                orderIndex: f.orderIndex
+            }));
+
+            const specifications = autoReorder(item.specifications || []).map(s => ({
+                key: s.key,
+                value: s.value,
+                orderIndex: s.orderIndex
+            }));
+
+            // Send everything in one update call
             const res = await fetch(`${API}/equipment/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -241,12 +428,26 @@ export default function AdminEquipment() {
                     version: item.version || '',
                     core: item.core || '',
                     description: item.description || '',
-                    imageUrl: item.imageUrl || ''
+                    imageUrl: item.imageUrl || '',
+                    categoryIds: categoryIds,
+                    tagIds: tagIds,
+                    features: features,
+                    specifications: specifications
                 })
             });
 
-            if (!res.ok) throw new Error('Save failed');
+            console.log('API Response Status:', res.status);
+            console.log('API Response OK:', res.ok);
+            console.log('API Response Headers:', res.headers);
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                console.error('API Error Response:', errorText);
+                throw new Error(`Save failed: ${res.status} - ${errorText}`);
+            }
+
             const saved = await res.json();
+            console.log('API Success Response:', saved);
             setOriginalById(prev => ({ ...prev, [id]: { ...saved } }));
 
             Swal.fire({
@@ -276,13 +477,27 @@ export default function AdminEquipment() {
     const hasChanges = (e) => {
         const o = originalById[e.id];
         if (!o) return false;
-        return (
+
+        // Check basic fields
+        const basicFieldsChanged = (
             (e.name || '') !== (o.name || '') ||
             (e.version || '') !== (o.version || '') ||
             (e.core || '') !== (o.core || '') ||
             (e.description || '') !== (o.description || '') ||
             (e.imageUrl || '') !== (o.imageUrl || '')
         );
+
+        if (basicFieldsChanged) return true;
+
+        // Check features
+        const featuresChanged = JSON.stringify(e.features || []) !== JSON.stringify(o.features || []);
+        if (featuresChanged) return true;
+
+        // Check specifications
+        const specsChanged = JSON.stringify(e.specifications || []) !== JSON.stringify(o.specifications || []);
+        if (specsChanged) return true;
+
+        return false;
     };
 
     const remove = async (id) => {
@@ -352,6 +567,7 @@ export default function AdminEquipment() {
 
                     <div className="row g-3 align-items-start">
                         <div className="col-12 col-lg-8 d-flex flex-column gap-3">
+                            {/* Basic Information */}
                             <div className="form-group row g-3 align-items-start">
                                 <label className="col-sm-3 col-form-label">Name *</label>
                                 <div className="col-sm-9">
@@ -382,6 +598,259 @@ export default function AdminEquipment() {
                                     <input className="form-control" value={e.imageUrl || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: ev.target.value } : x))} />
                                 </div>
                             </div>
+
+                            {/* Features Section */}
+                            <div className="form-group row g-3 align-items-start features-section">
+                                <label className="col-sm-3 col-form-label">Features</label>
+                                <div className="col-sm-9">
+                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Equipment Features</span>
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() => addFeature(e.id)}
+                                        >
+                                            + Add Feature
+                                        </button>
+                                    </div>
+                                    <div className="alert alert-info alert-sm mb-3" style={{ fontSize: '12px', padding: '8px 12px' }}>
+                                        <strong>💡 Avtomatik Sıralama:</strong> Xüsusiyyətlər avtomatik olaraq ardıcıl nömrələnir. Yenidən sıralamaq üçün ↑↓ düymələrindən istifadə edin.
+                                    </div>
+                                    {(e.features || []).map((feature, featureIndex) => (
+                                        <div key={feature.id || featureIndex} className="d-flex gap-2 mb-2 align-items-center feature-item">
+                                            <span className="badge bg-primary" style={{ minWidth: '30px', textAlign: 'center' }}>
+                                                #{feature.orderIndex + 1}
+                                            </span>
+                                            <input
+                                                className="form-control"
+                                                placeholder="Feature description"
+                                                value={feature.feature || ''}
+                                                onChange={(ev) => updateFeature(e.id, featureIndex, 'feature', ev.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-secondary"
+                                                onClick={() => reorderItems(e.id, 'features', featureIndex, Math.max(0, featureIndex - 1))}
+                                                disabled={featureIndex === 0}
+                                                title="Move Up"
+                                            >
+                                                ↑
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-secondary"
+                                                onClick={() => reorderItems(e.id, 'features', featureIndex, Math.min((e.features || []).length - 1, featureIndex + 1))}
+                                                disabled={featureIndex === (e.features || []).length - 1}
+                                                title="Move Down"
+                                            >
+                                                ↓
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-danger"
+                                                onClick={() => removeFeature(e.id, featureIndex)}
+                                                title="Remove Feature"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Specifications Section */}
+                            <div className="form-group row g-3 align-items-start specifications-section">
+                                <label className="col-sm-3 col-form-label">Specifications</label>
+                                <div className="col-sm-9">
+                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Technical Specifications</span>
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() => addSpecification(e.id)}
+                                        >
+                                            + Add Spec
+                                        </button>
+                                    </div>
+                                    <div className="alert alert-info alert-sm mb-3" style={{ fontSize: '12px', padding: '8px 12px' }}>
+                                        <strong>💡 Avtomatik Sıralama:</strong> Spesifikasiyalar avtomatik olaraq ardıcıl nömrələnir. Yenidən sıralamaq üçün ↑↓ düymələrindən istifadə edin.
+                                    </div>
+                                    {(e.specifications || []).map((spec, specIndex) => (
+                                        <div key={spec.id || specIndex} className="d-flex gap-2 mb-2 align-items-center specification-item">
+                                            <span className="badge bg-secondary" style={{ minWidth: '30px', textAlign: 'center' }}>
+                                                #{spec.orderIndex + 1}
+                                            </span>
+                                            <input
+                                                className="form-control"
+                                                placeholder="Specification key"
+                                                value={spec.key || ''}
+                                                onChange={(ev) => updateSpecification(e.id, specIndex, 'key', ev.target.value)}
+                                            />
+                                            <input
+                                                className="form-control"
+                                                placeholder="Specification value"
+                                                value={spec.value || ''}
+                                                onChange={(ev) => updateSpecification(e.id, specIndex, 'value', ev.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-secondary"
+                                                onClick={() => reorderItems(e.id, 'specifications', specIndex, Math.max(0, specIndex - 1))}
+                                                disabled={specIndex === 0}
+                                                title="Move Up"
+                                            >
+                                                ↑
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-secondary"
+                                                onClick={() => reorderItems(e.id, 'specifications', specIndex, Math.min((e.specifications || []).length - 1, specIndex + 1))}
+                                                disabled={specIndex === (e.specifications || []).length - 1}
+                                                title="Move Down"
+                                            >
+                                                ↓
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-outline-danger"
+                                                onClick={() => removeSpecification(e.id, specIndex)}
+                                                title="Remove Specification"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Categories and Tags Display (Read-only for now) */}
+                            {(e.categories && e.categories.length > 0) && (
+                                <div className="form-group row g-3 align-items-start">
+                                    <label className="col-sm-3 col-form-label">Categories</label>
+                                    <div className="col-sm-9">
+                                        <div className="d-flex flex-wrap gap-2 mb-2">
+                                            {e.categories.map((cat, idx) => (
+                                                <span key={cat.id || idx} className="badge bg-primary">
+                                                    {cat.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <select
+                                            className="form-select"
+                                            multiple
+                                            value={(e.categories || []).map(c => c.id)}
+                                            onChange={(ev) => {
+                                                const selectedOptions = Array.from(ev.target.selectedOptions, option => parseInt(option.value));
+                                                // Find the selected categories by IDs
+                                                const selectedCategories = categories.filter(cat => selectedOptions.includes(cat.id));
+                                                setEquipments(prev => prev.map(x =>
+                                                    x.id === e.id ? { ...x, categories: selectedCategories } : x
+                                                ));
+                                            }}
+                                        >
+                                            {categories.map(cat => (
+                                                <option key={cat.id} value={cat.id}>
+                                                    {cat.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <small className="form-text text-muted">Hold Ctrl/Cmd to select multiple categories</small>
+                                    </div>
+                                </div>
+                            )}
+
+                            {(e.tags && e.tags.length > 0) && (
+                                <div className="form-group row g-3 align-items-start">
+                                    <label className="col-sm-3 col-form-label">Tags</label>
+                                    <div className="col-sm-9">
+                                        <div className="d-flex flex-wrap gap-2 mb-2">
+                                            {e.tags.map((tag, idx) => (
+                                                <span key={tag.id || idx} className="badge bg-secondary">
+                                                    {tag.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <select
+                                            className="form-select"
+                                            multiple
+                                            value={(e.tags || []).map(t => t.id)}
+                                            onChange={(ev) => {
+                                                const selectedOptions = Array.from(ev.target.selectedOptions, option => parseInt(option.value));
+                                                // Find the selected tags by IDs
+                                                const selectedTags = tags.filter(tag => selectedOptions.includes(tag.id));
+                                                setEquipments(prev => prev.map(x =>
+                                                    x.id === e.id ? { ...x, tags: selectedTags } : x
+                                                ));
+                                            }}
+                                        >
+                                            {tags.map(tag => (
+                                                <option key={tag.id} value={tag.id}>
+                                                    {tag.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <small className="form-text text-muted">Hold Ctrl/Cmd to select multiple tags</small>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Show dropdowns even if no categories/tags exist */}
+                            {(!e.categories || e.categories.length === 0) && (
+                                <div className="form-group row g-3 align-items-start">
+                                    <label className="col-sm-3 col-form-label">Categories</label>
+                                    <div className="col-sm-9">
+                                        <select
+                                            className="form-select"
+                                            multiple
+                                            value={[]}
+                                            onChange={(ev) => {
+                                                const selectedOptions = Array.from(ev.target.selectedOptions, option => parseInt(option.value));
+                                                // Find the selected categories by IDs
+                                                const selectedCategories = categories.filter(cat => selectedOptions.includes(cat.id));
+                                                setEquipments(prev => prev.map(x =>
+                                                    x.id === e.id ? { ...x, categories: selectedCategories } : x
+                                                ));
+                                            }}
+                                        >
+                                            {categories.map(cat => (
+                                                <option key={cat.id} value={cat.id}>
+                                                    {cat.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <small className="form-text text-muted">Hold Ctrl/Cmd to select multiple categories</small>
+                                    </div>
+                                </div>
+                            )}
+
+                            {(!e.tags || e.tags.length === 0) && (
+                                <div className="form-group row g-3 align-items-start">
+                                    <label className="col-sm-3 col-form-label">Tags</label>
+                                    <div className="col-sm-9">
+                                        <select
+                                            className="form-select"
+                                            multiple
+                                            value={[]}
+                                            onChange={(ev) => {
+                                                const selectedOptions = Array.from(ev.target.selectedOptions, option => parseInt(option.value));
+                                                // Find the selected tags by IDs
+                                                const selectedTags = tags.filter(tag => selectedOptions.includes(tag.id));
+                                                setEquipments(prev => prev.map(x =>
+                                                    x.id === e.id ? { ...x, tags: selectedTags } : x
+                                                ));
+                                            }}
+                                        >
+                                            {tags.map(tag => (
+                                                <option key={tag.id} value={tag.id}>
+                                                    {tag.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <small className="form-text text-muted">Hold Ctrl/Cmd to select multiple tags</small>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="d-flex gap-2">
                                 <button className="btn btn-primary" disabled={!hasChanges(e) || submitting} onClick={() => submitFormForId(e.id)}>
                                     {submitting ? 'Yadda saxlanır...' : 'Yadda saxla'}
@@ -481,6 +950,48 @@ export default function AdminEquipment() {
                                 <div className="col-md-6"><label className="form-label">Core *</label><input className="form-control" value={form.core} onChange={(e) => setForm({ ...form, core: e.target.value })} /></div>
                             </div>
                             <div className="form-group mb-3 mt-3"><label className="form-label">Təsvir *</label><textarea className="form-control" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+
+                            {/* Categories Selection */}
+                            <div className="form-group mb-3">
+                                <label className="form-label">Categories</label>
+                                <select
+                                    className="form-select"
+                                    multiple
+                                    value={form.categoryIds}
+                                    onChange={(e) => {
+                                        const selectedOptions = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                                        setForm({ ...form, categoryIds: selectedOptions });
+                                    }}
+                                >
+                                    {categories.map(cat => (
+                                        <option key={cat.id} value={cat.id}>
+                                            {cat.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <small className="form-text text-muted">Hold Ctrl/Cmd to select multiple categories</small>
+                            </div>
+
+                            {/* Tags Selection */}
+                            <div className="form-group mb-3">
+                                <label className="form-label">Tags</label>
+                                <select
+                                    className="form-select"
+                                    multiple
+                                    value={form.tagIds}
+                                    onChange={(e) => {
+                                        const selectedOptions = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                                        setForm({ ...form, tagIds: selectedOptions });
+                                    }}
+                                >
+                                    {tags.map(tag => (
+                                        <option key={tag.id} value={tag.id}>
+                                            {tag.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <small className="form-text text-muted">Hold Ctrl/Cmd to select multiple tags</small>
+                            </div>
 
                             {/* Image Section */}
                             <div className="form-group mb-3">

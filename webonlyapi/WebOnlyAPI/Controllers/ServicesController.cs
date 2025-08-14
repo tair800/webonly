@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebOnlyAPI.Services;
 using WebOnlyAPI.DTOs;
+using Microsoft.AspNetCore.Http;
 
 namespace WebOnlyAPI.Controllers
 {
@@ -33,15 +34,57 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponseDto>> CreateService(CreateServiceDto createServiceDto)
+        public async Task<ActionResult<ServiceResponseDto>> CreateService([FromForm] CreateServiceDto createServiceDto, IFormFile? imageFile)
         {
+            // Handle image upload if provided
+            if (imageFile != null)
+            {
+                var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}_{imageFile.FileName}";
+                var uploadPath = Path.Combine("wwwroot", "uploads", "services");
+                
+                // Ensure directory exists
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                
+                var filePath = Path.Combine(uploadPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                
+                createServiceDto.DetailImage = $"/uploads/services/{fileName}";
+            }
+
             var service = await _serviceService.CreateServiceAsync(createServiceDto);
             return CreatedAtAction(nameof(GetServiceById), new { id = service.Id }, service);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceResponseDto>> UpdateService(int id, UpdateServiceDto updateServiceDto)
+        public async Task<ActionResult<ServiceResponseDto>> UpdateService(int id, [FromForm] UpdateServiceDto updateServiceDto, IFormFile? imageFile)
         {
+            // Handle image upload if provided
+            if (imageFile != null)
+            {
+                var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}_{imageFile.FileName}";
+                var uploadPath = Path.Combine("wwwroot", "uploads", "services");
+                
+                // Ensure directory exists
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                
+                var filePath = Path.Combine(uploadPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                
+                updateServiceDto.DetailImage = $"/uploads/services/{fileName}";
+            }
+
             var service = await _serviceService.UpdateServiceAsync(id, updateServiceDto);
             if (service == null)
                 return NotFound();

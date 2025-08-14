@@ -18,6 +18,8 @@ namespace WebOnlyAPI.DTOs
         public string? ImageUrl { get; set; }
         public List<int> CategoryIds { get; set; } = new List<int>();
         public List<int> TagIds { get; set; } = new List<int>();
+        public List<CreateEquipmentFeatureDto> Features { get; set; } = new List<CreateEquipmentFeatureDto>();
+        public List<CreateEquipmentSpecificationDto> Specifications { get; set; } = new List<CreateEquipmentSpecificationDto>();
     }
 
     public class UpdateEquipmentDto
@@ -35,6 +37,8 @@ namespace WebOnlyAPI.DTOs
         public string? ImageUrl { get; set; }
         public List<int> CategoryIds { get; set; } = new List<int>();
         public List<int> TagIds { get; set; } = new List<int>();
+        public List<CreateEquipmentFeatureDto> Features { get; set; } = new List<CreateEquipmentFeatureDto>();
+        public List<CreateEquipmentSpecificationDto> Specifications { get; set; } = new List<CreateEquipmentSpecificationDto>();
     }
 
     public class EquipmentResponseDto
@@ -60,10 +64,46 @@ namespace WebOnlyAPI.DTOs
         public int OrderIndex { get; set; }
     }
 
+    public class CreateEquipmentFeatureDto
+    {
+        [Required]
+        [StringLength(200)]
+        public string Feature { get; set; } = string.Empty;
+        public int OrderIndex { get; set; }
+    }
+
+    public class UpdateEquipmentFeatureDto
+    {
+        [Required]
+        [StringLength(200)]
+        public string Feature { get; set; } = string.Empty;
+        public int OrderIndex { get; set; }
+    }
+
     public class EquipmentSpecificationDto
     {
         public int Id { get; set; }
         public string Key { get; set; } = string.Empty;
+        public string? Value { get; set; }
+        public int OrderIndex { get; set; }
+    }
+
+    public class CreateEquipmentSpecificationDto
+    {
+        [Required]
+        [StringLength(100)]
+        public string Key { get; set; } = string.Empty;
+        [StringLength(500)]
+        public string? Value { get; set; }
+        public int OrderIndex { get; set; }
+    }
+
+    public class UpdateEquipmentSpecificationDto
+    {
+        [Required]
+        [StringLength(100)]
+        public string Key { get; set; } = string.Empty;
+        [StringLength(500)]
         public string? Value { get; set; }
         public int OrderIndex { get; set; }
     }

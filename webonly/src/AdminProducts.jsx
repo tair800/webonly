@@ -17,16 +17,23 @@ export default function AdminProducts() {
     const [creating, setCreating] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(1);
 
-    // Calculate pagination
+    // Filter products based on search term
+    const filteredProducts = products.filter(product =>
+        product.name?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+        product.subtext?.toLowerCase().startsWith(searchTerm.toLowerCase())
+    );
+
+    // Calculate pagination for filtered products
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(products.length / itemsPerPage);
+    const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
     // Pagination functions
     const goToPage = (pageNumber) => {
@@ -86,6 +93,11 @@ export default function AdminProducts() {
         setCreating(false);
         setNewIconFile(null);
         setNewIconPreview('');
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1); // Reset to first page when searching
     };
 
     const createProduct = async () => {
@@ -571,6 +583,8 @@ export default function AdminProducts() {
                             className="form-control"
                             placeholder="Axtar..."
                             style={{ backgroundColor: '#2a2a2a', border: 'none', color: 'white', paddingLeft: '40px' }}
+                            value={searchTerm}
+                            onChange={handleSearchChange}
                         />
                         <svg
                             width="18"

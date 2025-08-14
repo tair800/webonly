@@ -48,8 +48,6 @@ namespace WebOnlyAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-
-
         [HttpPut("{id}")]
         public async Task<ActionResult<EquipmentResponseDto>> Update(int id, [FromBody] UpdateEquipmentDto dto)
         {
@@ -70,8 +68,6 @@ namespace WebOnlyAPI.Controllers
             if (!ok) return NotFound();
             return NoContent();
         }
-
-
 
         [HttpGet("categories")]
         public async Task<ActionResult<IEnumerable<object>>> GetCategories()

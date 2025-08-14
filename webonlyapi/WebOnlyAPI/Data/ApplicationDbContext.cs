@@ -25,7 +25,6 @@ namespace WebOnlyAPI.Data
         public DbSet<ProductSection> ProductSections { get; set; }
         public DbSet<Reference> References { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<ServiceArticle> ServiceArticles { get; set; }
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<VisitorAnalytics> VisitorAnalytics { get; set; }
         
@@ -53,7 +52,6 @@ namespace WebOnlyAPI.Data
             modelBuilder.Entity<ProductSection>().ToTable("ProductSections");
             modelBuilder.Entity<Reference>().ToTable("References");
             modelBuilder.Entity<Service>().ToTable("Services");
-            modelBuilder.Entity<ServiceArticle>().ToTable("ServiceArticles");
             modelBuilder.Entity<Slider>().ToTable("Sliders");
             modelBuilder.Entity<VisitorAnalytics>().ToTable("VisitorAnalytics");
 
@@ -72,13 +70,6 @@ namespace WebOnlyAPI.Data
                 .HasMany(p => p.Images)
                 .WithOne(i => i.Product)
                 .HasForeignKey(i => i.ProductId);
-
-
-
-            modelBuilder.Entity<Service>()
-                .HasMany(s => s.Articles)
-                .WithOne(a => a.Service)
-                .HasForeignKey(a => a.ServiceId);
 
             // Configure many-to-many relationships for Equipment Categories and Tags
             modelBuilder.Entity<EquipmentCategoryMapping>()

@@ -17,7 +17,6 @@ namespace WebOnlyAPI.Services
         public async Task<IEnumerable<ServiceResponseDto>> GetAllServicesAsync()
         {
             var services = await _context.Services
-                .Include(s => s.Articles.OrderBy(a => a.OrderIndex))
                 .OrderBy(s => s.Id)
                 .ToListAsync();
 
@@ -27,7 +26,6 @@ namespace WebOnlyAPI.Services
         public async Task<ServiceResponseDto?> GetServiceByIdAsync(int id)
         {
             var service = await _context.Services
-                .Include(s => s.Articles.OrderBy(a => a.OrderIndex))
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             return service != null ? MapToResponseDto(service) : null;
@@ -98,15 +96,7 @@ namespace WebOnlyAPI.Services
                 Subtext = service.Subtext,
                 ImageUrl = service.ImageUrl,
                 CreatedAt = service.CreatedAt,
-                UpdatedAt = service.UpdatedAt,
-                Articles = service.Articles.Select(a => new ServiceArticleDto
-                {
-                    Id = a.Id,
-                    Number = a.Number,
-                    Title = a.Title,
-                    Description = a.Description,
-                    OrderIndex = a.OrderIndex
-                }).ToList()
+                UpdatedAt = service.UpdatedAt
             };
         }
     }
