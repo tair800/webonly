@@ -32,6 +32,7 @@ namespace WebOnlyAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<UserLoginHistory> UserLoginHistory { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -90,6 +91,12 @@ namespace WebOnlyAPI.Data
                 .WithOne(h => h.User)
                 .HasForeignKey(h => h.UserId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.PasswordResetTokens)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Seed some initial data if needed
             SeedData(modelBuilder);

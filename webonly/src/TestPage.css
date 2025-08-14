@@ -115,21 +115,7 @@
     color: #ffffff;
 }
 
-.test-page-forgot-password {
-    text-align: right;
-    margin-bottom: 2rem;
-}
 
-.test-page-forgot-password a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.test-page-forgot-password a:hover {
-    color: #467EFE;
-}
 
 .test-page-login-button {
     width: 100%;

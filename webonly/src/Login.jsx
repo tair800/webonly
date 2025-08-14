@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
 import './Login.css';
 
 export default function Login() {
@@ -13,6 +14,16 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const { login, isAuthenticated, loading: authLoading } = useAuth();
+
+    // Redirect if already authenticated (only after auth loading is complete)
+    useEffect(() => {
+        console.log('Login useEffect: authLoading:', authLoading, 'isAuthenticated:', isAuthenticated());
+        if (!authLoading && isAuthenticated()) {
+            console.log('Login: Redirecting to admin panel (already authenticated)');
+            navigate('/admin-panel', { replace: true });
+        }
+    }, [authLoading, isAuthenticated, navigate]);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -28,6 +39,14 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Prevent submission if already authenticated
+        if (isAuthenticated()) {
+            console.log('Login: Already authenticated, redirecting');
+            navigate('/admin-panel', { replace: true });
+            return;
+        }
+
         setLoading(true);
         setError('');
 
@@ -43,12 +62,15 @@ export default function Login() {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem('adminToken', data.token);
-                localStorage.setItem('adminUser', JSON.stringify(data.user));
-                if (data.expiresAt) {
-                    localStorage.setItem('tokenExpiresAt', data.expiresAt);
-                }
-                navigate('/admin-panel', { replace: true });
+                console.log('Login: Success response received:', data);
+                // Use AuthContext login function to properly set authentication state
+                login(data.user, data.token, data.expiresAt);
+
+                console.log('Login: About to navigate to admin panel');
+                // Add a small delay to ensure state is updated before navigation
+                setTimeout(() => {
+                    navigate('/admin-panel', { replace: true });
+                }, 100);
             } else {
                 setError(data.message || 'Login failed');
             }
@@ -58,6 +80,24 @@ export default function Login() {
             setLoading(false);
         }
     };
+
+    // Show loading while checking authentication
+    if (authLoading) {
+        return (
+            <div className="login-container">
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    fontSize: '1.2rem',
+                    color: '#ffffff'
+                }}>
+                    Yüklənir...
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="login-container">
@@ -135,7 +175,7 @@ export default function Login() {
                             {loading ? 'Daxil olunur...' : 'Daxil ol'}
                         </button>
 
-                      
+
                     </form>
                 </div>
             </div>

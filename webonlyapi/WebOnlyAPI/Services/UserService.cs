@@ -19,6 +19,9 @@ namespace WebOnlyAPI.Services
         Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
         Task<bool> DeactivateUserAsync(int id);
         Task<bool> ActivateUserAsync(int id);
+        Task<UserDto?> GetUserByEmailAsync(string email);
+        Task<bool> StorePasswordResetTokenAsync(int userId, string resetToken, DateTime expiresAt);
+        Task<bool> ResetPasswordWithTokenAsync(string resetToken, string newPassword);
     }
 
     public class UserService : IUserService
@@ -275,6 +278,50 @@ namespace WebOnlyAPI.Services
             user.IsActive = true;
             user.UpdatedAt = DateTime.UtcNow;
 
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<UserDto?> GetUserByEmailAsync(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return user != null ? MapToUserDto(user) : null;
+        }
+
+        public async Task<bool> StorePasswordResetTokenAsync(int userId, string resetToken, DateTime expiresAt)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            var passwordResetToken = new PasswordResetToken
+            {
+                UserId = userId,
+                ResetToken = resetToken,
+                ExpiresAt = expiresAt,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.PasswordResetTokens.Add(passwordResetToken);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> ResetPasswordWithTokenAsync(string resetToken, string newPassword)
+        {
+            var passwordResetToken = await _context.PasswordResetTokens
+                .FirstOrDefaultAsync(t => t.ResetToken == resetToken && t.ExpiresAt > DateTime.UtcNow);
+
+            if (passwordResetToken == null) return false;
+
+            var user = await _context.Users.FindAsync(passwordResetToken.UserId);
+            if (user == null) return false;
+
+            user.PasswordHash = newPassword; // In production, hash this
+            user.UpdatedAt = DateTime.UtcNow;
+
+            _context.PasswordResetTokens.Remove(passwordResetToken);
             await _context.SaveChangesAsync();
 
             return true;

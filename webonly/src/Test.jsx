@@ -68,9 +68,7 @@ function Test() {
                             </div>
                         </div>
 
-                        <div className="test-page-forgot-password">
-                            <a href="#forgot-password">Şifrəni unutmusunuz?</a>
-                        </div>
+
 
                         <button type="submit" className="test-page-login-button">
                             Daxil ol

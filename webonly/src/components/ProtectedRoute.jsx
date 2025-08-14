@@ -6,6 +6,8 @@ export default function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuth();
     const location = useLocation();
 
+    console.log('ProtectedRoute: loading:', loading, 'isAuthenticated:', isAuthenticated());
+
     if (loading) {
         // Show loading spinner while checking authentication
         return (
@@ -23,10 +25,12 @@ export default function ProtectedRoute({ children }) {
     }
 
     if (!isAuthenticated()) {
+        console.log('ProtectedRoute: Not authenticated, redirecting to login');
         // Redirect to login page, saving the attempted location
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
+    console.log('ProtectedRoute: Authenticated, rendering children');
     // User is authenticated, render the protected content
     return children;
 }

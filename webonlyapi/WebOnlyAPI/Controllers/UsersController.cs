@@ -150,7 +150,7 @@ namespace WebOnlyAPI.Controllers
 
             try
             {
-                var success = await _userService.ChangePasswordAsync(id, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+                var success = await _userService.ChangePasswordAsync(id, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
                 if (!success)
                     return BadRequest("Invalid current password");
 
@@ -161,11 +161,5 @@ namespace WebOnlyAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-    }
-
-    public class ChangePasswordDto
-    {
-        public string CurrentPassword { get; set; } = string.Empty;
-        public string NewPassword { get; set; } = string.Empty;
     }
 }

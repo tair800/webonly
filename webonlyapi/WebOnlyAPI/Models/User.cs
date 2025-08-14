@@ -40,5 +40,6 @@ namespace WebOnlyAPI.Models
         // Navigation properties
         public virtual ICollection<UserSession> UserSessions { get; set; } = new List<UserSession>();
         public virtual ICollection<UserLoginHistory> LoginHistory { get; set; } = new List<UserLoginHistory>();
+        public virtual ICollection<PasswordResetToken> PasswordResetTokens { get; set; } = new List<PasswordResetToken>();
     }
 }
