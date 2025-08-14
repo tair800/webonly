@@ -28,6 +28,9 @@ function App() {
             {/* Login Route - No Header/Footer */}
             <Route path="/login" element={<Login />} />
 
+            {/* Test Route - No Header/Footer */}
+            <Route path="/test" element={<Test />} />
+
             {/* Admin Panel Routes - No Header/Footer */}
             <Route path="/admin-panel/*" element={<AdminPanel />} />
 
@@ -56,7 +59,6 @@ function App() {
                     <Route path="/products" element={<Products />} />
                     <Route path="/product/:id" element={<ProductDetail />} />
                     <Route path="/factory" element={<Factory />} />
-                    <Route path="/test" element={<Test />} />
                   </Routes>
                 </div>
                 <Footer />

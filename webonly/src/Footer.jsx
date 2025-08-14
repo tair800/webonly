@@ -1,6 +1,6 @@
 import React from 'react';
 import logoWhite from '/assets/logo-white.png';
-import footerLogo from '/assets/footer-logo.png';
+import footerLogo from '/assets/footer-new.png';
 import nextIcon from '/assets/next.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube, faFacebookF, faXTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';

@@ -459,20 +459,19 @@ export default function AdminAbout() {
             }
 
             try {
-                // For now, we'll create a reference with the first image
-                // In a real app, you'd upload all images and get their URLs
-                const referenceData = {
-                    name: newReference.name,
-                    imageUrl: newReference.images[0]?.url || '', // Use first image for now
-                    alt: newReference.alt,
-                    // You could also store all image URLs in a separate field
-                    allImages: newReference.images.map(img => img.url)
-                };
+                // Create FormData to send files properly
+                const formData = new FormData();
+                formData.append('name', newReference.name);
+                formData.append('alt', newReference.alt || '');
+
+                // Add the first image file
+                if (newReference.images[0] && newReference.images[0].file) {
+                    formData.append('imageFile', newReference.images[0].file);
+                }
 
                 const res = await fetch(`${API}/references`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(referenceData)
+                    body: formData // Send FormData instead of JSON
                 });
                 if (!res.ok) throw new Error('Reference save failed');
                 await loadReferences();
@@ -483,6 +482,7 @@ export default function AdminAbout() {
                     'success'
                 );
             } catch (e) {
+                console.error('Reference save error:', e);
                 Swal.fire(
                     'Xəta!',
                     'Referans əlavə edilərkən xəta baş verdi',
