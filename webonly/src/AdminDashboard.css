@@ -27,8 +27,24 @@
 .dashboard-header p {
     font-size: 1.1rem;
     color: #94a3b8;
-    margin: 0;
+    margin: 0 0 12px 0;
     font-weight: 500;
+}
+
+.last-updated {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: #60a5fa;
+    font-weight: 500;
+}
+
+.last-updated span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 /* Dashboard Grid Layout */
@@ -177,6 +193,33 @@
     min-width: 300px;
 }
 
+.metrics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 4px;
+}
+
+.metrics-header h3 {
+    color: #f8fafc;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.total-count {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.count-number {
+    color: #60a5fa;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
 .metrics-table table {
     width: 100%;
     border-collapse: collapse;
@@ -190,6 +233,8 @@
     color: #94a3b8;
     border-bottom: 1px solid #475569;
     background: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .metrics-table td {
@@ -214,6 +259,43 @@
     height: 12px;
     border-radius: 50%;
     flex-shrink: 0;
+}
+
+.count-badge {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-badge.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.status-badge.inactive {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white;
+}
+
+.page-url {
+    color: #60a5fa;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
 }
 
 
@@ -660,4 +742,55 @@
     pointer-events: none;
     border-radius: 9.998px;
     box-shadow: 0px 1.886px 15.368px 0px rgba(0, 0, 0, 0.25);
+}
+
+/* Enhanced Metrics Table Styles */
+.metrics-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.metrics-table th {
+    background: #334155;
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid #475569;
+}
+
+.metrics-table td {
+    padding: 16px;
+    border-bottom: 1px solid #334155;
+    color: #e2e8f0;
+    font-size: 0.875rem;
+}
+
+.metrics-table tr:hover {
+    background: #334155;
+}
+
+.page-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.page-name {
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.page-url {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Additional Analytics Styles */
+.additional-analytics {
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 32px;
 }
