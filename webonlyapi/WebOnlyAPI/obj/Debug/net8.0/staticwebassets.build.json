@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0v958qKD11ov73WJriPG15NYD3GHqPyGNd4uZfDDsxQ=",
+  "Hash": "Q3viLpAwee0LMrlubUBtaiIMk0pviEqiZdIKVe7iILM=",
   "Source": "WebOnlyAPI",
   "BasePath": "_content/WebOnlyAPI",
   "Mode": "Default",
@@ -851,6 +851,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\products\\8\\20250810134022262_email-icon.png"
+    },
+    {
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\references\\c29937b7-3f8e-400f-8500-c0d53210d161.png",
+      "SourceId": "WebOnlyAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\",
+      "BasePath": "_content/WebOnlyAPI",
+      "RelativePath": "uploads/references/c29937b7-3f8e-400f-8500-c0d53210d161.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\references\\c29937b7-3f8e-400f-8500-c0d53210d161.png"
     },
     {
       "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\services\\20250814134818440_servicesDetail8.png",

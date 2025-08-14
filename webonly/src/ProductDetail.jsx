@@ -13,9 +13,7 @@ function ProductDetail() {
     const [isDragging, setIsDragging] = useState(false);
     const sliderRef = useRef(null);
     const mainSectionRef = useRef(null);
-    const firstSectionRef = useRef(null);
-    const secondSectionRef = useRef(null);
-    const thirdSectionRef = useRef(null);
+    const sectionRefs = useRef({});
 
     const resolveUrl = (url) => {
         if (!url) return '';
@@ -31,24 +29,36 @@ function ProductDetail() {
                 if (!res.ok) throw new Error('Failed to load product');
                 const data = await res.json();
 
+                // Debug: Log the API response to see available fields
+                console.log('Product API Response:', data);
+
                 // Transform API data to match the expected structure
-                const sections = [
-                    {
-                        title: data.section1Title || 'Section 1',
-                        content: data.section1Description || 'Content for section 1',
+                const sections = [];
+
+                // Only add sections that have actual content
+                if (data.section1Title && data.section1Description) {
+                    sections.push({
+                        title: data.section1Title,
+                        content: data.section1Description,
                         image: data.section1Image ? resolveUrl(data.section1Image) : ''
-                    },
-                    {
-                        title: data.section2Title || 'Section 2',
-                        content: data.section2Description || 'Content for section 2',
+                    });
+                }
+
+                if (data.section2Title && data.section2Description) {
+                    sections.push({
+                        title: data.section2Title,
+                        content: data.section2Description,
                         image: data.section2Image ? resolveUrl(data.section2Image) : ''
-                    },
-                    {
-                        title: data.section3Title || 'Section 3',
-                        content: data.section3Description || 'Content for section 3',
+                    });
+                }
+
+                if (data.section3Title && data.section3Description) {
+                    sections.push({
+                        title: data.section3Title,
+                        content: data.section3Description,
                         image: data.section3Image ? resolveUrl(data.section3Image) : ''
-                    }
-                ];
+                    });
+                }
 
                 setProduct({
                     ...data,
@@ -83,14 +93,9 @@ function ProductDetail() {
         if (sectionIndex === 0) {
             // Start - scroll to main section
             targetRef = mainSectionRef.current;
-        } else if (sectionIndex === 1) {
-            targetRef = firstSectionRef.current;
-        } else if (sectionIndex === 2) {
-            targetRef = secondSectionRef.current;
-        } else if (sectionIndex === 3) {
-            targetRef = thirdSectionRef.current;
         } else {
-            return;
+            // Scroll to dynamic section
+            targetRef = sectionRefs.current[sectionIndex - 1];
         }
 
         if (targetRef) {
@@ -181,17 +186,18 @@ function ProductDetail() {
         }, observerOptions);
 
         // Observe all sections including main section
-        const sectionRefs = [mainSectionRef.current];
+        const allSectionRefs = [mainSectionRef.current];
 
-        // Add section refs based on the number of sections
-        const count = product?.sections?.length || 0;
-        if (count >= 1) sectionRefs.push(firstSectionRef.current);
-        if (count >= 2) sectionRefs.push(secondSectionRef.current);
-        if (count >= 3) sectionRefs.push(thirdSectionRef.current);
+        // Add dynamic section refs
+        Object.values(sectionRefs.current).forEach((sectionRef) => {
+            if (sectionRef) {
+                allSectionRefs.push(sectionRef);
+            }
+        });
 
-        sectionRefs.forEach((section, index) => {
+        allSectionRefs.forEach((section, index) => {
             if (section) {
-                section.dataset.section = index; // 0 for main, 1 for first, 2 for second, 3 for third
+                section.dataset.section = index; // 0 for main, 1 for first section, 2 for second section, etc.
                 observer.observe(section);
             }
         });
@@ -235,7 +241,13 @@ function ProductDetail() {
                                 <div className="scroller-indicator" style={{ top: `${scrollPosition}px` }} onMouseDown={handleMouseDown} />
                             </div>
                         </div>
-                        <img src={resolveUrl(product.mainImage)} alt="Product" className="product-detail-image" />
+                        {product.image || product.imageUrl || product.mainImage ? (
+                            <img src={resolveUrl(product.image || product.imageUrl || product.mainImage)} alt="Product" className="product-detail-image" />
+                        ) : (
+                            <div className="product-detail-image-placeholder">
+                                <p>No image available</p>
+                            </div>
+                        )}
 
                     </div>
                     <div className="main-right">
@@ -251,98 +263,85 @@ function ProductDetail() {
 
 
 
-                {/* Section 1 */}
-                {product.sections?.length >= 1 && (
-                    <div className="first-section" ref={firstSectionRef}>
-                        <div className="first-left">
-                            <div className="first-content-container">
-                                <div className="page-number-01">01</div>
-                                <div className="first-tagline-container" data-name="Tagline">
-                                    <div className="first-tagline-line" data-name="Line"></div>
-                                </div>
-                                <div className="first-content-title">
-                                    <p className="block leading-[normal]">{product.sections[0].title}</p>
-                                </div>
-                                <div className="first-content-description">
-                                    <p className="block leading-[1.2]">{product.sections[0].content}</p>
-                                </div>
-                                {product.sections[0].moreText && (
-                                    <div className="first-more-container" data-name="More">
-                                        <div className="first-more-text">
-                                            <p className="block mb-0">{product.sections[0].moreText}</p>
-                                            <p className="block mb-0">&nbsp;</p>
-                                            <p className="block">&nbsp;</p>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="first-right">
-                            {product.sections[0].image && <img src={resolveUrl(product.sections[0].image)} alt="Section 1" className="product-detail-image" />}
-                        </div>
-                    </div>
-                )}
+                {/* Dynamic Sections */}
+                {product.sections?.map((section, index) => {
+                    const sectionNumber = String(index + 1).padStart(2, '0');
+                    const isEven = index % 2 === 0;
 
-                {/* Section 2 */}
-                {product.sections?.length >= 2 && (
-                    <div className="second-section" ref={secondSectionRef}>
-                        <div className="second-left">
-                            {product.sections[1].image && <img src={resolveUrl(product.sections[1].image)} alt="Section 2" className="product-detail-image" />}
-                        </div>
-                        <div className="second-right">
-                            <div className="second-content-container">
-                                <div className="page-number-02">02</div>
-                                <div className="second-tagline-container" data-name="Tagline">
-                                    <div className="second-tagline-line" data-name="Line"></div>
-                                </div>
-                                <div className="second-content-heading">
-                                    <p className="block leading-[normal]">{product.sections[1].title}</p>
-                                </div>
-                                <div className="second-content-description">
-                                    <p className="block leading-[1.2]">{product.sections[1].content}</p>
-                                </div>
-                                {product.sections[1].moreText && (
-                                    <div className="second-more-container" data-name="More">
-                                        <div className="second-more-text">
-                                            <p className="block mb-0">{product.sections[1].moreText}</p>
+                    return (
+                        <div
+                            key={index}
+                            className={`${isEven ? 'first' : 'second'}-section`}
+                            ref={(el) => {
+                                sectionRefs.current[index] = el;
+                            }}
+                        >
+                            {isEven ? (
+                                // Even sections: content on left, image on right
+                                <>
+                                    <div className={`${isEven ? 'first' : 'second'}-left`}>
+                                        <div className={`${isEven ? 'first' : 'second'}-content-container`}>
+                                            <div className={`page-number-${sectionNumber}`}>{sectionNumber}</div>
+                                            <div className={`${isEven ? 'first' : 'second'}-tagline-container`} data-name="Tagline">
+                                                <div className={`${isEven ? 'first' : 'second'}-tagline-line`} data-name="Line"></div>
+                                            </div>
+                                            <div className={`${isEven ? 'first' : 'second'}-content-title`}>
+                                                <p className="block leading-[normal]">{section.title}</p>
+                                            </div>
+                                            <div className={`${isEven ? 'first' : 'second'}-content-description`}>
+                                                <p className="block leading-[1.2]">{section.content}</p>
+                                            </div>
+                                            {section.moreText && (
+                                                <div className={`${isEven ? 'first' : 'second'}-more-container`} data-name="More">
+                                                    <div className={`${isEven ? 'first' : 'second'}-more-text`}>
+                                                        <p className="block mb-0">{section.moreText}</p>
+                                                        {isEven && (
+                                                            <>
+                                                                <p className="block mb-0">&nbsp;</p>
+                                                                <p className="block">&nbsp;</p>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Section 3 */}
-                {product.sections?.length >= 3 && (
-                    <div className="third-section" ref={thirdSectionRef}>
-                        <div className="third-left">
-                            <div className="third-content-container">
-                                <div className="page-number-03">03</div>
-                                <div className="third-tagline-container" data-name="Tagline">
-                                    <div className="third-tagline-line" data-name="Line" />
-                                </div>
-                                <div className="third-main-title">
-                                    <p>{product.sections[2].title}</p>
-                                </div>
-                                {product.sections[2].moreText && (
-                                    <div className="third-more-container" data-name="More">
-                                        <div className="third-more-text">
-                                            <p className="block mb-0">{product.sections[2].moreText}</p>
+                                    <div className={`${isEven ? 'first' : 'second'}-right`}>
+                                        {section.image && <img src={resolveUrl(section.image)} alt={`Section ${index + 1}`} className="product-detail-image" />}
+                                    </div>
+                                </>
+                            ) : (
+                                // Odd sections: image on left, content on right
+                                <>
+                                    <div className={`${isEven ? 'first' : 'second'}-left`}>
+                                        {section.image && <img src={resolveUrl(section.image)} alt={`Section ${index + 1}`} className="product-detail-image" />}
+                                    </div>
+                                    <div className={`${isEven ? 'first' : 'second'}-right`}>
+                                        <div className={`${isEven ? 'first' : 'second'}-content-container`}>
+                                            <div className={`page-number-${sectionNumber}`}>{sectionNumber}</div>
+                                            <div className={`${isEven ? 'first' : 'second'}-tagline-container`} data-name="Tagline">
+                                                <div className={`${isEven ? 'first' : 'second'}-tagline-line`} data-name="Line"></div>
+                                            </div>
+                                            <div className={`${isEven ? 'first' : 'second'}-content-heading`}>
+                                                <p className="block leading-[normal]">{section.title}</p>
+                                            </div>
+                                            <div className={`${isEven ? 'first' : 'second'}-content-description`}>
+                                                <p className="block leading-[1.2]">{section.content}</p>
+                                            </div>
+                                            {section.moreText && (
+                                                <div className={`${isEven ? 'first' : 'second'}-more-container`} data-name="More">
+                                                    <div className={`${isEven ? 'first' : 'second'}-more-text`}>
+                                                        <p className="block mb-0">{section.moreText}</p>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
-                                )}
-                                <div className="third-description-text">
-                                    <p>{product.sections[2].content}</p>
-                                    <p>&nbsp;</p>
-                                </div>
-                            </div>
+                                </>
+                            )}
                         </div>
-                        <div className="third-right">
-                            {product.sections[2].image && <img src={resolveUrl(product.sections[2].image)} alt="Section 3" className="product-detail-image" />}
-                        </div>
-                    </div>
-                )}
+                    );
+                })}
             </div>
         </div>
     );
