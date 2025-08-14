@@ -93,7 +93,6 @@ const Prompt = styled.p`
 `;
 
 const Logo = styled.div`
-  opacity: 0;
   transition: 300ms ease-in-out;
   position: absolute;
   top: 50%;
@@ -113,17 +112,18 @@ const Logo = styled.div`
   }
 `;
 
-const Subtitle = styled.div`
+const ProductCard3DSubtitle = styled.div`
   position: absolute;
   bottom: 40px;
   width: 100%;
   text-align: center;
   font-size: 12px;
   letter-spacing: 2px;
-  transform: translateY(30px);
   color: rgba(255, 255, 255, 0.6);
   padding: 0 10px;
   line-height: 1.4;
+  opacity: 1;
+  transform: translateY(0);
 `;
 
 const Highlight = styled.span`
@@ -384,10 +384,7 @@ const createTrackerStyles = (area, rotateX, rotateY) => styled(Tracker)`
     transform: rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(0deg);
   }
 
-  &:hover ~ ${Card} ${Logo} {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
+
 
   &:hover ~ ${Card} ${GlowingElements} div {
     opacity: 1;
@@ -397,14 +394,9 @@ const createTrackerStyles = (area, rotateX, rotateY) => styled(Tracker)`
     animation: ${particleFloat} 2s infinite;
   }
 
-  &:hover ~ ${Card} ${Prompt} {
-    opacity: 0;
-  }
 
-  &:hover ~ ${Card} ${Subtitle} {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+
 
   &:hover ~ ${Card}::before {
     opacity: 1;
@@ -455,18 +447,23 @@ const ProductCard3D = ({ product }) => {
                 <CyberLines className="cyber-lines">
                   <span /><span /><span /><span />
                 </CyberLines>
-                <Prompt id="prompt">{isHovered ? "" : product.name}</Prompt>
-                <Logo className="logo">
-                  <img src={product.icon} alt={product.alt} />
-                </Logo>
+                {/* Non-hover: Name in center, Hover: Logo in center */}
+                {!isHovered ? (
+                  <Prompt id="prompt">{product.name}</Prompt>
+                ) : (
+                  <Logo className="logo">
+                    <img src={product.icon} alt={product.alt} />
+                  </Logo>
+                )}
                 <GlowingElements className="glowing-elements">
                   <Glow className="glow-1" />
                   <Glow className="glow-2" />
                   <Glow className="glow-3" />
                 </GlowingElements>
-                <Subtitle className="subtitle">
+                {/* Non-hover: Subtext at bottom, Hover: Name at bottom */}
+                <ProductCard3DSubtitle className="product-card-3d-subtitle">
                   <span>{isHovered ? product.name : product.subtext}</span>
-                </Subtitle>
+                </ProductCard3DSubtitle>
                 <CardParticles className="card-particles">
                   <span /><span /><span /> <span /><span /><span />
                 </CardParticles>

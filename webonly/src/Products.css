@@ -340,6 +340,35 @@
     text-align: center;
 }
 
+/* Product Card 3D Subtitle */
+.product-card-3d-subtitle {
+    position: absolute !important;
+    bottom: 40px !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    letter-spacing: 2px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    padding: 0 10px !important;
+    line-height: 1.4 !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    z-index: 10 !important;
+}
+
+/* Product Card 3D Logo */
+.product-card-3d-wrapper .logo {
+    transition: all 300ms ease-in-out !important;
+}
+
+.product-card-3d-wrapper .logo img {
+    transition: transform 300ms ease-in-out !important;
+}
+
+.product-card-3d-wrapper:hover .logo img {
+    transform: scale(1.1) !important;
+}
+
 /* Responsive Design for Product Card */
 @media (max-width: 768px) {
     .products-grid-3d {
