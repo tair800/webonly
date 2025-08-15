@@ -135,6 +135,7 @@ export default function AdminEquipment() {
     };
 
     const closeModal = () => {
+        setShowModal(false);
         setEditingId(null);
         resetForm();
     };
@@ -171,18 +172,23 @@ export default function AdminEquipment() {
     };
 
     const addFeature = (equipmentId) => {
-        setEquipments(prev => prev.map(eq =>
-            eq.id === equipmentId
-                ? {
-                    ...eq,
-                    features: autoReorder([...(eq.features || []), {
-                        id: Date.now(),
-                        feature: '',
-                        orderIndex: 0 // Will be auto-corrected by autoReorder
-                    }])
-                }
-                : eq
-        ));
+        setEquipments(prev => prev.map(eq => {
+            if (eq.id !== equipmentId) return eq;
+
+            // Check if already has 4 features
+            if ((eq.features || []).length >= 4) {
+                return eq;
+            }
+
+            return {
+                ...eq,
+                features: autoReorder([...(eq.features || []), {
+                    id: Date.now(),
+                    feature: '',
+                    orderIndex: 0 // Will be auto-corrected by autoReorder
+                }])
+            };
+        }));
     };
 
     const updateFeature = (equipmentId, featureIndex, field, value) => {
@@ -436,9 +442,7 @@ export default function AdminEquipment() {
                 })
             });
 
-            console.log('API Response Status:', res.status);
-            console.log('API Response OK:', res.ok);
-            console.log('API Response Headers:', res.headers);
+
 
             if (!res.ok) {
                 const errorText = await res.text();
@@ -447,7 +451,6 @@ export default function AdminEquipment() {
             }
 
             const saved = await res.json();
-            console.log('API Success Response:', saved);
             setOriginalById(prev => ({ ...prev, [id]: { ...saved } }));
 
             Swal.fire({
@@ -595,7 +598,31 @@ export default function AdminEquipment() {
                             <div className="form-group row g-3 align-items-start">
                                 <label className="col-sm-3 col-form-label">Image URL</label>
                                 <div className="col-sm-9">
-                                    <input className="form-control" value={e.imageUrl || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: ev.target.value } : x))} />
+                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                        <input className="form-control" value={e.imageUrl || ''} onChange={(ev) => setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: ev.target.value } : x))} placeholder="Equipment image URL" />
+                                        <button className="btn btn-outline-primary btn-sm" onClick={() => document.getElementById(`equipment-image-file-${e.id}`)?.click()}>
+                                            Browse
+                                        </button>
+                                    </div>
+                                    {/* Equipment Image Preview */}
+
+                                    <input id={`equipment-image-file-${e.id}`} type="file" accept="image/*" style={{ display: 'none' }} onChange={async (ev) => {
+                                        const file = ev.target.files?.[0];
+                                        if (!file) return;
+                                        const form = new FormData();
+                                        form.append('file', file);
+                                        try {
+                                            const res = await fetch(`${API}/upload/equipment/${e.id}`, { method: 'POST', body: form });
+                                            if (!res.ok) throw new Error('Yükləmə alınmadı');
+                                            const { url } = await res.json();
+                                            setEquipments(prev => prev.map(x => x.id === e.id ? { ...x, imageUrl: url } : x));
+                                            Swal.fire('Uğurlu!', 'Avadanlıq şəkli yeniləndi', 'success');
+                                        } catch (err) {
+                                            Swal.fire('Xəta!', err.message, 'error');
+                                        } finally {
+                                            ev.target.value = '';
+                                        }
+                                    }} />
                                 </div>
                             </div>
 
@@ -609,6 +636,7 @@ export default function AdminEquipment() {
                                             type="button"
                                             className="btn btn-sm btn-outline-primary"
                                             onClick={() => addFeature(e.id)}
+                                            disabled={(e.features || []).length >= 4}
                                         >
                                             + Add Feature
                                         </button>

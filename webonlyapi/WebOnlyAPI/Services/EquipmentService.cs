@@ -389,37 +389,38 @@ namespace WebOnlyAPI.Services
             };
         }
 
-        public async Task<IEnumerable<object>> GetCategoriesAsync()
+        public async Task<IEnumerable<EquipmentCategoryDto>> GetCategoriesAsync()
         {
             var categories = await _context.EquipmentCategories
                 .Where(c => c.IsActive)
                 .OrderBy(c => c.OrderIndex)
-                .Select(c => new
+                .Select(c => new EquipmentCategoryDto
                 {
-                    c.Id,
-                    c.Name,
-                    c.Description,
-                    c.Icon,
-                    c.Color,
-                    c.OrderIndex,
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description,
+                    Icon = c.Icon,
+                    Color = c.Color,
+                    OrderIndex = c.OrderIndex,
                     EquipmentCount = c.EquipmentMappings.Count
                 })
                 .ToListAsync();
             return categories;
         }
 
-        public async Task<IEnumerable<object>> GetTagsAsync()
+        public async Task<IEnumerable<EquipmentTagDto>> GetTagsAsync()
         {
             var tags = await _context.EquipmentTags
                 .Where(t => t.IsActive)
                 .OrderBy(t => t.OrderIndex)
-                .Select(t => new
+                .Select(t => new EquipmentTagDto
                 {
-                    t.Id,
-                    t.Name,
-                    t.Description,
-                    t.Color,
-                    t.OrderIndex
+                    Id = t.Id,
+                    Name = t.Name,
+                    Description = t.Description,
+                    Color = t.Color,
+                    OrderIndex = t.OrderIndex,
+                    EquipmentCount = t.EquipmentMappings.Count
                 })
                 .ToListAsync();
             return tags;
@@ -439,6 +440,160 @@ namespace WebOnlyAPI.Services
                 .ToListAsync();
 
             return results.Select(MapToResponse);
+        }
+
+        // Category CRUD operations
+        public async Task<EquipmentCategoryDto> CreateCategoryAsync(CreateEquipmentCategoryDto dto)
+        {
+            var category = new EquipmentCategory
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Icon = dto.Icon,
+                Color = dto.Color,
+                OrderIndex = dto.OrderIndex,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _context.EquipmentCategories.Add(category);
+            await _context.SaveChangesAsync();
+
+            return new EquipmentCategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                Icon = category.Icon,
+                Color = category.Color,
+                OrderIndex = category.OrderIndex,
+                EquipmentCount = 0 // New category has no equipment yet
+            };
+        }
+
+        public async Task<EquipmentCategoryDto?> UpdateCategoryAsync(int id, UpdateEquipmentCategoryDto dto)
+        {
+            var category = await _context.EquipmentCategories.FindAsync(id);
+            if (category == null) return null;
+
+            category.Name = dto.Name;
+            category.Description = dto.Description;
+            category.Icon = dto.Icon;
+            category.Color = dto.Color;
+            category.OrderIndex = dto.OrderIndex;
+            category.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return new EquipmentCategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                Icon = category.Icon,
+                Color = category.Color,
+                OrderIndex = category.OrderIndex,
+                EquipmentCount = category.EquipmentMappings.Count
+            };
+        }
+
+        public async Task<bool> DeleteCategoryAsync(int id)
+        {
+            var category = await _context.EquipmentCategories
+                .Include(c => c.EquipmentMappings)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category == null) return false;
+
+            // If category is used by equipment, deactivate it instead of deleting
+            if (category.EquipmentMappings.Any())
+            {
+                category.IsActive = false;
+                category.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            // If not used, delete it completely
+            _context.EquipmentCategories.Remove(category);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // Tag CRUD operations
+        public async Task<EquipmentTagDto> CreateTagAsync(CreateEquipmentTagDto dto)
+        {
+            var tag = new EquipmentTag
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Color = dto.Color,
+                OrderIndex = dto.OrderIndex,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _context.EquipmentTags.Add(tag);
+            await _context.SaveChangesAsync();
+
+            return new EquipmentTagDto
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Description = tag.Description,
+                Color = tag.Color,
+                OrderIndex = tag.OrderIndex,
+                EquipmentCount = 0 // New tag has no equipment yet
+            };
+        }
+
+        public async Task<EquipmentTagDto?> UpdateTagAsync(int id, UpdateEquipmentTagDto dto)
+        {
+            var tag = await _context.EquipmentTags.FindAsync(id);
+            if (tag == null) return null;
+
+            tag.Name = dto.Name;
+            tag.Description = dto.Description;
+            tag.Color = dto.Color;
+            tag.OrderIndex = dto.OrderIndex;
+            tag.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return new EquipmentTagDto
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Description = tag.Description,
+                Color = tag.Color,
+                OrderIndex = tag.OrderIndex,
+                EquipmentCount = tag.EquipmentMappings.Count
+            };
+        }
+
+        public async Task<bool> DeleteTagAsync(int id)
+        {
+            var tag = await _context.EquipmentTags
+                .Include(t => t.EquipmentMappings)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tag == null) return false;
+
+            // If tag is used by equipment, deactivate it instead of deleting
+            if (tag.EquipmentMappings.Any())
+            {
+                tag.IsActive = false;
+                tag.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            // If not used, delete it completely
+            _context.EquipmentTags.Remove(tag);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

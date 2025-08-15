@@ -63,11 +63,22 @@
     margin-bottom: 16px;
 }
 
+.equipment-card-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
 .equipment-card-category {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    padding: 3px 10px;
+    border-radius: 16px;
+    font-size: 11px;
     font-weight: 500;
-    margin-bottom: 8px;
+    border: 1px solid rgba(34, 197, 94, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-family: 'MadaniArabic-Medium', sans-serif;
@@ -166,6 +177,17 @@
         font-size: 14px;
     }
 
+    .equipment-card-categories,
+    .equipment-card-tags {
+        gap: 4px;
+    }
+
+    .equipment-card-category,
+    .equipment-card-tag {
+        font-size: 10px;
+        padding: 2px 8px;
+    }
+
     .equipment-card-more-btn {
         padding: 10px 20px;
         font-size: 13px;
@@ -179,5 +201,16 @@
 
     .equipment-card-image-container {
         height: 180px;
+    }
+
+    .equipment-card-categories,
+    .equipment-card-tags {
+        gap: 3px;
+    }
+
+    .equipment-card-category,
+    .equipment-card-tag {
+        font-size: 9px;
+        padding: 2px 6px;
     }
 }

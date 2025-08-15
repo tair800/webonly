@@ -203,7 +203,7 @@ const FiltersComponent = ({ onFilterChange }) => {
     const calculateContainerHeight = () => {
         const baseHeight = 400; // Base height for titles and search
         const categoriesHeight = categories.length * 25; // 25px per category
-        const tagsHeight = Math.min(tags.length, 4) * 30; // Max 4 tags, 30px per tag
+        const tagsHeight = tags.length * 30; // 30px per tag - show all tags
         const clearButtonHeight = (selectedCategories.length > 0 || selectedTags.length > 0 || searchTerm) ? 50 : 0;
 
         return baseHeight + categoriesHeight + tagsHeight + clearButtonHeight;
@@ -249,7 +249,7 @@ const FiltersComponent = ({ onFilterChange }) => {
                 ))}
 
                 {/* Dynamic Tags */}
-                {tags.slice(0, 4).map((tag, index) => (
+                {tags.map((tag, index) => (
                     <div
                         key={tag.id}
                         className={`tag-item ${selectedTags.includes(tag.id) ? 'selected' : ''}`}
@@ -262,7 +262,7 @@ const FiltersComponent = ({ onFilterChange }) => {
                         }}
                     >
                         <div className="tag-text">
-                            <p className="tag-label">{tag.name}</p>
+                            <p className="tag-label">{tag.name} ({tag.equipmentCount || 0})</p>
                         </div>
                     </div>
                 ))}
@@ -316,7 +316,7 @@ const FiltersComponent = ({ onFilterChange }) => {
                         style={{
                             position: 'absolute',
                             left: '24px',
-                            top: `${400 + (Math.min(tags.length, 4) * 30) + 50}px`
+                            top: `${400 + (tags.length * 30) + 50}px`
                         }}
                     >
                         Clear All Filters

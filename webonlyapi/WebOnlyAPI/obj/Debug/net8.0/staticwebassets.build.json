@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "4vdSUtKX3JRq30ZsZdtJYF2fUluq+L5QRRS1h9+/kLw=",
+  "Hash": "61atFmqHgP5KsW627LxEAxmy1kZU4TOVNh8hmeRtTaY=",
   "Source": "WebOnlyAPI",
   "BasePath": "_content/WebOnlyAPI",
   "Mode": "Default",
@@ -148,6 +148,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\equipment\\20250812095442494_director.png"
+    },
+    {
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\equipment\\20250815131636887_maps-logo.png",
+      "SourceId": "WebOnlyAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\",
+      "BasePath": "_content/WebOnlyAPI",
+      "RelativePath": "uploads/equipment/20250815131636887_maps-logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\equipment\\20250815131636887_maps-logo.png"
     },
     {
       "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\webonly2\\webonlyapi\\webonlyapi\\wwwroot\\uploads\\equipment\\equipment1.png",

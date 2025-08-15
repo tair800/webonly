@@ -6,6 +6,7 @@ import AdminAbout from './AdminAbout';
 import AdminProducts from './AdminProducts';
 import AdminEquipment from './AdminEquipment';
 import AdminServices from './AdminServices';
+import AdminCategoriesTags from './AdminCategoriesTags';
 import UserProfile from './UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import './AdminPanel.css';
@@ -40,6 +41,7 @@ function AdminPanel() {
                         <Route path="/products" element={<AdminProducts />} />
                         <Route path="/equipment" element={<AdminEquipment />} />
                         <Route path="/services" element={<AdminServices />} />
+                        <Route path="/categories-tags" element={<AdminCategoriesTags />} />
                         <Route path="/profile" element={<UserProfile />} />
                         <Route path="/settings" element={<div>Settings Page</div>} />
                         <Route path="/test" element={<div />} />

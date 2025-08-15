@@ -52,25 +52,68 @@ function Equipment() {
         console.log('Filters changed:', filters); // Debug log
 
         try {
-            // If no search term, show all equipment
-            if (!filters.search || filters.search.trim() === '') {
-                setFilteredEquipment(equipmentList);
-                return;
+            // Apply client-side filtering for categories and tags
+            let filtered = equipmentList;
+
+            // Filter by categories
+            if (filters.categories && filters.categories.length > 0) {
+                filtered = filtered.filter(equipment =>
+                    equipment.categories &&
+                    equipment.categories.some(cat => cat.id === filters.categories[0])
+                );
+                console.log(`After category filtering: ${filtered.length} items`);
             }
 
-            // Simple search - only search term
-            const searchUrl = `http://localhost:5098/api/equipment/search?q=${encodeURIComponent(filters.search.trim())}`;
-            console.log('Searching API:', searchUrl); // Debug log
-
-            const response = await fetch(searchUrl);
-            if (!response.ok) {
-                throw new Error(`Search failed: ${response.status}`);
+            // Filter by tags
+            if (filters.tags && filters.tags.length > 0) {
+                filtered = filtered.filter(equipment =>
+                    equipment.tags &&
+                    filters.tags.every(selectedTagId =>
+                        equipment.tags.some(tag => tag.id === selectedTagId)
+                    )
+                );
+                console.log(`After tag filtering: ${filtered.length} items`);
             }
 
-            const searchResults = await response.json();
-            console.log(`Search results: ${searchResults.length} items found`); // Debug log
+            // If there's a search term, use API search
+            if (filters.search && filters.search.trim() !== '') {
+                const searchUrl = `http://localhost:5098/api/equipment/search?q=${encodeURIComponent(filters.search.trim())}`;
+                console.log('Searching API:', searchUrl); // Debug log
 
-            setFilteredEquipment(searchResults);
+                const response = await fetch(searchUrl);
+                if (!response.ok) {
+                    throw new Error(`Search failed: ${response.status}`);
+                }
+
+                const searchResults = await response.json();
+                console.log(`Search results: ${searchResults.length} items found`); // Debug log
+
+                // Apply category and tag filters to search results
+                let searchFiltered = searchResults;
+
+                // Filter by categories
+                if (filters.categories && filters.categories.length > 0) {
+                    searchFiltered = searchFiltered.filter(equipment =>
+                        equipment.categories &&
+                        equipment.categories.some(cat => cat.id === filters.categories[0])
+                    );
+                }
+
+                // Filter by tags
+                if (filters.tags && filters.tags.length > 0) {
+                    searchFiltered = searchFiltered.filter(equipment =>
+                        equipment.tags &&
+                        filters.tags.every(selectedTagId =>
+                            equipment.tags.some(tag => tag.id === selectedTagId)
+                        )
+                    );
+                }
+
+                setFilteredEquipment(searchFiltered);
+            } else {
+                // No search term, just apply category and tag filters
+                setFilteredEquipment(filtered);
+            }
 
         } catch (error) {
             console.error('Search error:', error);
@@ -173,6 +216,12 @@ function Equipment() {
                 const data = await res.json();
 
                 if (isMounted) {
+                    console.log('Fetched equipment data:', data);
+                    console.log('First equipment item:', data[0]);
+                    if (data[0]) {
+                        console.log('Categories:', data[0].categories);
+                        console.log('Tags:', data[0].tags);
+                    }
                     setEquipmentList(data);
                     setFilteredEquipment(data);
                 }

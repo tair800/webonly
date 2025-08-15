@@ -70,17 +70,85 @@ namespace WebOnlyAPI.Controllers
         }
 
         [HttpGet("categories")]
-        public async Task<ActionResult<IEnumerable<object>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<EquipmentCategoryDto>>> GetCategories()
         {
             var categories = await _equipmentService.GetCategoriesAsync();
             return Ok(categories);
         }
 
         [HttpGet("tags")]
-        public async Task<ActionResult<IEnumerable<object>>> GetTags()
+        public async Task<ActionResult<IEnumerable<EquipmentTagDto>>> GetTags()
         {
             var tags = await _equipmentService.GetTagsAsync();
             return Ok(tags);
+        }
+
+        // Category CRUD operations
+        [HttpPost("categories")]
+        public async Task<ActionResult<EquipmentCategoryDto>> CreateCategory([FromBody] CreateEquipmentCategoryDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var category = await _equipmentService.CreateCategoryAsync(dto);
+            return CreatedAtAction(nameof(GetCategories), new { id = category.Id }, category);
+        }
+
+        [HttpPut("categories/{id}")]
+        public async Task<ActionResult<EquipmentCategoryDto>> UpdateCategory(int id, [FromBody] UpdateEquipmentCategoryDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var category = await _equipmentService.UpdateCategoryAsync(id, dto);
+            if (category == null) return NotFound();
+            return Ok(category);
+        }
+
+        [HttpDelete("categories/{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var success = await _equipmentService.DeleteCategoryAsync(id);
+            if (!success) return NotFound();
+            return NoContent();
+        }
+
+        // Tag CRUD operations
+        [HttpPost("tags")]
+        public async Task<ActionResult<EquipmentTagDto>> CreateTag([FromBody] CreateEquipmentTagDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tag = await _equipmentService.CreateTagAsync(dto);
+            return CreatedAtAction(nameof(GetTags), new { id = tag.Id }, tag);
+        }
+
+        [HttpPut("tags/{id}")]
+        public async Task<ActionResult<EquipmentTagDto>> UpdateTag(int id, [FromBody] UpdateEquipmentTagDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tag = await _equipmentService.UpdateTagAsync(id, dto);
+            if (tag == null) return NotFound();
+            return Ok(tag);
+        }
+
+        [HttpDelete("tags/{id}")]
+        public async Task<IActionResult> DeleteTag(int id)
+        {
+            var success = await _equipmentService.DeleteTagAsync(id);
+            if (!success) return NotFound();
+            return NoContent();
         }
 
         [HttpGet("search")]

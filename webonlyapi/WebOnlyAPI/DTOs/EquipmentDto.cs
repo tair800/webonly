@@ -116,6 +116,7 @@ namespace WebOnlyAPI.DTOs
         public string? Icon { get; set; }
         public string? Color { get; set; }
         public int OrderIndex { get; set; }
+        public int EquipmentCount { get; set; }
     }
 
     public class EquipmentTagDto
@@ -125,5 +126,74 @@ namespace WebOnlyAPI.DTOs
         public string? Description { get; set; }
         public string? Color { get; set; }
         public int OrderIndex { get; set; }
+        public int EquipmentCount { get; set; }
+    }
+
+    // Create and Update DTOs for Categories
+    public class CreateEquipmentCategoryDto
+    {
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+        
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        
+        [StringLength(100)]
+        public string? Icon { get; set; }
+        
+        [StringLength(50)]
+        public string? Color { get; set; }
+        
+        public int OrderIndex { get; set; } = 0;
+    }
+
+    public class UpdateEquipmentCategoryDto
+    {
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+        
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        
+        [StringLength(100)]
+        public string? Icon { get; set; }
+        
+        [StringLength(50)]
+        public string? Color { get; set; }
+        
+        public int OrderIndex { get; set; } = 0;
+    }
+
+    // Create and Update DTOs for Tags
+    public class CreateEquipmentTagDto
+    {
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+        
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        
+        [StringLength(50)]
+        public string? Color { get; set; }
+        
+        public int OrderIndex { get; set; } = 0;
+    }
+
+    public class UpdateEquipmentTagDto
+    {
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+        
+        [StringLength(2000)]
+        public string? Description { get; set; }
+        
+        [StringLength(50)]
+        public string? Color { get; set; }
+        
+        public int OrderIndex { get; set; } = 0;
     }
 }
