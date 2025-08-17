@@ -134,8 +134,6 @@ namespace WebOnlyAPI.Services
                 await _context.SaveChangesAsync();
 
                 // Add images as ProductImages with incrementing order
-                var order = 0;
-                var allImages = new List<string>();
                 // ProductImages DbSet removed - skipping image seeding
             }
         }
@@ -400,16 +398,16 @@ namespace WebOnlyAPI.Services
             if (_context.Employees.Any()) return;
             
             // Use C# strings with proper Unicode encoding - EF Core will handle the NCHAR conversion
-            var emps = new[]
+            var emps = new (string Name, string Position, string Image, string Phone, string Email, string LinkedIn, string? Description)[]
             {
-                new { Name = "Əli Məmmədov", Position = "Direktor", Image = "/assets/director.png", Phone = "+994 50 123 45 67", Email = "ali.mammadov@webonly.az", LinkedIn = "linkedin.com/in/ali-mammadov", Description = "10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir." },
-                new { Name = "Name Surname", Position = "Baş proqram tərtibatçısı", Image = "/assets/employee.png", Phone = "+994 50 123 45 68", Email = "developer@company.com", LinkedIn = "linkedin.com/in/developer", Description = (string?)null },
-                new { Name = "Name Surname", Position = "Layihə koordinatoru", Image = "/assets/employee.png", Phone = "+994 50 123 45 69", Email = "coordinator@company.com", LinkedIn = "linkedin.com/in/coordinator", Description = (string?)null },
-                new { Name = "Name Surname", Position = "Baş proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 70", Email = "programmer@company.com", LinkedIn = "linkedin.com/in/programmer", Description = (string?)null },
-                new { Name = "Name Surname", Position = "IT mütəxəssisi", Image = "/assets/employee.png", Phone = "+994 50 123 45 71", Email = "specialist@company.com", LinkedIn = "linkedin.com/in/specialist", Description = (string?)null },
-                new { Name = "Name Surname", Position = "Layihələr üzrə şöbə rəhbəri", Image = "/assets/employee.png", Phone = "+994 50 123 45 72", Email = "manager@company.com", LinkedIn = "linkedin.com/in/manager", Description = (string?)null },
-                new { Name = "Name Surname", Position = "Layihə meneceri", Image = "/assets/employee.png", Phone = "+994 50 123 45 73", Email = "project-manager@company.com", LinkedIn = "linkedin.com/in/project-manager", Description = (string?)null },
-                new { Name = "Name Surname", Position = "SQL Server üzrə proqramçı", Image = "/assets/employee.png", Phone = "+994 50 123 45 74", Email = "sql-developer@company.com", LinkedIn = "linkedin.com/in/sql-developer", Description = (string?)null },
+                ("Əli Məmmədov", "Direktor", "/assets/director.png", "+994 50 123 45 67", "ali.mammadov@webonly.az", "linkedin.com/in/ali-mammadov", "10 illik təcrübəsi ilə ERP proqramlarının tətbiqi və avadanlıq satışı sahəsində fəaliyyət göstərir. 500-dən çox uğurlu layihə, restoranlardan istehsalat müəssisələrinə qədər geniş spektrli bizneslərin avtomatlaşdırılması və POS CLASS, POS TÜRK avadanlıqlarının rəsmi nümayəndəliyi ilə bazarda lider mövqedədir."),
+                ("Name Surname", "Baş proqram tərtibatçısı", "/assets/employee.png", "+994 50 123 45 68", "developer@company.com", "linkedin.com/in/developer", null),
+                ("Name Surname", "Layihə koordinatoru", "/assets/employee.png", "+994 50 123 45 69", "coordinator@company.com", "linkedin.com/in/coordinator", null),
+                ("Name Surname", "Baş proqramçı", "/assets/employee.png", "+994 50 123 45 70", "programmer@company.com", "linkedin.com/in/programmer", null),
+                ("Name Surname", "IT mütəxəssisi", "/assets/employee.png", "+994 50 123 45 71", "specialist@company.com", "linkedin.com/in/specialist", null),
+                ("Name Surname", "Layihələr üzrə şöbə rəhbəri", "/assets/employee.png", "+994 50 123 45 72", "manager@company.com", "linkedin.com/in/manager", null),
+                ("Name Surname", "Layihə meneceri", "/assets/employee.png", "+994 50 123 45 73", "project-manager@company.com", "linkedin.com/in/project-manager", null),
+                ("Name Surname", "SQL Server üzrə proqramçı", "/assets/employee.png", "+994 50 123 45 74", "sql-developer@company.com", "linkedin.com/in/sql-developer", null),
             };
             foreach (var e in emps)
             {

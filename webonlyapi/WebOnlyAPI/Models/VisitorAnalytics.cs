@@ -7,10 +7,10 @@ namespace WebOnlyAPI.Models
         public int Id { get; set; }
         
         [Required]
-        public string PageUrl { get; set; }
+        public required string PageUrl { get; set; }
         
         [Required]
-        public string UserAgent { get; set; }
+        public required string UserAgent { get; set; }
         
         public string? IpAddress { get; set; }
         

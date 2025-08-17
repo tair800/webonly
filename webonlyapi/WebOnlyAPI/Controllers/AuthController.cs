@@ -83,17 +83,20 @@ namespace WebOnlyAPI.Controllers
                     return BadRequest(new { success = false, message = "Failed to process password reset request." });
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(new { success = false, message = "An error occurred while processing the request." });
             }
         }
 
         [HttpPost("reset-password")]
-        public async Task<ActionResult<object>> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        public async Task<ActionResult<object>> ResetPassword([FromBody] ResetPasswordDto? resetPasswordDto)
         {
+            if (resetPasswordDto == null)
+                return BadRequest(new { success = false, message = "Invalid request data" });
+            
             // Log the received data for debugging
-            Console.WriteLine($"ResetPassword called with Token: {resetPasswordDto?.Token}, NewPassword: {resetPasswordDto?.NewPassword?.Length} chars, ConfirmPassword: {resetPasswordDto?.ConfirmPassword?.Length} chars");
+            Console.WriteLine($"ResetPassword called with Token: {resetPasswordDto.Token}, NewPassword: {resetPasswordDto.NewPassword?.Length} chars, ConfirmPassword: {resetPasswordDto.ConfirmPassword?.Length} chars");
             
             if (!ModelState.IsValid)
             {
@@ -110,9 +113,9 @@ namespace WebOnlyAPI.Controllers
             }
 
             // Validate password length
-            if (resetPasswordDto.NewPassword.Length < 6)
+            if (string.IsNullOrEmpty(resetPasswordDto.NewPassword) || resetPasswordDto.NewPassword.Length < 6)
             {
-                Console.WriteLine($"Password too short: {resetPasswordDto.NewPassword.Length} chars");
+                Console.WriteLine($"Password too short: {resetPasswordDto.NewPassword?.Length ?? 0} chars");
                 return BadRequest(new { success = false, message = "Password must be at least 6 characters long." });
             }
 
@@ -160,7 +163,7 @@ namespace WebOnlyAPI.Controllers
                 return BadRequest(new { success = false, message = "Password must be at least 6 characters long." });
             }
 
-            var token = authorization.Substring("Bearer ".Length);
+            var token = authorization!.Substring("Bearer ".Length);
             var user = await _userService.GetUserByTokenAsync(token);
 
             if (user == null)

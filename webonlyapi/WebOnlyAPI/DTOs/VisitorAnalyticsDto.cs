@@ -3,8 +3,8 @@ namespace WebOnlyAPI.DTOs
     public class VisitorAnalyticsDto
     {
         public int Id { get; set; }
-        public string PageUrl { get; set; }
-        public string UserAgent { get; set; }
+        public required string PageUrl { get; set; }
+        public required string UserAgent { get; set; }
         public string? IpAddress { get; set; }
         public string? Referrer { get; set; }
         public DateTime VisitedAt { get; set; }
@@ -33,28 +33,28 @@ namespace WebOnlyAPI.DTOs
 
     public class PageViewDto
     {
-        public string PageUrl { get; set; }
+        public required string PageUrl { get; set; }
         public int ViewCount { get; set; }
         public double Percentage { get; set; }
     }
 
     public class DeviceTypeDto
     {
-        public string DeviceType { get; set; }
+        public required string DeviceType { get; set; }
         public int Count { get; set; }
         public double Percentage { get; set; }
     }
 
     public class BrowserDto
     {
-        public string Browser { get; set; }
+        public required string Browser { get; set; }
         public int Count { get; set; }
         public double Percentage { get; set; }
     }
 
     public class CountryDto
     {
-        public string Country { get; set; }
+        public required string Country { get; set; }
         public int Count { get; set; }
         public double Percentage { get; set; }
     }

@@ -327,6 +327,9 @@ namespace WebOnlyAPI.Services
                         .ThenInclude(tm => tm.Tag)
                     .FirstOrDefaultAsync(eq => eq.Id == id);
                 
+                if (reloadedEquipment == null)
+                    throw new Exception($"Equipment with ID {id} not found after update");
+                
                 return MapToResponse(reloadedEquipment);
             }
             catch (Exception ex)

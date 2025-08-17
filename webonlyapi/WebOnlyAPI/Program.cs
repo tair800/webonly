@@ -28,8 +28,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// JWT Authentication and Authorization removed
-
 // Register services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -46,37 +44,24 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebOnlyAPI v1");
+        options.RoutePrefix = ""; // This will serve Swagger UI at the root
+    });
 }
 
 app.UseHttpsRedirection();
-
-// Apply CORS early in the pipeline
 app.UseCors("AllowAll");
-
-// Redirect root to Swagger using middleware
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect("/swagger");
-        return;
-    }
-    await next();
-});
-
-// Authentication and Authorization middleware removed
-
-// Enable static files for serving uploaded images
 app.UseStaticFiles();
 
 app.MapControllers();
 
-        // Seed data
-        using (var scope = app.Services.CreateScope())
-        {
-            var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
-            await dataSeeder.SeedAllDataAsync();
-        }
+// Seed data - temporarily disabled for testing
+// using (var scope = app.Services.CreateScope())
+// {
+//     var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
+//     await dataSeeder.SeedAllDataAsync();
+// }
 
-        app.Run();
+await app.RunAsync();

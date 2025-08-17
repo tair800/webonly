@@ -90,7 +90,7 @@ namespace WebOnlyAPI.Services
                 .GroupBy(v => v.DeviceType)
                 .Select(g => new DeviceTypeDto
                 {
-                    DeviceType = g.Key,
+                    DeviceType = g.Key ?? "Unknown",
                     Count = g.Count(),
                     Percentage = 0
                 })
@@ -111,7 +111,7 @@ namespace WebOnlyAPI.Services
                 .GroupBy(v => v.Browser)
                 .Select(g => new BrowserDto
                 {
-                    Browser = g.Key,
+                    Browser = g.Key ?? "Unknown",
                     Count = g.Count(),
                     Percentage = 0
                 })
@@ -132,7 +132,7 @@ namespace WebOnlyAPI.Services
                 .GroupBy(v => v.Country)
                 .Select(g => new CountryDto
                 {
-                    Country = g.Key,
+                    Country = g.Key ?? "Unknown",
                     Count = g.Count(),
                     Percentage = 0
                 })
