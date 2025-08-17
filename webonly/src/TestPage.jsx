@@ -2,7 +2,7 @@ import React from 'react';
 import Spline from '@splinetool/react-spline';
 import './TestPage.css';
 
-const TestPage = () => {
+const TestCard = () => {
   const handleMouseDown = (e) => {
     // Allow scrolling when not directly interacting with canvas
     if (e.target.tagName !== 'CANVAS') {
@@ -21,5 +21,5 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default TestCard;
 

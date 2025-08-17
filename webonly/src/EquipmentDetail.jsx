@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import SimilarEquipmentCard from './components/SimilarEquipmentCard';
 import './EquipmentDetail.css';
 
 function EquipmentDetail() {
@@ -7,20 +8,27 @@ function EquipmentDetail() {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(0);
     const [equipment, setEquipment] = useState(null);
+    const [similarEquipment, setSimilarEquipment] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [similarCurrentPage, setSimilarCurrentPage] = useState(0);
 
     const resolveUrl = (url) => {
         if (!url) return '';
-
-        // If it's already a full URL, return as is
         if (url.startsWith('http')) return url;
 
-        // Handle relative paths
+        // Map database upload paths to local assets
+        if (url.includes('equipment1.png')) {
+            return '/assets/equipment1.png';
+        }
+        if (url.includes('equipment2.png')) {
+            return '/assets/equipment2.png';
+        }
+
+        // For other uploads, try the API server
         if (url.startsWith('/uploads/') || url.startsWith('/assets/')) {
             return `http://localhost:5098${url}`;
         }
-
         return url;
     };
 
@@ -46,13 +54,62 @@ function EquipmentDetail() {
                 });
                 setLoading(false);
             } catch (e) {
-                console.error(e);
                 setError(e.message);
                 setLoading(false);
             }
         };
         fetchEquipment();
     }, [id]);
+
+    // Fetch similar equipment
+    useEffect(() => {
+        const fetchSimilarEquipment = async () => {
+            try {
+                const res = await fetch('http://localhost:5098/api/equipment');
+                if (!res.ok) throw new Error('Failed to load similar equipment');
+                const data = await res.json();
+
+                // Filter out current equipment only
+                const filtered = data.filter(item => item.id !== parseInt(id));
+
+                // Use all available equipment (no artificial limit)
+                setSimilarEquipment(filtered);
+            } catch (e) {
+                // Error handling for similar equipment fetch
+            }
+        };
+
+        if (equipment) {
+            fetchSimilarEquipment();
+        }
+    }, [equipment, id]);
+
+    // Handle similar equipment scroll
+    const handleSimilarScroll = (event) => {
+        const container = event.target;
+        const scrollLeft = container.scrollLeft;
+        const pageWidth = 5 * 270; // 5 cards per page * (250px + 20px gap)
+        const currentPageIndex = Math.round(scrollLeft / pageWidth);
+        setSimilarCurrentPage(Math.max(0, Math.min(currentPageIndex, totalSimilarPages - 1)));
+    };
+
+    // Calculate total pages for similar equipment (5 cards per page)
+    const totalSimilarPages = Math.ceil(similarEquipment.length / 5);
+
+    // Handle dot click navigation
+    const handleDotClick = (pageIndex) => {
+        const container = document.querySelector('.similar-equipment-cards');
+        if (container) {
+            const scrollPosition = pageIndex * (5 * 270); // 5 cards per page * (250px + 20px gap)
+            container.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+            setSimilarCurrentPage(pageIndex);
+        }
+    };
+
+
 
     if (loading) {
         return (
@@ -176,6 +233,27 @@ function EquipmentDetail() {
                     <div className="equipment-detail-team-divider"></div>
                     <div className="equipment-detail-team-bar"></div>
                 </div>
+            </div>
+
+            <div className="similar-equipment-scroller">
+                <div className="similar-equipment-cards" onScroll={handleSimilarScroll}>
+                    {similarEquipment.map((item, index) => (
+                        <SimilarEquipmentCard key={item.id} equipment={item} />
+                    ))}
+                </div>
+
+                {/* Dynamic Dot Navigation */}
+                {totalSimilarPages > 1 && (
+                    <div className="similar-equipment-dots">
+                        {Array.from({ length: totalSimilarPages }, (_, index) => (
+                            <div
+                                key={index}
+                                className={`similar-equipment-dot ${index === similarCurrentPage ? 'similar-equipment-dot-active' : ''}`}
+                                onClick={() => handleDotClick(index)}
+                            ></div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

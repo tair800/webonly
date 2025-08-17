@@ -23,5 +23,6 @@ namespace WebOnlyAPI.Services
         Task<EquipmentTagDto> CreateTagAsync(CreateEquipmentTagDto dto);
         Task<EquipmentTagDto?> UpdateTagAsync(int id, UpdateEquipmentTagDto dto);
         Task<bool> DeleteTagAsync(int id);
+        Task<int> FixBlobUrlsAsync();
     }
 }

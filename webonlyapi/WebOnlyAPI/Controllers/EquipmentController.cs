@@ -160,5 +160,19 @@ namespace WebOnlyAPI.Controllers
             var results = await _equipmentService.SearchByNameAsync(q);
             return Ok(results);
         }
+
+        [HttpPost("fix-blob-urls")]
+        public async Task<IActionResult> FixBlobUrls()
+        {
+            try
+            {
+                var result = await _equipmentService.FixBlobUrlsAsync();
+                return Ok(new { message = "Blob URLs fixed successfully", fixedCount = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

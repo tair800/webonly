@@ -23,8 +23,7 @@
     background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
     backdrop-filter: blur(285.79998779296875px);
     filter: blur(100px);
-    opacity: 0.1;
-    z-index: 1;
+    opacity: 0.3;
     pointer-events: none;
 }
 
@@ -39,8 +38,7 @@
     background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
     backdrop-filter: blur(285.79998779296875px);
     filter: blur(100px);
-    opacity: 0.06;
-    z-index: 1;
+    opacity: 0.03;
     pointer-events: none;
 }
 
@@ -55,14 +53,13 @@
     background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
     backdrop-filter: blur(285.79998779296875px);
     filter: blur(100px);
-    opacity: 0.1;
-    z-index: 1;
+    opacity: 0.3;
     pointer-events: none;
 }
 
 .equipment-detail-circle-background-4 {
     position: absolute;
-    top: 90%;
+    top: 60%;
     left: 100%;
     transform: translate(-50%, -50%);
     width: 400px;
@@ -71,8 +68,7 @@
     background: conic-gradient(from 213.15deg at 50% 50%, #17DBFC -16.68deg, #467EFE 90.44deg, #17DBFC 343.32deg, #467EFE 450.44deg);
     backdrop-filter: blur(285.79998779296875px);
     filter: blur(100px);
-    opacity: 0.1;
-    z-index: 1;
+    opacity: 0.2;
     pointer-events: none;
 }
 
@@ -837,4 +833,76 @@
         width: 80px;
         height: 80px;
     }
+}
+
+/* Similar Equipment Scroller */
+.similar-equipment-scroller {
+    margin-top: 40px;
+    padding: 0 20px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.similar-equipment-cards {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 0;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    width: 100%;
+}
+
+.similar-equipment-cards::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Opera */
+}
+
+.similar-equipment-card {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+/* Ensure each page shows exactly 5 cards */
+.similar-equipment-cards>div {
+    scroll-snap-align: start;
+}
+
+/* Dot Navigation */
+.similar-equipment-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.similar-equipment-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(70, 126, 254, 0.8) 0%, rgba(23, 219, 252, 0.8) 100%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.similar-equipment-dot:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.similar-equipment-dot-active {
+    width: 16px;
+    height: 16px;
+    opacity: 1;
+    background: linear-gradient(135deg, rgba(70, 126, 254, 1) 0%, rgba(23, 219, 252, 1) 100%);
+    box-shadow: 0 0 15px rgba(70, 126, 254, 0.8);
 }

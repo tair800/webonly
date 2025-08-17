@@ -13,6 +13,7 @@ import Products from './Products';
 import Factory from './Factory';
 import ProductDetail from './ProductDetail';
 import Test from './Test';
+import TestCard from './TestCard';
 import AdminPanel from './AdminPanel';
 import Login from './Login';
 import { AuthProvider } from './contexts/AuthContext';
@@ -30,6 +31,9 @@ function App() {
 
             {/* Test Route - No Header/Footer */}
             <Route path="/test" element={<Test />} />
+
+            {/* TestCard Route - No Header/Footer */}
+            <Route path="/testcard" element={<TestCard />} />
 
             {/* Admin Panel Routes - No Header/Footer */}
             <Route path="/admin-panel/*" element={<AdminPanel />} />

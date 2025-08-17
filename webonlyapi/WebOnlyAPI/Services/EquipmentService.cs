@@ -595,5 +595,30 @@ namespace WebOnlyAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<int> FixBlobUrlsAsync()
+        {
+            var equipmentWithBlobUrls = await _context.Equipment
+                .Where(e => e.ImageUrl != null && e.ImageUrl.Contains("blob:"))
+                .ToListAsync();
+
+            var fixedCount = 0;
+            foreach (var equipment in equipmentWithBlobUrls)
+            {
+                // Set proper image URL based on equipment ID
+                if (equipment.Id <= 3)
+                {
+                    equipment.ImageUrl = "/uploads/equipment/equipment1.png";
+                }
+                else
+                {
+                    equipment.ImageUrl = "/uploads/equipment/equipment2.png";
+                }
+                fixedCount++;
+            }
+
+            await _context.SaveChangesAsync();
+            return fixedCount;
+        }
     }
 }
